@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PTZChanelCap version="2.0" xmlns="http://www.hikvision.com/ver20/XMLSchema">
+<ContinuousPanTiltSpace>
+<XRange>
+<Min>-100</Min>
+<Max>100</Max>
+</XRange>
+<YRange>
+<Min>-100</Min>
+<Max>100</Max>
+</YRange>
+</ContinuousPanTiltSpace>
+<ContinuousZoomSpace>
+<ZRange>
+<Min>-100</Min>
+<Max>100</Max>
+</ZRange>
+</ContinuousZoomSpace>
+<maxPresetNum>255</maxPresetNum>
+<maxPatrolNum>4</maxPatrolNum>
+<maxPatternNum>0</maxPatternNum>
+<maxLimitesNum>0</maxLimitesNum>
+<maxTimeTaskNum>10</maxTimeTaskNum>
+<controlProtocol opt="HIKVISION,PELCO-P,PELCO-D">PELCO-D</controlProtocol>
+<controlAddress>0</controlAddress>
+<PTZRs485Para version="2.0" xmlns="http://www.hikvision.com/ver20/XMLSchema">
+<baudRate opt="1200,2400,4800,9600,19200,38400,57600,76800,115200">9600</baudRate>
+<dataBits opt="5,6,7,8">8</dataBits>
+<parityType opt="none,even,odd">none</parityType>
+<stopBits opt="1,2">1</stopBits>
+<flowCtrl opt="none,software,hardware">none</flowCtrl>
+</PTZRs485Para>
+<PresetNameCap version="2.0" xmlns="http://www.hikvision.com/ver20/XMLSchema">
+<presetNameSupport>false</presetNameSupport>
+</PresetNameCap>
+<wiperStatusSupport>false</wiperStatusSupport>
+<isSupportPosition3D>false</isSupportPosition3D>
+<isSpportPtzlimiteds>false</isSpportPtzlimiteds>
+<oneKeyMenu>false</oneKeyMenu>
+<LockPT>false</LockPT>
+<isSupportManualWiper>true</isSupportManualWiper>
+<PTZAuxType opt="WIPER"/>
+<isNotSupportInitalPostionCtrl>true</isNotSupportInitalPostionCtrl>
+</PTZChanelCap>
