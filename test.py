@@ -33,3 +33,7 @@ if response.status_code == 200:
     print("图片保存成功！")
 else:
     print(f"请求失败，状态码：{response.status_code}")
+
+response = requests.get("http://192.168.1.64/ISAPI/Image/channels/1/focusConfiguration", auth=auth)
+# 输出响应内容
+print(response.text)
