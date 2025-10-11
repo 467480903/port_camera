@@ -1,0 +1,404 @@
+[
+  {
+    "id": "2f9b58d1f9172efa",
+    "type": "tab",
+    "label": "HTTP",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "648db23c2690c43c",
+    "type": "http in",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "url": "/zoom",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 140,
+    "y": 180,
+    "wires": [
+      [
+        "f08c7936b0b88bea"
+      ]
+    ]
+  },
+  {
+    "id": "c2f362cae83a93a9",
+    "type": "http response",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 450,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "f08c7936b0b88bea",
+    "type": "function",
+    "z": "2f9b58d1f9172efa",
+    "name": "function 1",
+    "func": "msg.payload = global.get(\"cam1zoom\");\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 180,
+    "wires": [
+      [
+        "c2f362cae83a93a9"
+      ]
+    ]
+  },
+  {
+    "id": "587321e860790c16",
+    "type": "http in",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "url": "/focus",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 140,
+    "y": 240,
+    "wires": [
+      [
+        "a8c3b703f354befd"
+      ]
+    ]
+  },
+  {
+    "id": "08c8c4ef50f1a2d4",
+    "type": "http response",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 450,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "a8c3b703f354befd",
+    "type": "function",
+    "z": "2f9b58d1f9172efa",
+    "name": "function 2",
+    "func": "msg.payload = global.get(\"cam1focus\");\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 240,
+    "wires": [
+      [
+        "08c8c4ef50f1a2d4"
+      ]
+    ]
+  },
+  {
+    "id": "27886ab86993c7c9",
+    "type": "http in",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "url": "/laser",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 140,
+    "y": 300,
+    "wires": [
+      [
+        "1bd11b425532ca08"
+      ]
+    ]
+  },
+  {
+    "id": "2053fd5b47d687eb",
+    "type": "http response",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 450,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "1bd11b425532ca08",
+    "type": "function",
+    "z": "2f9b58d1f9172efa",
+    "name": "function 3",
+    "func": "msg.payload = global.get(\"laser\");\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 300,
+    "wires": [
+      [
+        "2053fd5b47d687eb"
+      ]
+    ]
+  },
+  {
+    "id": "04c9f951c4f39d15",
+    "type": "http in",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "url": "/setzoom",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 150,
+    "y": 400,
+    "wires": [
+      [
+        "3c3e97c9bac6e3cb",
+        "14a553490716c0c5"
+      ]
+    ]
+  },
+  {
+    "id": "68d757abce2dd03c",
+    "type": "http response",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 750,
+    "y": 400,
+    "wires": []
+  },
+  {
+    "id": "3c3e97c9bac6e3cb",
+    "type": "function",
+    "z": "2f9b58d1f9172efa",
+    "name": "function 4",
+    "func": "global.set(\"cam1zoom\",msg.payload.value);\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 400,
+    "wires": [
+      [
+        "68d757abce2dd03c",
+        "e8a61dedecd86c53"
+      ]
+    ]
+  },
+  {
+    "id": "1f9673862d967ea6",
+    "type": "http in",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "url": "/setfocus",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 150,
+    "y": 460,
+    "wires": [
+      [
+        "a4555070f3964a56",
+        "0b2ba104f8327dde"
+      ]
+    ]
+  },
+  {
+    "id": "67f804b555d04d5a",
+    "type": "http response",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 750,
+    "y": 460,
+    "wires": []
+  },
+  {
+    "id": "a4555070f3964a56",
+    "type": "function",
+    "z": "2f9b58d1f9172efa",
+    "name": "function 5",
+    "func": "global.set(\"cam1focus\",msg.payload.value);\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 460,
+    "wires": [
+      [
+        "67f804b555d04d5a",
+        "e8a61dedecd86c53"
+      ]
+    ]
+  },
+  {
+    "id": "14a553490716c0c5",
+    "type": "debug",
+    "z": "2f9b58d1f9172efa",
+    "name": "debug 3",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 320,
+    "y": 360,
+    "wires": []
+  },
+  {
+    "id": "0b2ba104f8327dde",
+    "type": "debug",
+    "z": "2f9b58d1f9172efa",
+    "name": "debug 4",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 320,
+    "y": 520,
+    "wires": []
+  },
+  {
+    "id": "e8a61dedecd86c53",
+    "type": "link out",
+    "z": "2f9b58d1f9172efa",
+    "name": "OUT_CAMERA",
+    "mode": "link",
+    "links": [
+      "809fc9fc8e25b71a"
+    ],
+    "x": 505,
+    "y": 440,
+    "wires": []
+  },
+  {
+    "id": "607fb801b885b97e",
+    "type": "http in",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "url": "/mode",
+    "method": "get",
+    "upload": false,
+    "swaggerDoc": "",
+    "x": 140,
+    "y": 100,
+    "wires": [
+      [
+        "c04f796453101c24",
+        "4d16084d4068ed8b"
+      ]
+    ]
+  },
+  {
+    "id": "d88175cd3b585ce5",
+    "type": "http response",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 550,
+    "y": 100,
+    "wires": []
+  },
+  {
+    "id": "c04f796453101c24",
+    "type": "function",
+    "z": "2f9b58d1f9172efa",
+    "name": "function 15",
+    "func": "global.set(\"mode\",msg.payload.mode);\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 310,
+    "y": 40,
+    "wires": [
+      [
+        "d88175cd3b585ce5",
+        "27134fd8a18cb5bb"
+      ]
+    ]
+  },
+  {
+    "id": "4d16084d4068ed8b",
+    "type": "debug",
+    "z": "2f9b58d1f9172efa",
+    "name": "debug 6",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 320,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "27134fd8a18cb5bb",
+    "type": "switch",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "property": "mode",
+    "propertyType": "global",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "auto",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 1,
+    "x": 510,
+    "y": 40,
+    "wires": [
+      [
+        "b2274bf8610139dc"
+      ]
+    ]
+  },
+  {
+    "id": "b2274bf8610139dc",
+    "type": "link out",
+    "z": "2f9b58d1f9172efa",
+    "name": "OUT_DO_AUTO",
+    "mode": "link",
+    "links": [
+      "479f35c15608a2f0"
+    ],
+    "x": 685,
+    "y": 40,
+    "wires": []
+  }
+]

@@ -1,0 +1,4893 @@
+[
+    {
+        "id": "e19522c94a64392c",
+        "type": "tab",
+        "label": "cloud sim",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "dab640f06d65d12c",
+        "type": "tab",
+        "label": "device sim",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "2f7c5de1022f2748",
+        "type": "tab",
+        "label": "test",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "5f126a6b883e596b",
+        "type": "http in",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "url": "/cloud",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 170,
+        "y": 120,
+        "wires": [
+            [
+                "ca75c5acbdfed8f7",
+                "c1f081ca3bdb0b16"
+            ]
+        ]
+    },
+    {
+        "id": "ca75c5acbdfed8f7",
+        "type": "debug",
+        "z": "e19522c94a64392c",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 340,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "069f85729bac8f7c",
+        "type": "switch",
+        "z": "e19522c94a64392c",
+        "name": "switch cmd",
+        "property": "payload.cmd",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "login",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "heart",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "read_all_boxes",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "task_fail",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "patroling",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "patrol_done",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "feeding",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "feed_done",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "cleanning",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "clean_done",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 11,
+        "x": 550,
+        "y": 260,
+        "wires": [
+            [
+                "e213fdf2462a4e21"
+            ],
+            [
+                "20a3b728bf1a452a"
+            ],
+            [
+                "d6b36a4e4c99f554"
+            ],
+            [
+                "b62128f32a05bb7c"
+            ],
+            [
+                "f743f56ffbea5bbb"
+            ],
+            [
+                "d4a881b8f8783d4c"
+            ],
+            [
+                "d3010c5f8bd71b3c"
+            ],
+            [
+                "7be8ff047efbc520"
+            ],
+            [
+                "d02c7fd9059d4cc3"
+            ],
+            [
+                "db3c675af51a77d5"
+            ],
+            [
+                "c2a581f712022ddc"
+            ]
+        ]
+    },
+    {
+        "id": "c1f081ca3bdb0b16",
+        "type": "switch",
+        "z": "e19522c94a64392c",
+        "name": "has cmd",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "hask",
+                "v": "cmd",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 360,
+        "y": 260,
+        "wires": [
+            [
+                "069f85729bac8f7c"
+            ],
+            [
+                "e795c7afaed2214a"
+            ]
+        ]
+    },
+    {
+        "id": "e213fdf2462a4e21",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "login",
+        "func": "msg.payload = {\n    \"response_id\": msg.payload.request_id,\n    \"cmd\": \"login\",\n    \"result\": global.get('uuid').v4(),\n    \"time\": (new Date()).toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 120,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "e61de90a931f5a08",
+        "type": "http response",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1310,
+        "y": 820,
+        "wires": []
+    },
+    {
+        "id": "e795c7afaed2214a",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "missing cmd",
+        "func": "msg.payload = {\n    \"response_id\": global.get('uuid').v4(),\n    \"error\":\"missing cmd\",\n    \"time\": (new Date()).toISOString()\n}\nconsole.error(msg.payload)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 570,
+        "y": 820,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "20a3b728bf1a452a",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "heart",
+        "func": "msg.payload = {\n    \"cmd\": \"heart\",\n    \"result\": {\n        \"answer\": msg.payload.data.ask,\n        \"ask\": (new Date()).getTime()\n    }\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 160,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "c2a581f712022ddc",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "no such cmd",
+        "func": "msg.payload = {\n    \"error\":\"no such cmd\",\n    \"time\": (new Date()).toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 600,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "d6b36a4e4c99f554",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "read_all_boxes",
+        "func": "msg.payload = {\n    \"response_id\": msg.payload.request_id,\n    \"cmd\": \"read_all_boxes\",\n    \"result\": [\n        {\n            \"code\": \"A80\",\n            \"x\": 11.481649653390917,\n            \"y\": 45.32491369373343,\n            \"height\": 50,\n            \"specifics\": [\n                {\n                    \"id\": 1,\n                    \"exists\": true,\n                    \"last_patrol\": \"2025-05-14T01:52:34.836Z\",\n                    \"last_feed\": \"2025-05-14T01:52:34.836Z\",\n                    \"last_clean\": \"2025-05-14T01:52:34.836Z\",\n                    \"length\":0.02,\n                    \"width\":0.03\n                },\n                {\n                    \"id\": 2,\n                    \"exists\": false,\n                    \"last_patrol\": \"2025-05-14T01:52:34.836Z\",\n                    \"last_feed\": \"2025-05-14T01:52:34.836Z\",\n                    \"last_clean\": \"2025-05-14T01:52:34.836Z\",\n                    \"length\":0.02,\n                    \"width\":0.03\n                },\n                {\n                    \"id\": 3,\n                    \"exists\": true,\n                    \"last_patrol\": \"2025-05-14T01:52:34.836Z\",\n                    \"last_feed\": \"2025-05-14T01:52:34.836Z\",\n                    \"last_clean\": \"2025-05-14T01:52:34.836Z\",\n                    \"length\":0.02,\n                    \"width\":0.03\n                }\n            ]\n        },\n        {\n            \"code\": \"A60\",\n            \"x\": 22.91528488439715,\n            \"y\": 19.77164897920309,\n            \"height\": 50,\n            \"specifics\": [\n                {\n                    \"id\": 1,\n                    \"exists\": true,\n                    \"last_patrol\": \"2025-05-14T01:52:34.836Z\",\n                    \"last_feed\": \"2025-05-14T01:52:34.836Z\",\n                    \"last_clean\": \"2025-05-14T01:52:34.836Z\",\n                }\n            ]\n        }\n    ]\n}\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 820,
+        "y": 200,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "b62128f32a05bb7c",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "task_fail",
+        "func": "msg.payload = {\n    \"response_id\": \"10590\",\n    \"cmd\": \"task_fail\",\n    \"result\": \"success\"\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 240,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "f743f56ffbea5bbb",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "patroling",
+        "func": "msg.payload = {\n    \"response_id\": \"response122939909\",\n    \"task_id\": \"task_173756467\",\n    \"cmd\": \"patroling\",\n    \"result\": \"success\",\n    \"time\": \"2025-05-14T03:09:26.059Z\"\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 280,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "d4a881b8f8783d4c",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "patrol_done",
+        "func": "msg.payload = {\n    \"response_id\": \"response_193649177\",\n    \"task_id\": \"task_144657291\",\n    \"cmd\": \"patrol_done\",\n    \"result\": \"success\",\n    \"time\": \"2025-05-14T03:16:24.417Z\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 320,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "d3010c5f8bd71b3c",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "feeding",
+        "func": "msg.payload ={\n    \"response_id\": 164476501,\n    \"task_id\": \"FEED_123\",\n    \"cmd\": \"feeding\",\n    \"result\": \"success\",\n    \"time\": \"2025-05-14T03:51:38.770Z\"\n};\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 360,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "7be8ff047efbc520",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "feed_done",
+        "func": "msg.payload = {\n    \"response_id\": \"202504190001\",\n    \"task_id\": \"FEED_123\",\n    \"cmd\": \"feed_done\",\n    \"result\": \"success\",\n    \"time\": \"2025-04-19T06:37:02.982Z\"\n};\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 400,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "d02c7fd9059d4cc3",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "cleanning",
+        "func": "msg.payload = {\n    \"response_id\": \"202505140001\",\n    \"task_id\": \"CLEAN_123456\",\n    \"cmd\": \"cleaning\",\n    \"result\": \"success\",\n    \"time\": \"2025-05-14T04:14:56.488Z\"\n}\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 800,
+        "y": 440,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "db3c675af51a77d5",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "clean_done",
+        "func": "msg.payload = {\n    \"response_id\": \"202505140002\",\n    \"task_id\": \"CLEAN_123456\",\n    \"cmd\": \"clean_done\",\n    \"result\": \"success\",\n    \"time\": \"2025-05-14T05:19:22.296Z\"\n};\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 480,
+        "wires": [
+            [
+                "e61de90a931f5a08"
+            ]
+        ]
+    },
+    {
+        "id": "0dd624640119c5f9",
+        "type": "http request",
+        "z": "e19522c94a64392c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 1100,
+        "wires": [
+            [
+                "66231417d3bc2ae7"
+            ]
+        ]
+    },
+    {
+        "id": "c79c920c43e27b14",
+        "type": "inject",
+        "z": "e19522c94a64392c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 1100,
+        "wires": [
+            [
+                "4ae1050b8eba0d1b"
+            ]
+        ]
+    },
+    {
+        "id": "4ae1050b8eba0d1b",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "login",
+        "func": "msg.payload = {\n    \n    \"request_id\": global.get('uuid').v4(),\n    \"cmd\": \"login\",\n    \"data\":{\n      \"username\":\"user1\",\n      \"password\":\"password\"\n     },\n    \"time\":(new Date()).toISOString(),\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 1100,
+        "wires": [
+            [
+                "0187eb7f3d012ba2"
+            ]
+        ]
+    },
+    {
+        "id": "e75e9943f42d8178",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "token",
+        "func": "flow.set(\"token\",msg.payload.result);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 1100,
+        "wires": [
+            [
+                "955e92823893f335"
+            ]
+        ]
+    },
+    {
+        "id": "66231417d3bc2ae7",
+        "type": "json",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 675,
+        "y": 1100,
+        "wires": [
+            [
+                "e75e9943f42d8178"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "8b505ee8869954c4",
+        "type": "http request",
+        "z": "e19522c94a64392c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 1160,
+        "wires": [
+            [
+                "142663cb545a3ce7"
+            ]
+        ]
+    },
+    {
+        "id": "2ac48671cd022e7c",
+        "type": "inject",
+        "z": "e19522c94a64392c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 1160,
+        "wires": [
+            [
+                "6b50f21004c48d8c"
+            ]
+        ]
+    },
+    {
+        "id": "6b50f21004c48d8c",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "read_all_positions",
+        "func": "\nmsg.payload = {\n    \n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"read_all_positions\",\n    \"data\": {\n\n    }\n\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 370,
+        "y": 1160,
+        "wires": [
+            [
+                "9a998e47ce27da62"
+            ]
+        ]
+    },
+    {
+        "id": "9e41d96337d4fec0",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "read_all_positions",
+        "func": "flow.set(\"all_positions\",msg.payload.result);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 1160,
+        "wires": [
+            [
+                "955e92823893f335"
+            ]
+        ]
+    },
+    {
+        "id": "142663cb545a3ce7",
+        "type": "json",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 675,
+        "y": 1160,
+        "wires": [
+            [
+                "9e41d96337d4fec0"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "ac7b8a7374388a55",
+        "type": "http request",
+        "z": "e19522c94a64392c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 1220,
+        "wires": [
+            [
+                "fb16634009a563e0"
+            ]
+        ]
+    },
+    {
+        "id": "67201e63232f9e76",
+        "type": "inject",
+        "z": "e19522c94a64392c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 1220,
+        "wires": [
+            [
+                "8f3a4f9df6dee7f1"
+            ]
+        ]
+    },
+    {
+        "id": "8f3a4f9df6dee7f1",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "task_cancel",
+        "func": "\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"task_cancel\",\n    \"data\": {\n        \"task_id\": \"20250514\"\n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 1220,
+        "wires": [
+            [
+                "208e69a4f0eaa5fb"
+            ]
+        ]
+    },
+    {
+        "id": "a72a5208ccc0d48c",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "task_cancel",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 810,
+        "y": 1220,
+        "wires": [
+            [
+                "955e92823893f335"
+            ]
+        ]
+    },
+    {
+        "id": "fb16634009a563e0",
+        "type": "json",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 675,
+        "y": 1220,
+        "wires": [
+            [
+                "a72a5208ccc0d48c"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "b5ab9df8ca380b10",
+        "type": "inject",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 180,
+        "y": 940,
+        "wires": [
+            [
+                "001e6ffe24c7d395"
+            ]
+        ]
+    },
+    {
+        "id": "001e6ffe24c7d395",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "cloud address",
+        "func": "flow.set(\"cloud_address\",\"http://42.193.99.214:1880/device\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 940,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0187eb7f3d012ba2",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/\"+msg.payload.cmd;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 485,
+        "y": 1100,
+        "wires": [
+            [
+                "0dd624640119c5f9"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "9a998e47ce27da62",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/\"+msg.payload.cmd;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 485,
+        "y": 1160,
+        "wires": [
+            [
+                "8b505ee8869954c4"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "208e69a4f0eaa5fb",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/\"+msg.payload.cmd;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 485,
+        "y": 1220,
+        "wires": [
+            [
+                "ac7b8a7374388a55"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "a38870ee0afa4910",
+        "type": "http request",
+        "z": "e19522c94a64392c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 1280,
+        "wires": [
+            [
+                "2c08226900beee2c"
+            ]
+        ]
+    },
+    {
+        "id": "d19650a1b3a1a421",
+        "type": "inject",
+        "z": "e19522c94a64392c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 1280,
+        "wires": [
+            [
+                "05eb4f1d6d8d2af7"
+            ]
+        ]
+    },
+    {
+        "id": "05eb4f1d6d8d2af7",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "patrol",
+        "func": "\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"patrol\",\n    task_id: global.get('uuid').v4(),\n    \"description\": \"对某个区域执行巡检\",\n    \"data\": [\n        {\n            \"code\": \"A1\",\n            \"specific\": [\n                0,\n                1,\n                2,\n                3\n            ]\n        },\n        {\n            \"code\": \"A2\",\n            \"specific\": [\n                0,\n                1,\n                3\n            ]\n        }\n    ],\n    \"time\": \"2025-05-14T03:39:06.305Z\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 1280,
+        "wires": [
+            [
+                "0e08c5a9034675fc"
+            ]
+        ]
+    },
+    {
+        "id": "ed9f0435b2255cc2",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "patrol",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 1280,
+        "wires": [
+            [
+                "955e92823893f335"
+            ]
+        ]
+    },
+    {
+        "id": "2c08226900beee2c",
+        "type": "json",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 675,
+        "y": 1280,
+        "wires": [
+            [
+                "ed9f0435b2255cc2"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "0e08c5a9034675fc",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/\"+msg.payload.cmd;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 485,
+        "y": 1280,
+        "wires": [
+            [
+                "a38870ee0afa4910"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "4d64775134c37f2e",
+        "type": "http request",
+        "z": "e19522c94a64392c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 1340,
+        "wires": [
+            [
+                "e9bccaa9ea0340fd"
+            ]
+        ]
+    },
+    {
+        "id": "634e28d78def7e7b",
+        "type": "inject",
+        "z": "e19522c94a64392c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 1340,
+        "wires": [
+            [
+                "a6fd48befcdd2b78"
+            ]
+        ]
+    },
+    {
+        "id": "a6fd48befcdd2b78",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "feed",
+        "func": "\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"feed\",\n        task_id: global.get('uuid').v4(),\n    \"description\": \"对某些区域执行投喂\",\n    \"data\": [\n        {\n            \"position\": \"A1\",\n            \"specific\": [\n                {\n                    \"id\": 0,\n                    \"quantity\": 1.5\n                },\n                {\n                    \"id\": 1,\n                    \"quantity\": 1.5\n                },\n                {\n                    \"id\": 2,\n                    \"quantity\": 1.1\n                },\n                {\n                    \"id\": 3,\n                    \"quantity\": 1\n                }\n            ]\n        },\n        {\n            \"position\": \"A2\",\n            \"specific\": [\n                {\n                    \"id\": 0,\n                    \"quantity\": 1.5\n                },\n                {\n                    \"id\": 1,\n                    \"quantity\": 1.5\n                }\n            ]\n        }\n    ],\n    \"time\": \"2025-05-14T03:43:29.555Z\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 1340,
+        "wires": [
+            [
+                "97b35d344dda1714"
+            ]
+        ]
+    },
+    {
+        "id": "96b3a1c83ed026be",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "feed ",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 1340,
+        "wires": [
+            [
+                "955e92823893f335"
+            ]
+        ]
+    },
+    {
+        "id": "e9bccaa9ea0340fd",
+        "type": "json",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 675,
+        "y": 1340,
+        "wires": [
+            [
+                "96b3a1c83ed026be"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "97b35d344dda1714",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/\"+msg.payload.cmd;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 485,
+        "y": 1340,
+        "wires": [
+            [
+                "4d64775134c37f2e"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "955e92823893f335",
+        "type": "debug",
+        "z": "e19522c94a64392c",
+        "name": "debug 5",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 1160,
+        "wires": []
+    },
+    {
+        "id": "6b77d1f8a6ca2928",
+        "type": "http request",
+        "z": "e19522c94a64392c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 1400,
+        "wires": [
+            [
+                "bfb063f7aa136f94"
+            ]
+        ]
+    },
+    {
+        "id": "8277b866c223ccf5",
+        "type": "inject",
+        "z": "e19522c94a64392c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 1400,
+        "wires": [
+            [
+                "5479152eb432a960"
+            ]
+        ]
+    },
+    {
+        "id": "5479152eb432a960",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "clean",
+        "func": "\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"clean\",\n        task_id: global.get('uuid').v4(),\n    \"description\": \"对某些区域执行清洗\",\n    \"data\": [\n        {\n            \"position\": \"A1\",\n            \"specific\": [\n                0,\n                1,\n                2,\n                3\n            ]\n        },\n        {\n            \"position\": \"A2\",\n            \"specific\": [\n                0,\n                1\n            ]\n        }\n    ],\n    \"time\": \"2025-05-14T04:10:27.024Z\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 1400,
+        "wires": [
+            [
+                "2361ede6f3d8c4ef"
+            ]
+        ]
+    },
+    {
+        "id": "c555f03da31db3c4",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "clean",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 790,
+        "y": 1400,
+        "wires": [
+            [
+                "955e92823893f335"
+            ]
+        ]
+    },
+    {
+        "id": "bfb063f7aa136f94",
+        "type": "json",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 675,
+        "y": 1400,
+        "wires": [
+            [
+                "c555f03da31db3c4"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "2361ede6f3d8c4ef",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/\"+msg.payload.cmd;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 485,
+        "y": 1400,
+        "wires": [
+            [
+                "6b77d1f8a6ca2928"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "3b2931487536eb77",
+        "type": "http request",
+        "z": "e19522c94a64392c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 600,
+        "y": 1460,
+        "wires": [
+            [
+                "86b58e85658415ad"
+            ]
+        ]
+    },
+    {
+        "id": "ef8e359c5fa9712d",
+        "type": "inject",
+        "z": "e19522c94a64392c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 1460,
+        "wires": [
+            [
+                "57ae04ecd6050aac"
+            ]
+        ]
+    },
+    {
+        "id": "57ae04ecd6050aac",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "devices_descriptions",
+        "func": "\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"devices_descriptions\",\n    \"data\": {\n        \"devices\": \"ALL\"\n    },\n    \"time\": \"2025-05-13T14:56:42.660Z\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 380,
+        "y": 1460,
+        "wires": [
+            [
+                "d28269cf0aecb148"
+            ]
+        ]
+    },
+    {
+        "id": "12883cf40d709f79",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "devices_descriptions",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1460,
+        "wires": [
+            [
+                "955e92823893f335"
+            ]
+        ]
+    },
+    {
+        "id": "86b58e85658415ad",
+        "type": "json",
+        "z": "e19522c94a64392c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 705,
+        "y": 1460,
+        "wires": [
+            [
+                "12883cf40d709f79"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "d28269cf0aecb148",
+        "type": "function",
+        "z": "e19522c94a64392c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/\"+msg.payload.cmd;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 515,
+        "y": 1460,
+        "wires": [
+            [
+                "3b2931487536eb77"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "2f12f7c87b2071d2",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 510,
+        "y": 300,
+        "wires": [
+            [
+                "64567a0fb550cc44"
+            ]
+        ]
+    },
+    {
+        "id": "668ba68b6ebed2e7",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 300,
+        "wires": [
+            [
+                "70ca96b9b935513f"
+            ]
+        ]
+    },
+    {
+        "id": "70ca96b9b935513f",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "login",
+        "func": "msg.payload = {\n    \n    \"request_id\": global.get('uuid').v4(),\n    \"cmd\": \"login\",\n    \"data\":{\n      \"username\":\"testuser\",\n      \"password\":\"af88a0ae641589b908fa8b31f0fcf6e1\"\n     },\n    \"time\":(new Date()).toISOString(),\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 300,
+        "wires": [
+            [
+                "50520ce0f1fa28ec"
+            ]
+        ]
+    },
+    {
+        "id": "7201bcad364097bd",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 2",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1100,
+        "y": 300,
+        "wires": []
+    },
+    {
+        "id": "03a53eb4585b9122",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "token",
+        "func": "flow.set(\"token\",msg.payload.result);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 730,
+        "y": 300,
+        "wires": [
+            [
+                "7201bcad364097bd"
+            ]
+        ]
+    },
+    {
+        "id": "64567a0fb550cc44",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 615,
+        "y": 300,
+        "wires": [
+            [
+                "03a53eb4585b9122"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "305e51a978a927cf",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 510,
+        "y": 420,
+        "wires": [
+            [
+                "7b4c0407007b0de1"
+            ]
+        ]
+    },
+    {
+        "id": "babf564b5aa0e2c9",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "60",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 150,
+        "y": 420,
+        "wires": [
+            [
+                "9ee0b59b29e3b628"
+            ]
+        ]
+    },
+    {
+        "id": "9ee0b59b29e3b628",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "heart",
+        "func": "var answer = (new Date()).getTime();\nif ( typeof(flow.get(\"heart-answer\"))!='undefined'){\n  console.error(flow.get(\"heart-answer\"));\n  answer = flow.get(\"heart-answer\");\n}\nmsg.payload = {\n    \n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"heart\",\n    \"data\": {\n      \"answer\": answer,\n      \"ask\": (new Date()).getTime(),\n    }\n\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 420,
+        "wires": [
+            [
+                "233ff0a47a7fdfe6"
+            ]
+        ]
+    },
+    {
+        "id": "e0e9b7c2731e80a3",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "heart-answer",
+        "func": "flow.set(\"heart-answer\",msg.payload.result.ask);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 750,
+        "y": 420,
+        "wires": [
+            [
+                "ccbea1dd708866d6"
+            ]
+        ]
+    },
+    {
+        "id": "7b4c0407007b0de1",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 615,
+        "y": 420,
+        "wires": [
+            [
+                "e0e9b7c2731e80a3"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "dde8290ee6295061",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 40,
+        "wires": [
+            [
+                "b48d37829fe2bf68"
+            ]
+        ]
+    },
+    {
+        "id": "b48d37829fe2bf68",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "cloud address",
+        "func": "flow.set(\"cloud_address\",\"http://42.193.99.214:1880/cloud\");\nflow.set(\"cloud_address\", \"https://www.sritnb.cn/smqx-crab/crab/api\");\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 40,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "50520ce0f1fa28ec",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/login\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 425,
+        "y": 300,
+        "wires": [
+            [
+                "2f12f7c87b2071d2"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "233ff0a47a7fdfe6",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\") +\"/heart\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 425,
+        "y": 420,
+        "wires": [
+            [
+                "305e51a978a927cf"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "8822f94c4bd6eed1",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 480,
+        "wires": [
+            [
+                "5fb16823687956b6"
+            ]
+        ]
+    },
+    {
+        "id": "693275f397206d4f",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 480,
+        "wires": [
+            [
+                "b9e45e025a7e0698"
+            ]
+        ]
+    },
+    {
+        "id": "b9e45e025a7e0698",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "read_all_boxes",
+        "func": "\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"read_all_boxes\",\n    \"data\": { }\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 320,
+        "y": 480,
+        "wires": [
+            [
+                "a151060f5463cdc2"
+            ]
+        ]
+    },
+    {
+        "id": "2492ec7b2cc8dddc",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "all_boxes",
+        "func": "flow.set(\"all_boxes\",msg.payload.result);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 480,
+        "wires": [
+            [
+                "7201bcad364097bd"
+            ]
+        ]
+    },
+    {
+        "id": "5fb16823687956b6",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 635,
+        "y": 480,
+        "wires": [
+            [
+                "2492ec7b2cc8dddc"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "a151060f5463cdc2",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\") +\"/read_all_boxes\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 445,
+        "y": 480,
+        "wires": [
+            [
+                "8822f94c4bd6eed1"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "1e82c0a0c3c07e7e",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 580,
+        "wires": [
+            [
+                "1624a37a25045f5c"
+            ]
+        ]
+    },
+    {
+        "id": "deb771c2198e6681",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 580,
+        "wires": [
+            [
+                "137de9b66c294b8f"
+            ]
+        ]
+    },
+    {
+        "id": "137de9b66c294b8f",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "task_fail",
+        "func": "\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"task_fail\",\n    \"data\": { \n       \"task_id\": flow.get(\"task_id\")\n    }\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 580,
+        "wires": [
+            [
+                "1b6cb81143758df6"
+            ]
+        ]
+    },
+    {
+        "id": "538c83558f7e52da",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "task_fail f",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 580,
+        "wires": [
+            [
+                "7201bcad364097bd"
+            ]
+        ]
+    },
+    {
+        "id": "1624a37a25045f5c",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 635,
+        "y": 580,
+        "wires": [
+            [
+                "538c83558f7e52da"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "1b6cb81143758df6",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\") + \"/task_fail\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 445,
+        "y": 580,
+        "wires": [
+            [
+                "1e82c0a0c3c07e7e"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "76522693f9920785",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 680,
+        "wires": [
+            [
+                "903fb0e3c95bfedc"
+            ]
+        ]
+    },
+    {
+        "id": "0c2c0507076f5995",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 680,
+        "wires": [
+            [
+                "162bad58c3119b47"
+            ]
+        ]
+    },
+    {
+        "id": "162bad58c3119b47",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "patroling",
+        "func": "var request = flow.get(\"patrol_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"patroling\",\n    \"task_id\": request.task_id,\n    \"data\": {\n        \"position\": request.data[0].code,\n        \"specific\":  request.data[0].specific[0],\n        \"photo_id\": flow.get(\"file_upload_result\")['file_id']\n    },\n    \"time\": (new Date()).toISOString(),\n}\n\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 680,
+        "wires": [
+            [
+                "e81b87cb85dc47c0"
+            ]
+        ]
+    },
+    {
+        "id": "8fe3f0b464b92bdf",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "patroling f",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 680,
+        "wires": [
+            [
+                "7201bcad364097bd"
+            ]
+        ]
+    },
+    {
+        "id": "903fb0e3c95bfedc",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 635,
+        "y": 680,
+        "wires": [
+            [
+                "8fe3f0b464b92bdf"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "e81b87cb85dc47c0",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\") +\"/patroling\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 445,
+        "y": 680,
+        "wires": [
+            [
+                "76522693f9920785",
+                "4f226043c33d0137"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "2c5f13e2550b8d03",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 760,
+        "wires": [
+            [
+                "2c9e02800baab280"
+            ]
+        ]
+    },
+    {
+        "id": "48d340fc86f1a1e1",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 120,
+        "y": 740,
+        "wires": [
+            [
+                "1d7e1fd0d01585e5"
+            ]
+        ]
+    },
+    {
+        "id": "1d7e1fd0d01585e5",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "patrol_done",
+        "func": "var request = flow.get(\"patrol_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"patrol_done\",\n    \"task_id\": request.task_id,\n    \"data\": [\n        {\n            \"position\": \"A1\",\n            \"specific\": 0,\n            \"photo_id\": \"photo_1\"\n        },\n        {\n            \"position\": \"A1\",\n            \"specific\": 1,\n            \"photo_id\": \"photo_11\"\n        },\n        {\n            \"position\": \"A1\",\n            \"specific\": 2,\n            \"photo_id\": \"photo_12\"\n        },\n        {\n            \"position\": \"A2\",\n            \"specific\": 0,\n            \"photo_id\": \"photo_2\"\n        },\n        {\n            \"position\": \"A2\",\n            \"specific\": 1,\n            \"photo_id\": \"photo_21\"\n        }\n    ],\n    \"time\": (new Date()).toISOString(),\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 760,
+        "wires": [
+            [
+                "dc6be27c01ea4aa2"
+            ]
+        ]
+    },
+    {
+        "id": "115d8c83ce65a883",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "patrol_done f",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 760,
+        "wires": [
+            [
+                "7201bcad364097bd"
+            ]
+        ]
+    },
+    {
+        "id": "2c9e02800baab280",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 635,
+        "y": 760,
+        "wires": [
+            [
+                "115d8c83ce65a883"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "dc6be27c01ea4aa2",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/patrol_done\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 445,
+        "y": 760,
+        "wires": [
+            [
+                "2c5f13e2550b8d03"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "451ccb39af0a223e",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 840,
+        "wires": [
+            [
+                "250ca237beac1b7e"
+            ]
+        ]
+    },
+    {
+        "id": "a7ca1bbd2f24d800",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 840,
+        "wires": [
+            [
+                "f4516fb83e016934"
+            ]
+        ]
+    },
+    {
+        "id": "f4516fb83e016934",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "feeding",
+        "func": "var feed_request = flow.get(\"feed_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n   \"cmd\": \"feeding\",\n   \"task_id\": feed_request.task_id,\n    \"data\": {\n        \"position\": \"A12\",\n        \"specific\": 52,\n        \"quantity\": 1.5\n    },\n    \"time\": (new Date()).toISOString()\n}\n\nmsg.payload.data.position = feed_request.data[0].position;\nmsg.payload.data.specific = feed_request.data[0].specific[0].id;\nmsg.payload.data.quantity = feed_request.data[0].specific[0].quantity;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 840,
+        "wires": [
+            [
+                "3da9ac34a5ac0bf7"
+            ]
+        ]
+    },
+    {
+        "id": "c4efa9228ac96a81",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "feeding f",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 760,
+        "y": 840,
+        "wires": [
+            [
+                "7201bcad364097bd"
+            ]
+        ]
+    },
+    {
+        "id": "250ca237beac1b7e",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 635,
+        "y": 840,
+        "wires": [
+            [
+                "c4efa9228ac96a81"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "3da9ac34a5ac0bf7",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/feeding\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 445,
+        "y": 840,
+        "wires": [
+            [
+                "451ccb39af0a223e"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "4ec63f4c9ab4cc72",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 920,
+        "wires": [
+            [
+                "ba3f8e6ce7d094bf"
+            ]
+        ]
+    },
+    {
+        "id": "c92eae80b5937478",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 920,
+        "wires": [
+            [
+                "6a5424039ec01bce"
+            ]
+        ]
+    },
+    {
+        "id": "6a5424039ec01bce",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "feed_done",
+        "func": "var feed_request = flow.get(\"feed_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"feed_done\",\n    \"task_id\": feed_request.task_id,\n    \"data\": [\n        {\n            \"position\": \"A1\",\n            \"specific\": [\n                {\n                    \"id\": 0,\n                    \"quantity\": 1.5\n                },\n                {\n                    \"id\": 1,\n                    \"quantity\": 1.5\n                },\n                {\n                    \"id\": 2,\n                    \"quantity\": 1.1\n                },\n                {\n                    \"id\": 3,\n                    \"quantity\": 1\n                }\n            ]\n        },\n        {\n            \"position\": \"A2\",\n            \"specific\": [\n                {\n                    \"id\": 0,\n                    \"quantity\": 1.5\n                },\n                {\n                    \"id\": 1,\n                    \"quantity\": 1.5\n                }\n            ]\n        }\n    ],\n    \"time\": (new Date()).toISOString()\n}\n\nmsg.payload.data = feed_request.data;\n\n// arr_.push({\n//     position : feed_request.data[0].position,\n//     specific: feed_request.data[0].specific\n// });\n\n// arr_.push({\n//     position: feed_request.data[1].position,\n//     specific: feed_request.data[1].specific\n// });\n\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 920,
+        "wires": [
+            [
+                "e0366c9d6bccddcf"
+            ]
+        ]
+    },
+    {
+        "id": "025ea1e7426a1423",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "feed_done f",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 920,
+        "wires": [
+            [
+                "7201bcad364097bd"
+            ]
+        ]
+    },
+    {
+        "id": "ba3f8e6ce7d094bf",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 635,
+        "y": 920,
+        "wires": [
+            [
+                "025ea1e7426a1423"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "e0366c9d6bccddcf",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/feed_done\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 445,
+        "y": 920,
+        "wires": [
+            [
+                "4ec63f4c9ab4cc72",
+                "a0e57364bb5cced7"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "909d20445d0b6f71",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 1000,
+        "wires": [
+            [
+                "48c21f86fbec2c5e"
+            ]
+        ]
+    },
+    {
+        "id": "75675cb6f06ea32b",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 1000,
+        "wires": [
+            [
+                "dbfcdb500d663a06"
+            ]
+        ]
+    },
+    {
+        "id": "dbfcdb500d663a06",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "cleanning",
+        "func": "var request = flow.get(\"clean_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"cleanning\",\n    \"task_id\": request.task_id,\n    \"data\": {\n        \"position\": \"A1\",\n        \"specific\": 2\n    },\n    \"time\": (new Date()).toISOString()\n}\n\n\nmsg.payload.data.position = request.data[0].position;\nmsg.payload.data.specific = request.data[0].specific[0];\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 300,
+        "y": 1000,
+        "wires": [
+            [
+                "6c049e369ed15fca",
+                "036ddfc0e4373ac4"
+            ]
+        ]
+    },
+    {
+        "id": "a9ef1baf4e2103f3",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "cleanning f",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 1000,
+        "wires": [
+            [
+                "7201bcad364097bd"
+            ]
+        ]
+    },
+    {
+        "id": "48c21f86fbec2c5e",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 635,
+        "y": 1000,
+        "wires": [
+            [
+                "a9ef1baf4e2103f3"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "6c049e369ed15fca",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/cleanning\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 445,
+        "y": 1000,
+        "wires": [
+            [
+                "909d20445d0b6f71"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "bf73ded8daca567a",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 1080,
+        "wires": [
+            [
+                "f7475ef4e3bd317a"
+            ]
+        ]
+    },
+    {
+        "id": "46cc0e9c4e4e59bd",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 1080,
+        "wires": [
+            [
+                "619ee7ebc03f1788"
+            ]
+        ]
+    },
+    {
+        "id": "619ee7ebc03f1788",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "clean_done",
+        "func": "var request = flow.get(\"clean_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"clean_done\",\n    \"task_id\": request.task_id,\n    \"data\": [\n        {\n            \"position\": \"A1\",\n            \"specific\": [\n                0,\n                1,\n                2,\n                3\n            ]\n        },\n        {\n            \"position\": \"A2\",\n            \"specific\": [\n                0,\n                1\n            ]\n        }\n    ],\n    \"time\": (new Date()).toISOString()\n}\nmsg.payload.data = request.data;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 310,
+        "y": 1080,
+        "wires": [
+            [
+                "781da44eb691dedc"
+            ]
+        ]
+    },
+    {
+        "id": "fb869907b41aec56",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "clean_done f",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 770,
+        "y": 1080,
+        "wires": [
+            [
+                "7201bcad364097bd"
+            ]
+        ]
+    },
+    {
+        "id": "f7475ef4e3bd317a",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 635,
+        "y": 1080,
+        "wires": [
+            [
+                "fb869907b41aec56"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "781da44eb691dedc",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/clean_done\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 445,
+        "y": 1080,
+        "wires": [
+            [
+                "bf73ded8daca567a"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "5c2378db11bbe79b",
+        "type": "http in",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "url": "/device",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 150,
+        "y": 1300,
+        "wires": [
+            [
+                "9e7ede0484ed836a",
+                "16ea809805ca2907"
+            ]
+        ]
+    },
+    {
+        "id": "9e7ede0484ed836a",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 3",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 320,
+        "y": 1240,
+        "wires": []
+    },
+    {
+        "id": "16ea809805ca2907",
+        "type": "switch",
+        "z": "dab640f06d65d12c",
+        "name": "has cmd",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "hask",
+                "v": "cmd",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 320,
+        "y": 1680,
+        "wires": [
+            [
+                "c2731911b5f55e6e"
+            ],
+            [
+                "ed0ac0040f1785a0"
+            ]
+        ]
+    },
+    {
+        "id": "c2731911b5f55e6e",
+        "type": "switch",
+        "z": "dab640f06d65d12c",
+        "name": "switch cmd",
+        "property": "payload.cmd",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "login",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "read_all_positions",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "task_cancel",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "patrol",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "feed",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "clean",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "devices_descriptions",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 8,
+        "x": 330,
+        "y": 1600,
+        "wires": [
+            [
+                "cbb9793df3d7ebf9"
+            ],
+            [
+                "49c52c799ec9ca83"
+            ],
+            [
+                "26c03716fe9de792"
+            ],
+            [
+                "4440b103f8fd9b43"
+            ],
+            [
+                "95a769b8039005cf"
+            ],
+            [
+                "640c08975d6dceaa"
+            ],
+            [
+                "db5ff92e8bde61cb"
+            ],
+            [
+                "aaaefd71f70e4c43"
+            ]
+        ]
+    },
+    {
+        "id": "ed0ac0040f1785a0",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "missing cmd",
+        "func": "msg.payload = {\n    \"response_id\": global.get('uuid').v4(),\n    \"error\":\"missing cmd\",\n    \"time\": (new Date()).toISOString()\n}\nconsole.error(msg.payload)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 1680,
+        "wires": [
+            [
+                "f25e979b209e9a56"
+            ]
+        ]
+    },
+    {
+        "id": "f25e979b209e9a56",
+        "type": "http response",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 1270,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "cbb9793df3d7ebf9",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "login",
+        "func": "msg.payload = {\n    \"response_id\": msg.payload.request_id,\n    \"cmd\": \"login\",\n    \"result\": global.get('uuid').v4(),\n    \"time\": (new Date()).toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 1320,
+        "wires": [
+            [
+                "f25e979b209e9a56"
+            ]
+        ]
+    },
+    {
+        "id": "aaaefd71f70e4c43",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "no such cmd",
+        "func": "msg.payload = {\n    \"error\":\"no such cmd\",\n    \"time\": (new Date()).toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 1620,
+        "wires": [
+            [
+                "f25e979b209e9a56"
+            ]
+        ]
+    },
+    {
+        "id": "49c52c799ec9ca83",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "read_all_positions",
+        "func": "msg.payload = {\n    \"response_id\": msg.payload.request_id,\n    \"cmd\": \"read_all_positions\",\n    \"result\": [\n        {\n            \"code\": \"A12\",\n            \"x\": 63.984739352150584,\n            \"y\": 39.172286676552744,\n            \"r\": 129.2850350990478\n        },\n        {\n            \"code\": \"A48\",\n            \"x\": 60.35791923550421,\n            \"y\": 88.43770197564186,\n            \"r\": 121.19233333316798\n        }\n    ],\n    \"time\": (new Date()).toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 870,
+        "y": 1360,
+        "wires": [
+            [
+                "f25e979b209e9a56",
+                "fc9c2f076b8df6ab"
+            ]
+        ]
+    },
+    {
+        "id": "26c03716fe9de792",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "task_cancel",
+        "func": "msg.payload = {\n    \"response_id\": msg.payload.request_id,\n    \"cmd\": \"task_cancel\",\n    \"result\": \"success\",\n    \"time\": (new Date()).toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 1400,
+        "wires": [
+            [
+                "f25e979b209e9a56"
+            ]
+        ]
+    },
+    {
+        "id": "4440b103f8fd9b43",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "patrol",
+        "func": "flow.set(\"patrol_request\",msg.payload);\nmsg.payload = {\n    \"response_id\": msg.payload.request_id,\n    \"cmd\": \"patrol\",\n   \"result\": \"success\",\n           \"task_id\": msg.payload.task_id,\n    \"time\": (new Date()).toISOString()\n};\nflow.set(\"task_id\",msg.payload.task_id);\nflow.set(\"task_type\", msg.payload.cmd);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 1440,
+        "wires": [
+            [
+                "f25e979b209e9a56",
+                "79feb44fb6548bbe"
+            ]
+        ]
+    },
+    {
+        "id": "95a769b8039005cf",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "feed",
+        "func": "flow.set(\"feed_request\",msg.payload);\nmsg.payload = {\n    \"response_id\": msg.payload.request_id,\n    \"cmd\": \"feed\",\n    \"description\": \"对某些区域执行投喂\",\n    \"result\": \"success\",\n            \"task_id\": msg.payload.task_id,\n    \"time\": (new Date()).toISOString()\n};\nflow.set(\"task_id\",msg.payload.task_id);\nflow.set(\"task_type\", msg.payload.cmd);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 1480,
+        "wires": [
+            [
+                "f25e979b209e9a56",
+                "ba596998d3b3753a"
+            ]
+        ]
+    },
+    {
+        "id": "640c08975d6dceaa",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "clean",
+        "func": "flow.set(\"clean_request\",msg.payload);\nmsg.payload = {\n    \"response_id\": msg.payload.request_id,\n    \"cmd\": \"clean\",\n        \"task_id\": msg.payload.task_id,\n   \"result\": \"success\",\n    \"time\": (new Date()).toISOString()\n};\nflow.set(\"task_id\",msg.payload.task_id);\nflow.set(\"task_type\", msg.payload.cmd);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 830,
+        "y": 1520,
+        "wires": [
+            [
+                "f25e979b209e9a56",
+                "91518d83321ff1ab"
+            ]
+        ]
+    },
+    {
+        "id": "db5ff92e8bde61cb",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "devices_descriptions",
+        "func": "msg.payload = {\n    \"response_id\": msg.payload.request_id,\n    \"cmd\": \"devices_descriptions\",\n  \"result\": [\n        {\n            \"code\": \"AMR_10\",\n            \"state\": \"waiting\",\n            \"state_description\": [\n                \"waiting\",\n                \"running\",\n                \"charging\",\n                \"error\",\n                \"rebooting\",\n                \"initing\"\n            ],\n            \"components\": [\n                {\n                    \"code\": \"AGV_18\",\n                    \"x\": \"24.4113\",\n                    \"y\": \"73.5456\",\n                    \"z\": \"52.5491\",\n                    \"r\": \"46.8544\",\n                    \"state\": \"waiting\",\n                    \"state_description\": [\n                        \"moving\",\n                        \"waiting\",\n                        \"error\",\n                        \"charging\"\n                    ],\n                    \"error_code\": \"-\",\n                    \"previes_position_code\": \"P1518\",\n                    \"target_position_code\": \"P1223\",\n                    \"current_position_code\": \"P1175\",\n                    \"QRcode_scanner\": \"CODE117695454\"\n                },\n                {\n                    \"code\": \"ROBOT_17\",\n                    \"joints\": [\n                        {\n                            \"name\": \"j1\",\n                            \"encoder\": 190933454,\n                            \"ration\": 65535,\n                            \"position\": \"100.5871\",\n                            \"velocity\": \"398.2834\",\n                            \"torque\": \"438.2119\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j2\",\n                            \"encoder\": 129541259,\n                            \"ration\": 65535,\n                            \"position\": \"44.1086\",\n                            \"velocity\": \"42.0991\",\n                            \"torque\": \"232.1509\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j3\",\n                            \"encoder\": 172305829,\n                            \"ration\": 65535,\n                            \"position\": \"92.0669\",\n                            \"velocity\": \"90.4997\",\n                            \"torque\": \"250.0399\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j4\",\n                            \"encoder\": 171829746,\n                            \"ration\": 65535,\n                            \"position\": \"173.4402\",\n                            \"velocity\": \"769.5842\",\n                            \"torque\": \"762.8201\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j5\",\n                            \"encoder\": 105453003,\n                            \"ration\": 65535,\n                            \"position\": \"77.9814\",\n                            \"velocity\": \"753.0665\",\n                            \"torque\": \"563.8057\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j6\",\n                            \"encoder\": 155672370,\n                            \"ration\": 65535,\n                            \"position\": \"175.8273\",\n                            \"velocity\": \"879.1544\",\n                            \"torque\": \"881.3698\",\n                            \"error_code\": \"-\"\n                        }\n                    ],\n                    \"state\": \"waiting\",\n                    \"state_description\": [\n                        \"auto-running\",\n                        \"waiting\",\n                        \"error\",\n                        \"manual-running\"\n                    ],\n                    \"error_code\": \"-\",\n                    \"current_program\": \"program20250513.lua\",\n                    \"tool_coordinates\": {\n                        \"x\": \"457.7106\",\n                        \"y\": \"719.9508\",\n                        \"z\": \"914.3824\",\n                        \"rx\": \"25.6935\",\n                        \"ry\": \"187.7403\",\n                        \"rz\": \"257.6622\"\n                    },\n                    \"mode\": \"AUTO\",\n                    \"arm\": \"MAIN\",\n                    \"DO\": [\n                        0,\n                        0,\n                        0,\n                        0,\n                        0,\n                        0,\n                        0,\n                        0\n                    ],\n                    \"DI\": [\n                        1,\n                        1,\n                        1,\n                        1,\n                        1,\n                        1,\n                        1,\n                        1\n                    ]\n                },\n                {\n                    \"code\": \"VISION_19\",\n                    \"state\": \"waiting\",\n                    \"state_description\": [\n                        \"waiting\",\n                        \"error\"\n                    ]\n                }\n            ]\n        },\n        {\n            \"code\": \"AMR_16\",\n            \"state\": \"waiting\",\n            \"state_description\": [\n                \"waiting\",\n                \"running\",\n                \"charging\",\n                \"error\",\n                \"rebooting\",\n                \"initing\"\n            ],\n            \"components\": [\n                {\n                    \"code\": \"AGV_19\",\n                    \"x\": \"16.3267\",\n                    \"y\": \"23.8371\",\n                    \"z\": \"38.5667\",\n                    \"r\": \"70.6358\",\n                    \"state\": \"waiting\",\n                    \"state_description\": [\n                        \"moving\",\n                        \"waiting\",\n                        \"error\",\n                        \"charging\"\n                    ],\n                    \"error_code\": \"-\",\n                    \"previes_position_code\": \"P1133\",\n                    \"target_position_code\": \"P1039\",\n                    \"current_position_code\": \"P1093\",\n                    \"QRcode_scanner\": \"CODE158887238\"\n                },\n                {\n                    \"code\": \"ROBOT_15\",\n                    \"joints\": [\n                        {\n                            \"name\": \"j1\",\n                            \"encoder\": 112305881,\n                            \"ration\": 65535,\n                            \"position\": \"15.4475\",\n                            \"velocity\": \"918.4090\",\n                            \"torque\": \"887.6573\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j2\",\n                            \"encoder\": 179653427,\n                            \"ration\": 65535,\n                            \"position\": \"2.8994\",\n                            \"velocity\": \"918.8914\",\n                            \"torque\": \"240.0629\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j3\",\n                            \"encoder\": 146866615,\n                            \"ration\": 65535,\n                            \"position\": \"167.1354\",\n                            \"velocity\": \"112.4577\",\n                            \"torque\": \"529.4717\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j4\",\n                            \"encoder\": 154454077,\n                            \"ration\": 65535,\n                            \"position\": \"118.0143\",\n                            \"velocity\": \"273.9283\",\n                            \"torque\": \"442.0505\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j5\",\n                            \"encoder\": 189229283,\n                            \"ration\": 65535,\n                            \"position\": \"43.7476\",\n                            \"velocity\": \"500.5635\",\n                            \"torque\": \"686.5565\",\n                            \"error_code\": \"-\"\n                        },\n                        {\n                            \"name\": \"j6\",\n                            \"encoder\": 108520606,\n                            \"ration\": 65535,\n                            \"position\": \"95.8493\",\n                            \"velocity\": \"251.3306\",\n                            \"torque\": \"650.9995\",\n                            \"error_code\": \"-\"\n                        }\n                    ],\n                    \"state\": \"waiting\",\n                    \"state_description\": [\n                        \"auto-running\",\n                        \"waiting\",\n                        \"error\",\n                        \"manual-running\"\n                    ],\n                    \"error_code\": \"-\",\n                    \"current_program\": \"program20250513.lua\",\n                    \"tool_coordinates\": {\n                        \"x\": \"368.4089\",\n                        \"y\": \"560.8837\",\n                        \"z\": \"558.8271\",\n                        \"rx\": \"119.0054\",\n                        \"ry\": \"20.7585\",\n                        \"rz\": \"233.4679\"\n                    },\n                    \"mode\": \"AUTO\",\n                    \"arm\": \"MAIN\",\n                    \"DO\": [\n                        0,\n                        0,\n                        0,\n                        0,\n                        0,\n                        0,\n                        0,\n                        0\n                    ],\n                    \"DI\": [\n                        1,\n                        1,\n                        1,\n                        1,\n                        1,\n                        1,\n                        1,\n                        1\n                    ]\n                },\n                {\n                    \"code\": \"VISION_10\",\n                    \"state\": \"waiting\",\n                    \"state_description\": [\n                        \"waiting\",\n                        \"error\"\n                    ]\n                }\n            ]\n        }\n    ],\n    \"time\": (new Date()).toISOString()\n};\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 880,
+        "y": 1580,
+        "wires": [
+            [
+                "f25e979b209e9a56"
+            ]
+        ]
+    },
+    {
+        "id": "e6794bad68cf3bd7",
+        "type": "http in",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "url": "/device/login",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 570,
+        "y": 1320,
+        "wires": [
+            [
+                "cbb9793df3d7ebf9",
+                "efb68df65fb8cb0a"
+            ]
+        ]
+    },
+    {
+        "id": "eab840d63a1bf590",
+        "type": "http in",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "url": "/device/read_all_positions",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 610,
+        "y": 1360,
+        "wires": [
+            [
+                "49c52c799ec9ca83",
+                "efb68df65fb8cb0a"
+            ]
+        ]
+    },
+    {
+        "id": "ceed0cc230fbee1f",
+        "type": "http in",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "url": "/device/task_cancel",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 590,
+        "y": 1400,
+        "wires": [
+            [
+                "26c03716fe9de792",
+                "efb68df65fb8cb0a"
+            ]
+        ]
+    },
+    {
+        "id": "3cca33534d2d721d",
+        "type": "http in",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "url": "/device/patrol",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 570,
+        "y": 1440,
+        "wires": [
+            [
+                "4440b103f8fd9b43",
+                "5b3c3a81eb817723",
+                "efb68df65fb8cb0a"
+            ]
+        ]
+    },
+    {
+        "id": "465f7dced15ea1cd",
+        "type": "http in",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "url": "/device/feed",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 570,
+        "y": 1480,
+        "wires": [
+            [
+                "95a769b8039005cf",
+                "eeaea9c75098f59c",
+                "efb68df65fb8cb0a"
+            ]
+        ]
+    },
+    {
+        "id": "bfacc0af1bf4f569",
+        "type": "http in",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "url": "/device/clean",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 570,
+        "y": 1520,
+        "wires": [
+            [
+                "640c08975d6dceaa",
+                "07616c5cc650f496",
+                "efb68df65fb8cb0a"
+            ]
+        ]
+    },
+    {
+        "id": "4c020e7408dab122",
+        "type": "http in",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "url": "/device/devices_descriptions",
+        "method": "post",
+        "upload": false,
+        "skipBodyParsing": false,
+        "swaggerDoc": "",
+        "x": 600,
+        "y": 1580,
+        "wires": [
+            [
+                "db5ff92e8bde61cb"
+            ]
+        ]
+    },
+    {
+        "id": "ccbea1dd708866d6",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 6",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 800,
+        "y": 360,
+        "wires": []
+    },
+    {
+        "id": "f4392ebf4fbff24b",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 380,
+        "wires": [
+            [
+                "9ee0b59b29e3b628"
+            ]
+        ]
+    },
+    {
+        "id": "5b3c3a81eb817723",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 7",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 1780,
+        "wires": []
+    },
+    {
+        "id": "eeaea9c75098f59c",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 8",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 1820,
+        "wires": []
+    },
+    {
+        "id": "07616c5cc650f496",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 9",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 1860,
+        "wires": []
+    },
+    {
+        "id": "a0e57364bb5cced7",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 10",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 880,
+        "wires": []
+    },
+    {
+        "id": "036ddfc0e4373ac4",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 11",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 560,
+        "y": 1040,
+        "wires": []
+    },
+    {
+        "id": "4f226043c33d0137",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 12",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 540,
+        "y": 640,
+        "wires": []
+    },
+    {
+        "id": "4b4ea40a8548daae",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 140,
+        "y": 160,
+        "wires": [
+            [
+                "49c3394412284405"
+            ]
+        ]
+    },
+    {
+        "id": "83f16b7b7678787c",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "Format the header and payload",
+        "func": "msg.headers = {\n    \"Content-Type\": \"multipart/form-data; boundary=------------------------d74496d66958873e\"\n}\n\n\n\nmsg.payload = '--------------------------d74496d66958873e\\r\\n'+\n'Content-Disposition: form-data; name=\"request_id\"\\r\\n'+\n'\\r\\n'+\n global.get('uuid').v4()+'\\r\\n'+\n'--------------------------d74496d66958873e\\r\\n'+\n'Content-Disposition: form-data; name=\"token\"\\r\\n'+\n'\\r\\n'+\nflow.get(\"token\")+'\\r\\n'+\n'--------------------------d74496d66958873e\\r\\n'+\n'Content-Disposition: form-data; name=\"cmd\"\\r\\n'+\n'\\r\\n'+\n'file_upload\\r\\n'+\n'--------------------------d74496d66958873e\\r\\n'+\n'Content-Disposition: form-data; name=\"file\"; filename=\"'+msg.filename+'\"\\r\\n'+\n'Content-Type: application/octet-stream\\r\\n'+\n'\\r\\n'+\nmsg.payload+'\\r\\n'+\n'--------------------------d74496d66958873e--\\r\\n';\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 350,
+        "y": 220,
+        "wires": [
+            [
+                "e09c5d8702c1feb1"
+            ]
+        ]
+    },
+    {
+        "id": "49c3394412284405",
+        "type": "file in",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "filename": "/root/output.log",
+        "filenameType": "str",
+        "format": "",
+        "chunk": false,
+        "sendError": false,
+        "allProps": false,
+        "x": 410,
+        "y": 160,
+        "wires": [
+            [
+                "83f16b7b7678787c"
+            ]
+        ]
+    },
+    {
+        "id": "e09c5d8702c1feb1",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\") + \"/file_upload\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 525,
+        "y": 220,
+        "wires": [
+            [
+                "5302e55d87789388"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "5302e55d87789388",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 610,
+        "y": 220,
+        "wires": [
+            [
+                "2d32f81f58c96304"
+            ]
+        ]
+    },
+    {
+        "id": "2d32f81f58c96304",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 715,
+        "y": 220,
+        "wires": [
+            [
+                "a18cdfcb64f2133e"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "a18cdfcb64f2133e",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "file_upload",
+        "func": "flow.set(\"file_upload_result\",msg.payload.result)\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 850,
+        "y": 220,
+        "wires": [
+            [
+                "575a416348863970",
+                "0e562857472a3ecf"
+            ]
+        ]
+    },
+    {
+        "id": "575a416348863970",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 13",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 900,
+        "y": 160,
+        "wires": []
+    },
+    {
+        "id": "fc9c2f076b8df6ab",
+        "type": "delay",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1140,
+        "y": 1060,
+        "wires": [
+            [
+                "5afebfcd468e9745"
+            ]
+        ]
+    },
+    {
+        "id": "5afebfcd468e9745",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "function 8",
+        "func": "\nreturn {payload:1};",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1280,
+        "y": 1060,
+        "wires": [
+            [
+                "b9e45e025a7e0698"
+            ]
+        ]
+    },
+    {
+        "id": "79feb44fb6548bbe",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "循环执行子任务",
+        "func": "var patrol_request = flow.get(\"patrol_request\");\nfor(var i=0;i<patrol_request.data.length;i++){\n    var t1 = patrol_request.data[i];\n    for(var j=0;j<t1.specific.length;j++){\n        var v = t1.specific[j];\n        node.send({payload: {specific: v, code: t1.code}});\n    }\n}\nnode.send({payload:\"done\"});\npatrol_request.ongoing = [];\nflow.set(\"patrol_request\",patrol_request);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1500,
+        "y": 1340,
+        "wires": [
+            [
+                "9b14c32ce8e441a9"
+            ]
+        ]
+    },
+    {
+        "id": "9b14c32ce8e441a9",
+        "type": "delay",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "2",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1700,
+        "y": 1340,
+        "wires": [
+            [
+                "d228b45109351128",
+                "c5e2ea17b247cfa9",
+                "67b03e614e204677"
+            ]
+        ]
+    },
+    {
+        "id": "d228b45109351128",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 14",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1920,
+        "y": 1300,
+        "wires": []
+    },
+    {
+        "id": "abf52b16cc0c12a4",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "patroling",
+        "func": "var request = flow.get(\"patrol_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"patroling\",\n    \"task_id\": request.task_id,\n    \"data\": {\n        \"position\": msg.payload.code,\n        \"specific\":  msg.payload.specific,\n        \"photo_id\": flow.get(\"file_upload_result\")['file_id']\n    },\n    \"time\": (new Date()).toISOString(),\n}\n\nrequest.ongoing.push(msg.payload.data);\nflow.set(\"patrol_request\", request);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2260,
+        "y": 1380,
+        "wires": [
+            [
+                "f334b24557f456eb"
+            ]
+        ]
+    },
+    {
+        "id": "f334b24557f456eb",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\") +\"/patroling\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2385,
+        "y": 1380,
+        "wires": [
+            [
+                "74889dcd1549ef25"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "74889dcd1549ef25",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2490,
+        "y": 1380,
+        "wires": [
+            [
+                "94e6cd93c41509ad",
+                "67b03e614e204677"
+            ]
+        ]
+    },
+    {
+        "id": "94e6cd93c41509ad",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 15",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2640,
+        "y": 1380,
+        "wires": []
+    },
+    {
+        "id": "689d859763fc773f",
+        "type": "link in",
+        "z": "dab640f06d65d12c",
+        "name": "IN_FILE_UPLOAD",
+        "links": [
+            "7c3b52089df8dd37"
+        ],
+        "x": 265,
+        "y": 120,
+        "wires": [
+            [
+                "49c3394412284405"
+            ]
+        ]
+    },
+    {
+        "id": "7c3b52089df8dd37",
+        "type": "link out",
+        "z": "dab640f06d65d12c",
+        "name": "OUT_FILE_UPLOAD",
+        "mode": "link",
+        "links": [
+            "689d859763fc773f"
+        ],
+        "x": 2065,
+        "y": 1420,
+        "wires": []
+    },
+    {
+        "id": "0e562857472a3ecf",
+        "type": "link out",
+        "z": "dab640f06d65d12c",
+        "name": "OUT_FILE_UPLOAD_DONE",
+        "mode": "link",
+        "links": [],
+        "x": 1045,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "252b3ecff30fb862",
+        "type": "delay",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "pauseType": "delay",
+        "timeout": "1",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "1",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 2100,
+        "y": 1380,
+        "wires": [
+            [
+                "abf52b16cc0c12a4"
+            ]
+        ]
+    },
+    {
+        "id": "c5e2ea17b247cfa9",
+        "type": "switch",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "done",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1910,
+        "y": 1380,
+        "wires": [
+            [
+                "c8a65ed804d80508"
+            ],
+            [
+                "7c3b52089df8dd37",
+                "252b3ecff30fb862"
+            ]
+        ]
+    },
+    {
+        "id": "0ab288480c0f3dc7",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2330,
+        "y": 1340,
+        "wires": [
+            [
+                "2555fe59bff2f842"
+            ]
+        ]
+    },
+    {
+        "id": "c8a65ed804d80508",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "patrol_done",
+        "func": "var request = flow.get(\"patrol_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"patrol_done\",\n    \"task_id\": request.task_id,\n    \"data\": [\n        \n    ],\n    \"time\": (new Date()).toISOString(),\n}\nmsg.payload.data = request.ongoing;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2110,
+        "y": 1340,
+        "wires": [
+            [
+                "95166b35a2239fe5"
+            ]
+        ]
+    },
+    {
+        "id": "1f73e62fc1aedcbd",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "patrol_done f",
+        "func": "\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2570,
+        "y": 1340,
+        "wires": [
+            [
+                "cbb23301d680d405",
+                "67b03e614e204677"
+            ]
+        ]
+    },
+    {
+        "id": "2555fe59bff2f842",
+        "type": "json",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "action": "obj",
+        "pretty": false,
+        "x": 2435,
+        "y": 1340,
+        "wires": [
+            [
+                "1f73e62fc1aedcbd"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "95166b35a2239fe5",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/patrol_done\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2245,
+        "y": 1340,
+        "wires": [
+            [
+                "0ab288480c0f3dc7"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "cbb23301d680d405",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 16",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2740,
+        "y": 1340,
+        "wires": []
+    },
+    {
+        "id": "ba596998d3b3753a",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "循环执行子任务",
+        "func": "var request = flow.get(\"feed_request\");\nfor(var i=0;i<request.data.length;i++){\n    var t1 = request.data[i];\n    for(var j=0;j<t1.specific.length;j++){\n        var v = t1.specific[j];\n        node.send({payload: {specific: v, position: t1.position}});\n    }\n}\nnode.send({payload:\"done\"});\nrequest.ongoing = [];\nflow.set(\"feed_request\",request);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1500,
+        "y": 1480,
+        "wires": [
+            [
+                "4e9361ce9618d878"
+            ]
+        ]
+    },
+    {
+        "id": "4e9361ce9618d878",
+        "type": "delay",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "2",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1700,
+        "y": 1480,
+        "wires": [
+            [
+                "ddd7852a64bcb3a2",
+                "1b009fbef40c90f4",
+                "67b03e614e204677"
+            ]
+        ]
+    },
+    {
+        "id": "ddd7852a64bcb3a2",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 17",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1900,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "1b009fbef40c90f4",
+        "type": "switch",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "done",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1930,
+        "y": 1540,
+        "wires": [
+            [
+                "d0b4984e7c4bcf5c"
+            ],
+            [
+                "b43acc0ed5436291"
+            ]
+        ]
+    },
+    {
+        "id": "b43acc0ed5436291",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "feeding",
+        "func": "var feed_request = flow.get(\"feed_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n   \"cmd\": \"feeding\",\n   \"task_id\": feed_request.task_id,\n    \"data\": {\n        \"position\": msg.payload.position,\n        \"specific\":  msg.payload.specific.id,\n        \"quantity\": msg.payload.specific.quantity\n    },\n    \"time\": (new Date()).toISOString()\n}\n\nfeed_request.ongoing.push(msg.payload.data);\nflow.set(\"feed_request\", feed_request);\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2120,
+        "y": 1560,
+        "wires": [
+            [
+                "7b09904a13dc6b66",
+                "ed71559643286515"
+            ]
+        ]
+    },
+    {
+        "id": "7b09904a13dc6b66",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/feeding\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2265,
+        "y": 1560,
+        "wires": [
+            [
+                "4d6338e3c82f39fe"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "4d6338e3c82f39fe",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2350,
+        "y": 1560,
+        "wires": [
+            [
+                "9748742a63463fb1",
+                "67b03e614e204677"
+            ]
+        ]
+    },
+    {
+        "id": "9748742a63463fb1",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 18",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2520,
+        "y": 1560,
+        "wires": []
+    },
+    {
+        "id": "d0b4984e7c4bcf5c",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "feed_done",
+        "func": "var feed_request = flow.get(\"feed_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"feed_done\",\n    \"task_id\": feed_request.task_id,\n    \"data\": [\n    ],\n    \"time\": (new Date()).toISOString()\n}\n\nvar data = feed_request.ongoing;\n\nconst result = Object.values(\n  data.reduce((acc, { position, specific, quantity }) => {\n    if (!acc[position]) {\n      acc[position] = { position, specific: [] };\n    }\n    acc[position].specific.push({ id: specific, quantity });\n    return acc;\n  }, {})\n);\n\nmsg.payload.data = result;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2130,
+        "y": 1520,
+        "wires": [
+            [
+                "6e0f32d52d41ba71"
+            ]
+        ]
+    },
+    {
+        "id": "6e0f32d52d41ba71",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/feed_done\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2265,
+        "y": 1520,
+        "wires": [
+            [
+                "46e607ad86b5e3ec"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "46e607ad86b5e3ec",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2350,
+        "y": 1520,
+        "wires": [
+            [
+                "7528934ca3397779",
+                "67b03e614e204677"
+            ]
+        ]
+    },
+    {
+        "id": "c88b290dd06b2990",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1340,
+        "y": 1420,
+        "wires": [
+            [
+                "ba596998d3b3753a"
+            ]
+        ]
+    },
+    {
+        "id": "ed71559643286515",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 19",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2420,
+        "y": 1660,
+        "wires": []
+    },
+    {
+        "id": "e964230124387ff9",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1860,
+        "y": 1620,
+        "wires": [
+            [
+                "d0b4984e7c4bcf5c"
+            ]
+        ]
+    },
+    {
+        "id": "91518d83321ff1ab",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "循环执行子任务",
+        "func": "var request = flow.get(\"clean_request\");\nfor(var i=0;i<request.data.length;i++){\n    var t1 = request.data[i];\n    for(var j=0;j<t1.specific.length;j++){\n        var v = t1.specific[j];\n        node.send({payload: {specific: v, position: t1.position}});\n    }\n}\nnode.send({payload:\"done\"});\nrequest.ongoing = [];\nflow.set(\"clean_request\",request);",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1520,
+        "y": 1700,
+        "wires": [
+            [
+                "d4cda4f1e638ab9c"
+            ]
+        ]
+    },
+    {
+        "id": "d4cda4f1e638ab9c",
+        "type": "delay",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "pauseType": "rate",
+        "timeout": "5",
+        "timeoutUnits": "seconds",
+        "rate": "1",
+        "nbRateUnits": "2",
+        "rateUnits": "second",
+        "randomFirst": "1",
+        "randomLast": "5",
+        "randomUnits": "seconds",
+        "drop": false,
+        "allowrate": false,
+        "outputs": 1,
+        "x": 1720,
+        "y": 1700,
+        "wires": [
+            [
+                "787c2f5c068c2adb",
+                "67a3e4ce52915204",
+                "67b03e614e204677"
+            ]
+        ]
+    },
+    {
+        "id": "787c2f5c068c2adb",
+        "type": "switch",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "done",
+                "vt": "str"
+            },
+            {
+                "t": "else"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1930,
+        "y": 1800,
+        "wires": [
+            [
+                "06af705fe673a015"
+            ],
+            [
+                "4835405b04c662d1"
+            ]
+        ]
+    },
+    {
+        "id": "7528934ca3397779",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 20",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2560,
+        "y": 1480,
+        "wires": []
+    },
+    {
+        "id": "67a3e4ce52915204",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 21",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 1940,
+        "y": 1680,
+        "wires": []
+    },
+    {
+        "id": "4835405b04c662d1",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "cleanning",
+        "func": "var request = flow.get(\"clean_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"cleanning\",\n    \"task_id\": request.task_id,\n    \"data\": {\n        \"position\": msg.payload.position,\n        \"specific\": msg.payload.specific,\n    },\n    \"time\": (new Date()).toISOString()\n}\nrequest.ongoing.push(msg.payload.data);\nflow.set(\"clean_request\", request);\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2140,
+        "y": 1820,
+        "wires": [
+            [
+                "6f604c9fc1fd3084"
+            ]
+        ]
+    },
+    {
+        "id": "06af705fe673a015",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "clean_done",
+        "func": "var request = flow.get(\"clean_request\");\nmsg.payload = {\n    \"request_id\": global.get('uuid').v4(),\n    \"token\": flow.get(\"token\"),\n    \"cmd\": \"clean_done\",\n    \"task_id\": request.task_id,\n    \"data\": [\n        {\n            \"position\": \"A1\",\n            \"specific\": [\n                0,\n                1,\n                2,\n                3\n            ]\n        },\n        {\n            \"position\": \"A2\",\n            \"specific\": [\n                0,\n                1\n            ]\n        }\n    ],\n    \"time\": (new Date()).toISOString()\n}\nvar data = request.ongoing;\n\nconst result = Object.values(\n  data.reduce((acc, { position, specific }) => {\n    if (!acc[position]) {\n      acc[position] = { position, specific: [] };\n    }\n    acc[position].specific.push(specific);\n    return acc;\n  }, {})\n);\n\nmsg.payload.data = result;\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2150,
+        "y": 1780,
+        "wires": [
+            [
+                "79224fc2555793ec"
+            ]
+        ]
+    },
+    {
+        "id": "6f604c9fc1fd3084",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/cleanning\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2285,
+        "y": 1820,
+        "wires": [
+            [
+                "aba21a8be969b729"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "79224fc2555793ec",
+        "type": "function",
+        "z": "dab640f06d65d12c",
+        "name": "url",
+        "func": "msg.url = flow.get(\"cloud_address\")+\"/clean_done\";\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2285,
+        "y": 1780,
+        "wires": [
+            [
+                "eee65927da625b45"
+            ]
+        ],
+        "l": false
+    },
+    {
+        "id": "aba21a8be969b729",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2370,
+        "y": 1820,
+        "wires": [
+            [
+                "6d2c194dcfdb3cd7",
+                "67b03e614e204677"
+            ]
+        ]
+    },
+    {
+        "id": "eee65927da625b45",
+        "type": "http request",
+        "z": "dab640f06d65d12c",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 2370,
+        "y": 1780,
+        "wires": [
+            [
+                "6fba100fec3bc0a4",
+                "67b03e614e204677"
+            ]
+        ]
+    },
+    {
+        "id": "d87dad31223d37f8",
+        "type": "inject",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 1320,
+        "y": 1840,
+        "wires": [
+            [
+                "91518d83321ff1ab"
+            ]
+        ]
+    },
+    {
+        "id": "6fba100fec3bc0a4",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 22",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2560,
+        "y": 1780,
+        "wires": []
+    },
+    {
+        "id": "6d2c194dcfdb3cd7",
+        "type": "debug",
+        "z": "dab640f06d65d12c",
+        "name": "debug 23",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 2560,
+        "y": 1820,
+        "wires": []
+    },
+    {
+        "id": "67b03e614e204677",
+        "type": "file",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "filename": "/root/node-red-log.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 3240,
+        "y": 1180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "efb68df65fb8cb0a",
+        "type": "file",
+        "z": "dab640f06d65d12c",
+        "name": "",
+        "filename": "/root/mesrequest.txt",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": true,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 880,
+        "y": 1220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b544f22fdad3504c",
+        "type": "inject",
+        "z": "2f7c5de1022f2748",
+        "name": "press left",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 160,
+        "y": 220,
+        "wires": [
+            [
+                "1a3bc071c5c7580a"
+            ]
+        ]
+    },
+    {
+        "id": "1a3bc071c5c7580a",
+        "type": "function",
+        "z": "2f7c5de1022f2748",
+        "name": "no-cmd",
+        "func": "msg.payload = {\n    \n    \"request_id\": \"20240418_001\",\n    \"cmdx\": \"login\",\n    \"data\":{\n      \"username\":\"user1\",\n      \"password\":\"password\"\n     },\n    \"time\": \"2025-04-19T06:46:37.173Z\"\n}\nreturn msg;",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 360,
+        "y": 220,
+        "wires": [
+            [
+                "9dfc2013407310a7"
+            ]
+        ]
+    },
+    {
+        "id": "9dfc2013407310a7",
+        "type": "http request",
+        "z": "2f7c5de1022f2748",
+        "name": "cloud",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://42.193.99.214:1880/cloud",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 530,
+        "y": 220,
+        "wires": [
+            [
+                "f23e9f82baf6b676"
+            ]
+        ]
+    },
+    {
+        "id": "f23e9f82baf6b676",
+        "type": "debug",
+        "z": "2f7c5de1022f2748",
+        "name": "debug 4",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 760,
+        "y": 220,
+        "wires": []
+    },
+    {
+        "id": "c4f91df3.caef7",
+        "type": "http in",
+        "z": "2f7c5de1022f2748",
+        "name": "",
+        "url": "/files",
+        "method": "post",
+        "upload": true,
+        "swaggerDoc": "",
+        "x": 200,
+        "y": 340,
+        "wires": [
+            [
+                "cc5a37cf.86c6d8",
+                "c14febc0.522db8"
+            ]
+        ]
+    },
+    {
+        "id": "ef0aaf76.2236e",
+        "type": "http response",
+        "z": "2f7c5de1022f2748",
+        "name": "",
+        "statusCode": "",
+        "headers": {},
+        "x": 550,
+        "y": 340,
+        "wires": []
+    },
+    {
+        "id": "cc5a37cf.86c6d8",
+        "type": "debug",
+        "z": "2f7c5de1022f2748",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "req",
+        "targetType": "msg",
+        "x": 360,
+        "y": 380,
+        "wires": []
+    },
+    {
+        "id": "6a156025.b1c9f",
+        "type": "inject",
+        "z": "2f7c5de1022f2748",
+        "name": "",
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "date",
+        "x": 200,
+        "y": 440,
+        "wires": [
+            [
+                "fd62708f.a560a"
+            ]
+        ]
+    },
+    {
+        "id": "9c0b2081.b1ac6",
+        "type": "function",
+        "z": "2f7c5de1022f2748",
+        "name": "Format the header and payload",
+        "func": "msg.headers = {\n    \"Content-Type\": \"multipart/form-data; boundary=------------------------d74496d66958873e\"\n}\n\n\nmsg.payload = '--------------------------d74496d66958873e\\r\\n'+\n'Content-Disposition: form-data; name=\"select\"\\r\\n'+\n'\\r\\n'+\n'true\\r\\n'+\n'--------------------------d74496d66958873e\\r\\n'+\n'Content-Disposition: form-data; name=\"print\"\\r\\n'+\n'\\r\\n'+\n'true\\r\\n'+\n'--------------------------d74496d66958873e\\r\\n'+\n'Content-Disposition: form-data; name=\"file\"; filename=\"'+msg.filename+'\"\\r\\n'+\n'Content-Type: application/octet-stream\\r\\n'+\n'\\r\\n'+\nmsg.payload+'\\r\\n'+\n'--------------------------d74496d66958873e--\\r\\n';\n\n\nreturn msg;",
+        "outputs": 1,
+        "timeout": "",
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 330,
+        "y": 500,
+        "wires": [
+            [
+                "85c748e8.2d1f88"
+            ]
+        ]
+    },
+    {
+        "id": "85c748e8.2d1f88",
+        "type": "http request",
+        "z": "2f7c5de1022f2748",
+        "name": "",
+        "method": "POST",
+        "ret": "txt",
+        "paytoqs": "ignore",
+        "url": "http://42.193.99.214:1880/files",
+        "tls": "",
+        "persist": false,
+        "proxy": "",
+        "insecureHTTPParser": false,
+        "authType": "",
+        "senderr": false,
+        "headers": [],
+        "x": 570,
+        "y": 500,
+        "wires": [
+            [
+                "a4810d7a.f652a"
+            ]
+        ]
+    },
+    {
+        "id": "a4810d7a.f652a",
+        "type": "debug",
+        "z": "2f7c5de1022f2748",
+        "name": "",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "x": 750,
+        "y": 500,
+        "wires": []
+    },
+    {
+        "id": "c14febc0.522db8",
+        "type": "change",
+        "z": "2f7c5de1022f2748",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "okay",
+                "tot": "str"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 380,
+        "y": 340,
+        "wires": [
+            [
+                "ef0aaf76.2236e"
+            ]
+        ]
+    },
+    {
+        "id": "fd62708f.a560a",
+        "type": "file in",
+        "z": "2f7c5de1022f2748",
+        "name": "",
+        "filename": "/root/output.log",
+        "filenameType": "str",
+        "format": "",
+        "chunk": false,
+        "sendError": false,
+        "allProps": false,
+        "x": 390,
+        "y": 440,
+        "wires": [
+            [
+                "9c0b2081.b1ac6"
+            ]
+        ]
+    }
+]

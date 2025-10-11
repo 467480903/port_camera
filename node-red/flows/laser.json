@@ -1,0 +1,118 @@
+[
+  {
+    "id": "c6c10f6d57076b13",
+    "type": "tab",
+    "label": "laser",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "c7d0955d592b4cdb",
+    "type": "serial in",
+    "z": "c6c10f6d57076b13",
+    "name": "",
+    "serial": "bcb0ab03116fc4bb",
+    "x": 210,
+    "y": 160,
+    "wires": [
+      [
+        "4153d57940621d18",
+        "5476566185edf1a0"
+      ]
+    ]
+  },
+  {
+    "id": "5fe70d29f7588b66",
+    "type": "serial out",
+    "z": "c6c10f6d57076b13",
+    "name": "",
+    "serial": "bcb0ab03116fc4bb",
+    "x": 410,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "4153d57940621d18",
+    "type": "debug",
+    "z": "c6c10f6d57076b13",
+    "name": "debug 2",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 360,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "49a7cb4ad8663d3e",
+    "type": "inject",
+    "z": "c6c10f6d57076b13",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "1",
+    "crontab": "",
+    "once": true,
+    "onceDelay": "2",
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 340,
+    "wires": [
+      [
+        "af639b8982b9af62"
+      ]
+    ]
+  },
+  {
+    "id": "af639b8982b9af62",
+    "type": "function",
+    "z": "c6c10f6d57076b13",
+    "name": "function 8",
+    "func": "let buf = Buffer.from([0x01, 0x03, 0x00, 0x00, 0x00, 0x02, 0xC4, 0x0b]);\nmsg.payload = buf;  // 输出 Buffer\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 340,
+    "wires": [
+      [
+        "5fe70d29f7588b66"
+      ]
+    ]
+  },
+  {
+    "id": "5476566185edf1a0",
+    "type": "function",
+    "z": "c6c10f6d57076b13",
+    "name": "function 12",
+    "func": "var val = msg.payload[3]*0x1000000 + \n    msg.payload[4]*0x10000+\n    msg.payload[5]*0x100 +\n    msg.payload[6] ;\nglobal.set(\"laser\",val/1000);\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 410,
+    "y": 160,
+    "wires": [
+      []
+    ]
+  }
+]

@@ -1,3 +1,6 @@
 /node-red/node_modules
+/ffmpeg/node_modules
 *.backup
 /node-red/.config.*
+*.min.js
+pic.jpg

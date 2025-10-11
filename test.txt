@@ -1,0 +1,15 @@
+ffmpeg -i rtsp://admin:gene2025@192.168.1.64/ISAPI/Streaming/channels/101 -f mjpeg -q:v 5 -r 10 tcp://0.0.0.0:8090
+
+
+
+distence 3.662   
+zoom 13200
+focus 47000
+
+distence  8.412
+focus 12100
+zoom 16300
+
+distence  2.629
+focus 46100
+zoom 10900

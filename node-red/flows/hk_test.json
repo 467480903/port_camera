@@ -1,0 +1,1276 @@
+[
+  {
+    "id": "b48f1bf98b8323df",
+    "type": "tab",
+    "label": "hk_test",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "3e25d14686acd2a3",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "focus",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/System/Video/inputs/channels/1/focus",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 480,
+    "y": 300,
+    "wires": [
+      [
+        "160896b78c79d094",
+        "395709b6327e47fc"
+      ]
+    ]
+  },
+  {
+    "id": "a64410df8c4beb81",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 300,
+    "wires": [
+      [
+        "49c001c3c0233a7c"
+      ]
+    ]
+  },
+  {
+    "id": "49c001c3c0233a7c",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 16",
+    "func": "msg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><FocusData><focus>-90</focus></FocusData>';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 270,
+    "y": 300,
+    "wires": [
+      [
+        "3e25d14686acd2a3"
+      ]
+    ]
+  },
+  {
+    "id": "160896b78c79d094",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 9",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 700,
+    "y": 300,
+    "wires": []
+  },
+  {
+    "id": "1a56c59c5e5d4ca5",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "focus",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/System/Video/inputs/channels/1/focus",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 480,
+    "y": 400,
+    "wires": [
+      [
+        "160896b78c79d094"
+      ]
+    ]
+  },
+  {
+    "id": "3d5f2e9d1fec7f2d",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 400,
+    "wires": [
+      [
+        "001ea129a09a23f2"
+      ]
+    ]
+  },
+  {
+    "id": "001ea129a09a23f2",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 17",
+    "func": "msg = {};\nmsg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><FocusData><focus>0</focus></FocusData>';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 270,
+    "y": 400,
+    "wires": [
+      [
+        "1a56c59c5e5d4ca5"
+      ]
+    ]
+  },
+  {
+    "id": "395709b6327e47fc",
+    "type": "delay",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "1",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 320,
+    "y": 360,
+    "wires": [
+      [
+        "001ea129a09a23f2"
+      ]
+    ]
+  },
+  {
+    "id": "caa5b65ff4398753",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "continuous",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/PTZCtrl/channels/1/continuous",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 500,
+    "y": 540,
+    "wires": [
+      [
+        "cd41e5d7f2c62781",
+        "5044a56b3d0f060e"
+      ]
+    ]
+  },
+  {
+    "id": "4c761999be507c50",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 540,
+    "wires": [
+      [
+        "8ebde8868f0f8602"
+      ]
+    ]
+  },
+  {
+    "id": "8ebde8868f0f8602",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 18",
+    "func": "msg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><PTZData><zoom>60</zoom></PTZData>';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 270,
+    "y": 540,
+    "wires": [
+      [
+        "caa5b65ff4398753"
+      ]
+    ]
+  },
+  {
+    "id": "8c4f39e811b8eb9c",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "continuous",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/PTZCtrl/channels/1/continuous",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 500,
+    "y": 640,
+    "wires": [
+      [
+        "5044a56b3d0f060e"
+      ]
+    ]
+  },
+  {
+    "id": "eab05c27f19ea84d",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 80,
+    "y": 640,
+    "wires": [
+      [
+        "b197522b0c3a0afa"
+      ]
+    ]
+  },
+  {
+    "id": "b197522b0c3a0afa",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 19",
+    "func": "msg = {};\nmsg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><PTZData><zoom>0</zoom></PTZData>';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 270,
+    "y": 640,
+    "wires": [
+      [
+        "8c4f39e811b8eb9c"
+      ]
+    ]
+  },
+  {
+    "id": "cd41e5d7f2c62781",
+    "type": "delay",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "200",
+    "timeoutUnits": "milliseconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 330,
+    "y": 600,
+    "wires": [
+      [
+        "b197522b0c3a0afa"
+      ]
+    ]
+  },
+  {
+    "id": "5044a56b3d0f060e",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 10",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 740,
+    "y": 560,
+    "wires": []
+  },
+  {
+    "id": "3fd51fba37e4f909",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "deviceInfo",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64:80/ISAPI/System/deviceInfo",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 550,
+    "y": 220,
+    "wires": [
+      [
+        "78c196f3ace2b4cd"
+      ]
+    ]
+  },
+  {
+    "id": "01fd33cb21d61d01",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 220,
+    "wires": [
+      [
+        "80c1550f13536847"
+      ]
+    ]
+  },
+  {
+    "id": "80c1550f13536847",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 21",
+    "func": "// msg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><FocusData><focus>-60</focus></FocusData>';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 220,
+    "wires": [
+      [
+        "3fd51fba37e4f909"
+      ]
+    ]
+  },
+  {
+    "id": "78c196f3ace2b4cd",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 11",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 740,
+    "y": 220,
+    "wires": []
+  },
+  {
+    "id": "d59ba1328401e7bc",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "token",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/Security/token?format=json",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 530,
+    "y": 160,
+    "wires": [
+      [
+        "01da24c8c0a4856f"
+      ]
+    ]
+  },
+  {
+    "id": "0a1358be58ae69c9",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 160,
+    "wires": [
+      [
+        "d5fb53ba0eadf697"
+      ]
+    ]
+  },
+  {
+    "id": "d5fb53ba0eadf697",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 22",
+    "func": "// msg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><FocusData><focus>-60</focus></FocusData>';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 160,
+    "wires": [
+      [
+        "d59ba1328401e7bc"
+      ]
+    ]
+  },
+  {
+    "id": "01da24c8c0a4856f",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 12",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 740,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "7b3476b0b12df77b",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "capabilities",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/System/capabilities?type=all",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 530,
+    "y": 120,
+    "wires": [
+      [
+        "45933997d1b31e2a"
+      ]
+    ]
+  },
+  {
+    "id": "8bf8f01bddd3d6cc",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 120,
+    "wires": [
+      [
+        "f661768af61fbb87"
+      ]
+    ]
+  },
+  {
+    "id": "f661768af61fbb87",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 23",
+    "func": "// msg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><FocusData><focus>-60</focus></FocusData>';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 120,
+    "wires": [
+      [
+        "7b3476b0b12df77b"
+      ]
+    ]
+  },
+  {
+    "id": "45933997d1b31e2a",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 13",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 720,
+    "y": 120,
+    "wires": []
+  },
+  {
+    "id": "6242f8f7dbe394a0",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "capabilities-",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/PTZCtrl/channels/1/capabilities",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 490,
+    "y": 80,
+    "wires": [
+      [
+        "34fd4d18540a380a"
+      ]
+    ]
+  },
+  {
+    "id": "0e3c9d9374f4478d",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 80,
+    "wires": [
+      [
+        "449d94281e8e203b"
+      ]
+    ]
+  },
+  {
+    "id": "449d94281e8e203b",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 24",
+    "func": "// msg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><FocusData><focus>-60</focus></FocusData>';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 260,
+    "y": 80,
+    "wires": [
+      [
+        "6242f8f7dbe394a0"
+      ]
+    ]
+  },
+  {
+    "id": "34fd4d18540a380a",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 14",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 80,
+    "wires": []
+  },
+  {
+    "id": "2b5202eab0722ab8",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "presets",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/PTZCtrl/channels/1/presets",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 500,
+    "y": 740,
+    "wires": [
+      [
+        "7d525cec56c5f24e"
+      ]
+    ]
+  },
+  {
+    "id": "2f8f07d4eda82546",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 740,
+    "wires": [
+      [
+        "30ab8a64bb7fc88f"
+      ]
+    ]
+  },
+  {
+    "id": "30ab8a64bb7fc88f",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 25",
+    "func": "// msg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\"?><FocusData><focus>-60</focus></FocusData>';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 280,
+    "y": 740,
+    "wires": [
+      [
+        "2b5202eab0722ab8"
+      ]
+    ]
+  },
+  {
+    "id": "7d525cec56c5f24e",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 15",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 700,
+    "y": 740,
+    "wires": []
+  },
+  {
+    "id": "9a9e70e26ce5e600",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "absolute",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/PTZCtrl/channels/1/absolute",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 500,
+    "y": 860,
+    "wires": [
+      [
+        "ad2a9fe8eaef190b"
+      ]
+    ]
+  },
+  {
+    "id": "a81e0bada6a54cbb",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 860,
+    "wires": [
+      [
+        "f12d635053108fae"
+      ]
+    ]
+  },
+  {
+    "id": "f12d635053108fae",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 26",
+    "func": "msg.payload = \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><PTZData xmlns=\\\"http://www.isapi.org/ver20/XMLSchema\\\" version=\\\"2.0\\\">  <AbsoluteHigh>   <absoluteZoom>100</absoluteZoom>  </AbsoluteHigh></PTZData>\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 280,
+    "y": 860,
+    "wires": [
+      [
+        "9a9e70e26ce5e600"
+      ]
+    ]
+  },
+  {
+    "id": "ad2a9fe8eaef190b",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 16",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 700,
+    "y": 860,
+    "wires": []
+  },
+  {
+    "id": "489b64d6aecd476f",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "absolute2",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/PTZCtrl/channels/1/absolute",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 480,
+    "y": 940,
+    "wires": [
+      [
+        "88c9f1b0562f9694"
+      ]
+    ]
+  },
+  {
+    "id": "b5a9592edee6a138",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 940,
+    "wires": [
+      [
+        "161e3421951fc9e7"
+      ]
+    ]
+  },
+  {
+    "id": "161e3421951fc9e7",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 27",
+    "func": "msg.payload = \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><PTZData xmlns=\\\"http://www.isapi.org/ver20/XMLSchema\\\" version=\\\"2.0\\\">  <AbsoluteHigh>   <absoluteZoom>30</absoluteZoom>  </AbsoluteHigh></PTZData>\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 260,
+    "y": 940,
+    "wires": [
+      [
+        "489b64d6aecd476f"
+      ]
+    ]
+  },
+  {
+    "id": "88c9f1b0562f9694",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 17",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 940,
+    "wires": []
+  },
+  {
+    "id": "f8b0dd81881439bf",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "ControllerCap",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/System/ControllerCap",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 500,
+    "y": 1060,
+    "wires": [
+      [
+        "e1b9691063643f7d"
+      ]
+    ]
+  },
+  {
+    "id": "da19e4f2ce582a52",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 1060,
+    "wires": [
+      [
+        "dc59ed5ed9cbeb21"
+      ]
+    ]
+  },
+  {
+    "id": "dc59ed5ed9cbeb21",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 28",
+    "func": "// msg.payload = \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><PTZData xmlns=\\\"http://www.isapi.org/ver20/XMLSchema\\\" version=\\\"2.0\\\">  <AbsoluteHigh>   <absoluteZoom>30</absoluteZoom>  </AbsoluteHigh></PTZData>\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 260,
+    "y": 1060,
+    "wires": [
+      [
+        "f8b0dd81881439bf"
+      ]
+    ]
+  },
+  {
+    "id": "e1b9691063643f7d",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 18",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 680,
+    "y": 1060,
+    "wires": []
+  },
+  {
+    "id": "7f2c529d3fd0f131",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "channels",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/Image/channels",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 520,
+    "y": 1160,
+    "wires": [
+      [
+        "df34fb89aea816c3"
+      ]
+    ]
+  },
+  {
+    "id": "325b1f44747e8123",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 1160,
+    "wires": [
+      [
+        "5399f2684eb0120c"
+      ]
+    ]
+  },
+  {
+    "id": "5399f2684eb0120c",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 29",
+    "func": "// msg.payload = \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><PTZData xmlns=\\\"http://www.isapi.org/ver20/XMLSchema\\\" version=\\\"2.0\\\">  <AbsoluteHigh>   <absoluteZoom>30</absoluteZoom>  </AbsoluteHigh></PTZData>\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 1160,
+    "wires": [
+      [
+        "7f2c529d3fd0f131"
+      ]
+    ]
+  },
+  {
+    "id": "df34fb89aea816c3",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 19",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 720,
+    "y": 1160,
+    "wires": []
+  },
+  {
+    "id": "6c2d73eb558832ef",
+    "type": "http request",
+    "z": "b48f1bf98b8323df",
+    "name": "channels",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.64/ISAPI/PTZCtrl/channels/1/absoluteEx",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 520,
+    "y": 1260,
+    "wires": [
+      [
+        "25c997c0539ebb3c"
+      ]
+    ]
+  },
+  {
+    "id": "62d60af0bff032e9",
+    "type": "inject",
+    "z": "b48f1bf98b8323df",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 1260,
+    "wires": [
+      [
+        "e23e034ce85e99ca"
+      ]
+    ]
+  },
+  {
+    "id": "e23e034ce85e99ca",
+    "type": "function",
+    "z": "b48f1bf98b8323df",
+    "name": "function 30",
+    "func": "msg.payload = '<?xml version=\"1.0\" encoding=\"UTF-8\" ?>'+\n\n    '<PTZAbsoluteEx xmlns=\"http://www.isapi.org/ver20/XMLSchema\" version=\"2.0\" >'+\n  '<absoluteZoom>'+\n    '100'+\n  '</absoluteZoom>'+\n  '<focus>'+\n    '18100'+\n  '</focus>'+\n  '<horizontalSpeed>'+\n    '5'+\n  '</horizontalSpeed>'+\n'</PTZAbsoluteEx> ';\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 1260,
+    "wires": [
+      [
+        "6c2d73eb558832ef"
+      ]
+    ]
+  },
+  {
+    "id": "25c997c0539ebb3c",
+    "type": "debug",
+    "z": "b48f1bf98b8323df",
+    "name": "debug 20",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 720,
+    "y": 1260,
+    "wires": []
+  }
+]

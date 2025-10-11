@@ -1,0 +1,621 @@
+[
+  {
+    "id": "2c27b5a30c1815ba",
+    "type": "tab",
+    "label": "unv_test",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "e683fd20bb308972",
+    "type": "http request",
+    "z": "2c27b5a30c1815ba",
+    "name": "DeviceInfo",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.13/LAPI/V1.0/System/DeviceInfo",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 510,
+    "y": 60,
+    "wires": [
+      [
+        "a9f06831d4b3fcb7"
+      ]
+    ]
+  },
+  {
+    "id": "814741353ed8f45a",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 60,
+    "wires": [
+      [
+        "f53fef7e285bbef3"
+      ]
+    ]
+  },
+  {
+    "id": "f53fef7e285bbef3",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 33",
+    "func": "// msg.payload = \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><PTZData xmlns=\\\"http://www.isapi.org/ver20/XMLSchema\\\" version=\\\"2.0\\\">  <AbsoluteHigh>   <absoluteZoom>30</absoluteZoom>  </AbsoluteHigh></PTZData>\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 280,
+    "y": 60,
+    "wires": [
+      [
+        "e683fd20bb308972"
+      ]
+    ]
+  },
+  {
+    "id": "a9f06831d4b3fcb7",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 23",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 700,
+    "y": 60,
+    "wires": []
+  },
+  {
+    "id": "a4028d985f10da85",
+    "type": "http request",
+    "z": "2c27b5a30c1815ba",
+    "name": "DeviceInfo",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.13/LAPI/V1.0/System/DeviceInfo",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "",
+    "senderr": false,
+    "headers": [],
+    "x": 510,
+    "y": 200,
+    "wires": [
+      [
+        "a9f06831d4b3fcb7"
+      ]
+    ]
+  },
+  {
+    "id": "e4ae5893717b2f58",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 200,
+    "wires": [
+      [
+        "6168c61acb98c66f"
+      ]
+    ]
+  },
+  {
+    "id": "6168c61acb98c66f",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 34",
+    "func": "// msg.payload = \"<?xml version=\\\"1.0\\\" encoding=\\\"UTF-8\\\"?><PTZData xmlns=\\\"http://www.isapi.org/ver20/XMLSchema\\\" version=\\\"2.0\\\">  <AbsoluteHigh>   <absoluteZoom>30</absoluteZoom>  </AbsoluteHigh></PTZData>\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 280,
+    "y": 200,
+    "wires": [
+      [
+        "a4028d985f10da85"
+      ]
+    ]
+  },
+  {
+    "id": "b3791aee0e61a893",
+    "type": "http request",
+    "z": "2c27b5a30c1815ba",
+    "name": "PTZCtrl",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.13/LAPI/V1.0/Channel/0/PTZ/PTZCtrl",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 640,
+    "y": 320,
+    "wires": [
+      [
+        "68ec65d57dbf2df2"
+      ]
+    ]
+  },
+  {
+    "id": "d9584a989b5cc4bf",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 320,
+    "wires": [
+      [
+        "09e635818fe314fb"
+      ]
+    ]
+  },
+  {
+    "id": "09e635818fe314fb",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 35",
+    "func": "msg.payload = { \"PTZCmd\": 0x304, \"ContinueTime\": 0, \"Para1\": 0, \"Para2\": 0, \"Para3\": 0 }\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 280,
+    "y": 320,
+    "wires": [
+      [
+        "3bc6979ff98862c0",
+        "8ccb023550b1d984"
+      ]
+    ]
+  },
+  {
+    "id": "68ec65d57dbf2df2",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 24",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 820,
+    "y": 320,
+    "wires": []
+  },
+  {
+    "id": "3bc6979ff98862c0",
+    "type": "json",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "property": "payload",
+    "action": "str",
+    "pretty": false,
+    "x": 450,
+    "y": 320,
+    "wires": [
+      [
+        "b3791aee0e61a893"
+      ]
+    ]
+  },
+  {
+    "id": "ae0e03c0e779d536",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 400,
+    "wires": [
+      [
+        "cfde228015f8285a"
+      ]
+    ]
+  },
+  {
+    "id": "cfde228015f8285a",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 36",
+    "func": "msg.payload = { \"PTZCmd\": 0x303, \"ContinueTime\": 0, \"Para1\": 0, \"Para2\": 0, \"Para3\": 0 }\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 280,
+    "y": 400,
+    "wires": [
+      [
+        "3bc6979ff98862c0"
+      ]
+    ]
+  },
+  {
+    "id": "8ccb023550b1d984",
+    "type": "delay",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "300",
+    "timeoutUnits": "milliseconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 250,
+    "y": 360,
+    "wires": [
+      [
+        "cfde228015f8285a"
+      ]
+    ]
+  },
+  {
+    "id": "c516c2e72bf921d9",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 260,
+    "wires": [
+      [
+        "9ee645fc9419b1e6"
+      ]
+    ]
+  },
+  {
+    "id": "9ee645fc9419b1e6",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 37",
+    "func": "msg.payload = { \"PTZCmd\": 0x302, \"ContinueTime\": 0, \"Para1\": 0, \"Para2\": 0, \"Para3\": 0 }\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 280,
+    "y": 260,
+    "wires": [
+      [
+        "3bc6979ff98862c0",
+        "7e7c2ec117337f12"
+      ]
+    ]
+  },
+  {
+    "id": "7e7c2ec117337f12",
+    "type": "delay",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "300",
+    "timeoutUnits": "milliseconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 450,
+    "y": 260,
+    "wires": [
+      [
+        "cfde228015f8285a"
+      ]
+    ]
+  },
+  {
+    "id": "3bb0ddffe788902b",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 500,
+    "wires": [
+      [
+        "dd05a57c0ce2a9eb"
+      ]
+    ]
+  },
+  {
+    "id": "dd05a57c0ce2a9eb",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 38",
+    "func": "msg.payload ={}\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 300,
+    "y": 500,
+    "wires": [
+      [
+        "d634deb6cd028166"
+      ]
+    ]
+  },
+  {
+    "id": "6c6593278136ddf2",
+    "type": "http request",
+    "z": "2c27b5a30c1815ba",
+    "name": "ZoomFocusPos",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.13/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 540,
+    "y": 680,
+    "wires": [
+      [
+        "29485e9811a95c28"
+      ]
+    ]
+  },
+  {
+    "id": "d634deb6cd028166",
+    "type": "json",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "property": "payload",
+    "action": "str",
+    "pretty": false,
+    "x": 490,
+    "y": 500,
+    "wires": [
+      [
+        "12fccf44fbeedef6"
+      ]
+    ]
+  },
+  {
+    "id": "27638a0f1fb16fed",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 25",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 840,
+    "y": 500,
+    "wires": []
+  },
+  {
+    "id": "12fccf44fbeedef6",
+    "type": "http request",
+    "z": "2c27b5a30c1815ba",
+    "name": "PTZCtrl",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.13/LAPI/V1.0/Channel/0/PTZ/ZoomFocusPos",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 640,
+    "y": 560,
+    "wires": [
+      [
+        "27638a0f1fb16fed"
+      ]
+    ]
+  },
+  {
+    "id": "29485e9811a95c28",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 26",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 740,
+    "y": 680,
+    "wires": []
+  },
+  {
+    "id": "5c787895c1e2acb8",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 680,
+    "wires": [
+      [
+        "efc50db5f75a0cbc"
+      ]
+    ]
+  },
+  {
+    "id": "efc50db5f75a0cbc",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 39",
+    "func": "msg.payload ={}\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 310,
+    "y": 680,
+    "wires": [
+      [
+        "6c6593278136ddf2"
+      ]
+    ]
+  }
+]
