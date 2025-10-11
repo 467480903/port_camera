@@ -466,5 +466,85 @@
                 "file": "D:\\projects2025\\camera\\port_camera\\node-red\\node_modules\\node-red-contrib-flow-manager\\flow-manager.js"
             }
         }
+    },
+    "@bartbutenaers/node-red-rtsp-to-mjpeg": {
+        "name": "@bartbutenaers/node-red-rtsp-to-mjpeg",
+        "version": "1.0.0",
+        "local": true,
+        "user": true,
+        "nodes": {
+            "rtsp2mjpeg": {
+                "name": "rtsp2mjpeg",
+                "types": [
+                    "rtsp2mjpeg"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "@bartbutenaers/node-red-rtsp-to-mjpeg",
+                "file": "D:\\projects2025\\camera\\port_camera\\node-red\\node_modules\\@bartbutenaers\\node-red-rtsp-to-mjpeg\\rtsp2mjpeg.js"
+            }
+        }
+    },
+    "node-red-contrib-image-tools": {
+        "name": "node-red-contrib-image-tools",
+        "version": "2.1.1",
+        "local": true,
+        "user": true,
+        "nodes": {
+            "jimp": {
+                "name": "jimp",
+                "types": [
+                    "jimp-image"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "node-red-contrib-image-tools",
+                "file": "D:\\projects2025\\camera\\port_camera\\node-red\\node_modules\\node-red-contrib-image-tools\\jimp.js"
+            },
+            "xzingDecode": {
+                "name": "xzingDecode",
+                "types": [
+                    "Barcode Decoder"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "node-red-contrib-image-tools",
+                "file": "D:\\projects2025\\camera\\port_camera\\node-red\\node_modules\\node-red-contrib-image-tools\\xzingDecode.js"
+            },
+            "barcodeWriter": {
+                "name": "barcodeWriter",
+                "types": [
+                    "Barcode Generator"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "node-red-contrib-image-tools",
+                "file": "D:\\projects2025\\camera\\port_camera\\node-red\\node_modules\\node-red-contrib-image-tools\\barcodeWriter.js"
+            },
+            "imageViewer": {
+                "name": "imageViewer",
+                "types": [
+                    "image viewer"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "node-red-contrib-image-tools",
+                "file": "D:\\projects2025\\camera\\port_camera\\node-red\\node_modules\\node-red-contrib-image-tools\\imageViewer.js"
+            },
+            "app": {
+                "name": "app",
+                "types": [],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "node-red-contrib-image-tools",
+                "file": "D:\\projects2025\\camera\\port_camera\\node-red\\node_modules\\node-red-contrib-image-tools\\app.js"
+            }
+        }
     }
 }

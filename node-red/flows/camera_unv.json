@@ -1,0 +1,339 @@
+[
+  {
+    "id": "e5b6339a0f552a15",
+    "type": "tab",
+    "label": "camera_unv",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "c1ba72e87ef384ec",
+    "type": "http request",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 520,
+    "y": 160,
+    "wires": [
+      [
+        "d9d7dc4ac7afafd6"
+      ]
+    ]
+  },
+  {
+    "id": "dad578ae254707c3",
+    "type": "inject",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 160,
+    "wires": [
+      [
+        "51e2904ef44b90cf"
+      ]
+    ]
+  },
+  {
+    "id": "51e2904ef44b90cf",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 20",
+    "func": "msg.url = global.get(\"cam1url\") + \"LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0\";\nmsg.payload = msg.payload = {\n    \"ZoomPos\": global.get(\"cam1zoom\"),\n    \"FocusPos\": global.get(\"cam1focus\"),\n    \"FocusCorrectPara\": 257,\n    \"NotTriggerFocus\": 1\n}\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 160,
+    "wires": [
+      [
+        "c1ba72e87ef384ec"
+      ]
+    ]
+  },
+  {
+    "id": "d9d7dc4ac7afafd6",
+    "type": "debug",
+    "z": "e5b6339a0f552a15",
+    "name": "debug 7",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 700,
+    "y": 160,
+    "wires": []
+  },
+  {
+    "id": "7700fd3c7ede42d7",
+    "type": "link in",
+    "z": "e5b6339a0f552a15",
+    "name": "IN_CAMERA",
+    "links": [
+      "e8a61dedecd86c53"
+    ],
+    "x": 235,
+    "y": 120,
+    "wires": [
+      [
+        "51e2904ef44b90cf"
+      ]
+    ]
+  },
+  {
+    "id": "fb147bef71c23939",
+    "type": "inject",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 150,
+    "y": 40,
+    "wires": [
+      [
+        "eb94ba194ceca5ba"
+      ]
+    ]
+  },
+  {
+    "id": "eb94ba194ceca5ba",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 32",
+    "func": "global.set(\"cam1url\",\"http://192.168.1.13/\");\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 320,
+    "y": 40,
+    "wires": [
+      [
+        "da1b5f9e56fff103"
+      ]
+    ]
+  },
+  {
+    "id": "da1b5f9e56fff103",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 40",
+    "func": "msg.payload ={}\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 510,
+    "y": 40,
+    "wires": [
+      [
+        "64fe65e72bf42a72"
+      ]
+    ]
+  },
+  {
+    "id": "64fe65e72bf42a72",
+    "type": "http request",
+    "z": "e5b6339a0f552a15",
+    "name": "ZoomFocusPos",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.13/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 740,
+    "y": 40,
+    "wires": [
+      [
+        "bd081ea9260bef2f",
+        "c49e053f8cf9090c"
+      ]
+    ]
+  },
+  {
+    "id": "c49e053f8cf9090c",
+    "type": "json",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "property": "payload",
+    "action": "obj",
+    "pretty": false,
+    "x": 790,
+    "y": 120,
+    "wires": [
+      [
+        "221569e9e0424a8e",
+        "bd081ea9260bef2f"
+      ]
+    ]
+  },
+  {
+    "id": "221569e9e0424a8e",
+    "type": "change",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "cam1zoom",
+        "pt": "global",
+        "to": "payload.Response.Data.ZoomPos",
+        "tot": "msg"
+      },
+      {
+        "t": "set",
+        "p": "cam1focus",
+        "pt": "global",
+        "to": "payload.Response.Data.FocusPos",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 960,
+    "y": 120,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "bd081ea9260bef2f",
+    "type": "debug",
+    "z": "e5b6339a0f552a15",
+    "name": "debug 21",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1060,
+    "y": 40,
+    "wires": []
+  },
+  {
+    "id": "afb2b70871c2d239",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "do auto",
+    "func": "// 分段线性插值函数\nfunction getValuesByDistance(distance) {\n    // 数据点按distance排序\n    const dataPoints = [\n        { distance: 0.919, focus: 6390, zoom: 689 },\n        { distance: 1.956, focus: 5332, zoom: 895 },\n        { distance: 2.484, focus: 4228, zoom: 1076 },\n\n        { distance: 3.904, focus: 1476, zoom: 1522 },\n        { distance: 4.307, focus: 1237, zoom: 1595 },\n        { distance: 4.794, focus: 1476, zoom: 1722 },\n        { distance: 4.95, focus: 1882, zoom: 1763 },\n        { distance: 5.567, focus: 5314, zoom: 1923 },\n        { distance: 5.823, focus: 8218, zoom: 1990 },\n        { distance: 7.065, focus: 8590, zoom: 1990 },\n\n    ];\n    \n    // 边界情况：小于最小值\n    if (distance <= dataPoints[0].distance) {\n        return {\n            focus: dataPoints[0].focus,\n            zoom: dataPoints[0].zoom\n        };\n    }\n    \n    // 边界情况：大于最大值\n    if (distance >= dataPoints[dataPoints.length - 1].distance) {\n        const lastPoint = dataPoints[dataPoints.length - 1];\n        return {\n            focus: lastPoint.focus,\n            zoom: lastPoint.zoom\n        };\n    }\n    \n    // 查找插值区间并进行线性插值\n    for (let i = 0; i < dataPoints.length - 1; i++) {\n        const p1 = dataPoints[i];\n        const p2 = dataPoints[i + 1];\n        \n        if (distance >= p1.distance && distance <= p2.distance) {\n            // 计算插值系数\n            const t = (distance - p1.distance) / (p2.distance - p1.distance);\n            \n            // 线性插值计算\n            const focus = Math.round(p1.focus + (p2.focus - p1.focus) * t);\n            const zoom = Math.round(p1.zoom + (p2.zoom - p1.zoom) * t);\n            \n            return {\n                focus: focus,\n                zoom: zoom\n            };\n        }\n    }\n}\n\nvar obj = getValuesByDistance( global.get('laser') );\nglobal.set(\"cam1zoom\",obj.zoom);\nglobal.set(\"cam1focus\", obj.focus);\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 360,
+    "y": 280,
+    "wires": [
+      [
+        "51e2904ef44b90cf"
+      ]
+    ]
+  },
+  {
+    "id": "5f306ad82463b988",
+    "type": "link in",
+    "z": "e5b6339a0f552a15",
+    "name": "IN_DO_AUTO",
+    "links": [
+      "b2274bf8610139dc"
+    ],
+    "x": 165,
+    "y": 320,
+    "wires": [
+      [
+        "afb2b70871c2d239"
+      ]
+    ]
+  },
+  {
+    "id": "6a413332820d3f45",
+    "type": "inject",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "2",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 280,
+    "wires": [
+      [
+        "afb2b70871c2d239"
+      ]
+    ]
+  }
+]

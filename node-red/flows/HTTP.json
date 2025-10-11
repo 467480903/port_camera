@@ -290,7 +290,8 @@
     "name": "OUT_CAMERA",
     "mode": "link",
     "links": [
-      "809fc9fc8e25b71a"
+      "809fc9fc8e25b71a",
+      "7700fd3c7ede42d7"
     ],
     "x": 505,
     "y": 440,
@@ -395,7 +396,8 @@
     "name": "OUT_DO_AUTO",
     "mode": "link",
     "links": [
-      "479f35c15608a2f0"
+      "479f35c15608a2f0",
+      "5f306ad82463b988"
     ],
     "x": 685,
     "y": 40,

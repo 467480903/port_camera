@@ -493,7 +493,8 @@
     "y": 680,
     "wires": [
       [
-        "29485e9811a95c28"
+        "29485e9811a95c28",
+        "6fea013ea17a0f5e"
       ]
     ]
   },
@@ -565,7 +566,7 @@
     "complete": "false",
     "statusVal": "",
     "statusType": "auto",
-    "x": 740,
+    "x": 860,
     "y": 680,
     "wires": []
   },
@@ -615,6 +616,514 @@
     "wires": [
       [
         "6c6593278136ddf2"
+      ]
+    ]
+  },
+  {
+    "id": "6fea013ea17a0f5e",
+    "type": "json",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "property": "payload",
+    "action": "obj",
+    "pretty": false,
+    "x": 590,
+    "y": 760,
+    "wires": [
+      [
+        "f01f147c8e011d29",
+        "29485e9811a95c28"
+      ]
+    ]
+  },
+  {
+    "id": "f01f147c8e011d29",
+    "type": "change",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "cam1zoom",
+        "pt": "global",
+        "to": "payload.Response.Data.ZoomPos",
+        "tot": "msg"
+      },
+      {
+        "t": "set",
+        "p": "cam1focus",
+        "pt": "global",
+        "to": "payload.Response.Data.FocusPos",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 760,
+    "y": 760,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "80b8d2326bddd906",
+    "type": "http request",
+    "z": "2c27b5a30c1815ba",
+    "name": "ZoomFocusPos",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.13/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 540,
+    "y": 860,
+    "wires": [
+      [
+        "b83dab288f91197f"
+      ]
+    ]
+  },
+  {
+    "id": "0ddbfcc554401b56",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 860,
+    "wires": [
+      [
+        "0f334e6631584fcc"
+      ]
+    ]
+  },
+  {
+    "id": "0f334e6631584fcc",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 31",
+    "func": "msg.payload ={\n    \"ZoomPos\":\t895,\n\t\"FocusPos\":\t5332,\n\t\"FocusCorrectPara\":\t257,\n\t\"NotTriggerFocus\": 1\n}\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 310,
+    "y": 860,
+    "wires": [
+      [
+        "80b8d2326bddd906"
+      ]
+    ]
+  },
+  {
+    "id": "b83dab288f91197f",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 8",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 860,
+    "wires": []
+  },
+  {
+    "id": "9f0b0f85658e6680",
+    "type": "http request",
+    "z": "2c27b5a30c1815ba",
+    "name": "ZoomFocusPos",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://192.168.1.13/LAPI/V1.0/Channels/0/Media/Video/Streams/0/LiveStreamURL",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 500,
+    "y": 960,
+    "wires": [
+      [
+        "d656b247fbfd5863"
+      ]
+    ]
+  },
+  {
+    "id": "d656b247fbfd5863",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 22",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 820,
+    "y": 960,
+    "wires": []
+  },
+  {
+    "id": "aa54af56a0be5040",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 120,
+    "y": 960,
+    "wires": [
+      [
+        "db1798834dfe6be1"
+      ]
+    ]
+  },
+  {
+    "id": "db1798834dfe6be1",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 41",
+    "func": "msg.payload ={}\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 270,
+    "y": 960,
+    "wires": [
+      [
+        "9f0b0f85658e6680"
+      ]
+    ]
+  },
+  {
+    "id": "f41b14f3c92f31c9",
+    "type": "rtsp2mjpeg",
+    "z": "2c27b5a30c1815ba",
+    "url": "rtsp://192.168.1.13:554/media/video1",
+    "username": "admin",
+    "password": "Zc@emergen135",
+    "rate": "",
+    "quality": "",
+    "resolution": "",
+    "x": 530,
+    "y": 1180,
+    "wires": [
+      [
+        "6eaf957b75d73f64",
+        "7879dc6d05a25682"
+      ]
+    ]
+  },
+  {
+    "id": "ae40bf98806279f7",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 230,
+    "y": 1280,
+    "wires": [
+      [
+        "5569f60478062290"
+      ]
+    ]
+  },
+  {
+    "id": "5569f60478062290",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 42",
+    "func": "msg.topic = \"start_conversion\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 390,
+    "y": 1280,
+    "wires": [
+      [
+        "76c79aaaf0fbafde"
+      ]
+    ]
+  },
+  {
+    "id": "6eaf957b75d73f64",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 27",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 760,
+    "y": 1120,
+    "wires": []
+  },
+  {
+    "id": "6c77bf80ad110c28",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 230,
+    "y": 1320,
+    "wires": [
+      [
+        "87cef1536d2f7aa5"
+      ]
+    ]
+  },
+  {
+    "id": "87cef1536d2f7aa5",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 43",
+    "func": "msg.topic = \"stop_conversion\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 390,
+    "y": 1320,
+    "wires": [
+      [
+        "76c79aaaf0fbafde"
+      ]
+    ]
+  },
+  {
+    "id": "76c79aaaf0fbafde",
+    "type": "rtsp2mjpeg",
+    "z": "2c27b5a30c1815ba",
+    "url": "rtsp://192.168.1.64/ISAPI/Streaming/channels/101",
+    "username": "admin",
+    "password": "gene2025",
+    "rate": "",
+    "quality": "",
+    "resolution": "",
+    "x": 610,
+    "y": 1300,
+    "wires": [
+      [
+        "668412d4f40cbe86",
+        "7879dc6d05a25682"
+      ]
+    ]
+  },
+  {
+    "id": "668412d4f40cbe86",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 28",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 800,
+    "y": 1300,
+    "wires": []
+  },
+  {
+    "id": "7879dc6d05a25682",
+    "type": "image viewer",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "width": 160,
+    "data": "payload",
+    "dataType": "msg",
+    "active": true,
+    "x": 830,
+    "y": 1420,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "0fa5c7fdc91917fa",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 210,
+    "y": 1160,
+    "wires": [
+      [
+        "c6b96d48d90345f4"
+      ]
+    ]
+  },
+  {
+    "id": "c6b96d48d90345f4",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 44",
+    "func": "msg.topic = \"start_conversion\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 1160,
+    "wires": [
+      [
+        "f41b14f3c92f31c9"
+      ]
+    ]
+  },
+  {
+    "id": "606068d33b40baf3",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 210,
+    "y": 1200,
+    "wires": [
+      [
+        "43c6d97bbda80ed5"
+      ]
+    ]
+  },
+  {
+    "id": "43c6d97bbda80ed5",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 45",
+    "func": "msg.topic = \"stop_conversion\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 370,
+    "y": 1200,
+    "wires": [
+      [
+        "f41b14f3c92f31c9"
       ]
     ]
   }

@@ -1,6 +1,6 @@
+#海康相机
+
 ffmpeg -i rtsp://admin:gene2025@192.168.1.64/ISAPI/Streaming/channels/101 -f mjpeg -q:v 5 -r 10 tcp://0.0.0.0:8090
-
-
 
 distence 3.662   
 zoom 13200
@@ -13,3 +13,51 @@ zoom 16300
 distence  2.629
 focus 46100
 zoom 10900
+
+#UNV 相机
+
+ffmpeg -i rtsp://admin:Zc@emergen135@192.168.1.13:554/media/video1 -f mjpeg -q:v 5 -r 10 tcp://127.0.0.1:8090
+
+
+
+	"ZoomPos":	1990,
+	"FocusPos":	8590,
+	"FocusCorrectPara":	257,
+    7.065
+
+	"ZoomPos":	1990,
+	"FocusPos":	8218,
+	"FocusCorrectPara":	257,
+    5.823    
+
+    	"ZoomPos":	1763,
+	"FocusPos":	1882,
+	"FocusCorrectPara":	257,
+    4.95
+
+    	"ZoomPos":	1595,
+	"FocusPos":	1237,
+	"FocusCorrectPara":	257,
+    4.307	
+
+
+    	"ZoomPos":	1522,
+	"FocusPos":	1476,
+	"FocusCorrectPara":	257,
+    3.904
+
+
+    	"ZoomPos":	1076,
+	"FocusPos":	4228,
+	"FocusCorrectPara":	257,
+    2.484
+
+    	"ZoomPos":	895,
+	"FocusPos":	5332,
+	"FocusCorrectPara":	257,
+    1.956
+
+    	"ZoomPos":	689,
+	"FocusPos":	6390,
+	"FocusCorrectPara":	257,
+0.919

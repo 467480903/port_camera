@@ -4,6 +4,8 @@ from PIL import Image, ImageTk
 
 RTSP_URL = "rtsp://admin:gene2025@192.168.1.64:554/ISAPI/Streaming/channels/101"
 
+RTSP_URL = "rtsp://user1:h7Hsu3ULLnLTs*M@192.168.1.13:554/media/video1"
+
 class RTSPPlayer:
     def __init__(self, root, rtsp_url):
         self.root = root
