@@ -1126,5 +1126,241 @@
         "f41b14f3c92f31c9"
       ]
     ]
+  },
+  {
+    "id": "09f8deb063d1f84c",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 270,
+    "y": 1540,
+    "wires": [
+      [
+        "c814119c68b8e865"
+      ]
+    ]
+  },
+  {
+    "id": "c814119c68b8e865",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 46",
+    "func": "msg.topic = \"start_conversion\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 430,
+    "y": 1540,
+    "wires": [
+      [
+        "84ca84bfd0dfb1d7"
+      ]
+    ]
+  },
+  {
+    "id": "48ac17123c2370bf",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 270,
+    "y": 1580,
+    "wires": [
+      [
+        "fb8f0c7d3524306b"
+      ]
+    ]
+  },
+  {
+    "id": "fb8f0c7d3524306b",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 47",
+    "func": "msg.topic = \"stop_conversion\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 430,
+    "y": 1580,
+    "wires": [
+      [
+        "84ca84bfd0dfb1d7"
+      ]
+    ]
+  },
+  {
+    "id": "84ca84bfd0dfb1d7",
+    "type": "rtsp2mjpeg",
+    "z": "2c27b5a30c1815ba",
+    "url": "rtsp://192.168.1.43/stream0",
+    "username": "admin",
+    "password": "123456",
+    "rate": "",
+    "quality": "",
+    "resolution": "",
+    "x": 650,
+    "y": 1560,
+    "wires": [
+      [
+        "ffe367df1e7d9d8b",
+        "03986d8a687cd73c"
+      ]
+    ]
+  },
+  {
+    "id": "ffe367df1e7d9d8b",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 29",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 840,
+    "y": 1560,
+    "wires": []
+  },
+  {
+    "id": "03986d8a687cd73c",
+    "type": "image viewer",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "width": 160,
+    "data": "payload",
+    "dataType": "msg",
+    "active": true,
+    "x": 830,
+    "y": 1620,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "9eab725dd3542047",
+    "type": "exec",
+    "z": "2c27b5a30c1815ba",
+    "command": "ffmpeg -i \"rtsp://admin:123456@192.168.1.43/stream0\" -vframes 1 -q:v 2 d:\\output2c11111111.jpg",
+    "addpay": "",
+    "append": "",
+    "useSpawn": "false",
+    "timer": "",
+    "winHide": false,
+    "oldrc": false,
+    "name": "",
+    "x": 670,
+    "y": 1720,
+    "wires": [
+      [
+        "d067637fa85a4c3c"
+      ],
+      [
+        "d067637fa85a4c3c"
+      ],
+      [
+        "d067637fa85a4c3c"
+      ]
+    ]
+  },
+  {
+    "id": "131f3bb72fd77613",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 270,
+    "y": 1680,
+    "wires": [
+      [
+        "9eab725dd3542047",
+        "103d99075b21c599"
+      ]
+    ]
+  },
+  {
+    "id": "d067637fa85a4c3c",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 30",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1100,
+    "y": 1720,
+    "wires": []
+  },
+  {
+    "id": "103d99075b21c599",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 31",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 520,
+    "y": 1660,
+    "wires": []
   }
 ]
