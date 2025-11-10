@@ -1,9 +1,12 @@
+const path____ = require('path');
+const userDir____ = path____.resolve(__dirname); // settings.js 所在目录
+
 module.exports = {
     // 流文件存放目录
     flowFile: 'flows.json',
     
     // 用户目录
-    userDir: 'D:\\projects2025\\camera\\port_camera\\node-red',
+    userDir: userDir____,
     
     // 管理员认证
     // adminAuth: {
