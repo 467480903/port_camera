@@ -159,6 +159,21 @@
       background: rgb(30, 30, 30);
     }
 
+    /* 相机自读参数按钮特殊样式 */
+    #readCamera {
+      background: #4CAF50;
+      color: white;
+      border: 1px solid #45a049;
+      font-weight: 500;
+    }
+
+    #readCamera:hover {
+      background: #45a049;
+    }
+
+    #readCamera:active {
+      background: #3d8b40;
+    }
 
   </style>
   <script defer src="./reader.js"></script>
@@ -194,6 +209,11 @@
         <div class="label">激光测距值： <span id="laserVal" class="big-value">-</span></div>
       </div>
 
+      <!-- 相机自读参数按钮 -->
+      <div class="control-row">
+        <button id="readCamera">相机自读参数</button>
+      </div>
+
       <div class="status" id="status">状态：初始化中...</div>
     </div>
 
@@ -210,8 +230,8 @@
 
   <script>
     // 配置（必要时修改）
-    const POLL_BASE = 'http://localhost:1881';
-    const POLL_INTERVAL_MS = 200; // 1 秒
+    const POLL_BASE = `${window.location.protocol}//${window.location.hostname}:1881`;
+    const POLL_INTERVAL_MS = 200; // 200 毫秒
     const STEP = 100; // 按键每次改变的步长（可根据需要调整）
 
     $(function () {
@@ -220,7 +240,9 @@
       let currentMode = 'manual'; // 默认手动模式
 
       // 更新状态栏
-      function setStatus(text) { $('#status').text('状态：' + text); }
+      function setStatus(text) { 
+        $('#status').text('状态：' + text); 
+      }
 
       // 更新模式状态显示
       function updateModeDisplay(mode) {
@@ -254,24 +276,33 @@
 
       // 从后端获取值并更新页面
       function pollValues() {
-        // Zoom
-        $.get(POLL_BASE + '/zoom').done(function (data) {
-          // 假设返回的是纯数字或 JSON 包含 value 字段
-          let val = parseNumericResponse(data);
-          if (val !== null) { currentZoom = val; $('#zoomVal').text(val); }
-        }).fail(function () { /* ignore errors for single poll */ });
-
-        // Focus
-        $.get(POLL_BASE + '/focus').done(function (data) {
-          let val = parseNumericResponse(data);
-          if (val !== null) { currentFocus = val; $('#focusVal').text(val); }
-        }).fail(function () { });
-
-        // Laser
-        $.get(POLL_BASE + '/laser').done(function (data) {
-          let val = parseNumericResponse(data);
-          if (val !== null) { $('#laserVal').text(val); }
-        }).fail(function () { });
+        $.get(POLL_BASE + '/data').done(function (data) {
+          // 假设返回的是 [laser, zoom, focus] 这样的数组
+          if (Array.isArray(data) && data.length >= 3) {
+            // 解析激光值 (data[0])
+            let laserVal = parseNumericResponse(data[0]);
+            if (laserVal !== null) { 
+              $('#laserVal').text(laserVal); 
+            }
+            
+            // 解析变焦值 (data[1])
+            let zoomVal = parseNumericResponse(data[1]);
+            if (zoomVal !== null) { 
+              currentZoom = zoomVal; 
+              $('#zoomVal').text(zoomVal); 
+            }
+            
+            // 解析聚焦值 (data[2])
+            let focusVal = parseNumericResponse(data[2]);
+            if (focusVal !== null) { 
+              currentFocus = focusVal; 
+              $('#focusVal').text(focusVal); 
+            }
+          }
+        }).fail(function () { 
+          console.error('Failed to poll data from /data endpoint');
+          // 可以选择在这里处理错误，比如重试或显示错误信息
+        });
       }
 
       // 尝试从多种响应格式中解析数字（纯数字、{"value":123}、"{\"value\":123}")
@@ -303,41 +334,58 @@
           setStatus(endpoint + ' 已发送: ' + value);
           // 立即刷新一次数据（试图同步 UI）
           pollValues();
-        }).fail(function () { setStatus(endpoint + ' 发送失败'); });
+        }).fail(function () { 
+          setStatus(endpoint + ' 发送失败'); 
+        });
+      }
+
+      // 发送相机自读参数请求
+      function sendReadCamera() {
+        $.get(POLL_BASE + '/readCamera')
+          .done(function () {
+            setStatus('相机自读参数已发送');
+          })
+          .fail(function () {
+            setStatus('相机自读参数发送失败');
+          });
       }
 
       // 模式切换按钮绑定
       $('#manualBtn').on('click', function () {
-        // if (currentMode !== 'manual') {
-          setMode('manual');
-        // }
+        setMode('manual');
       });
 
       $('#autoBtn').on('click', function () {
-        // if (currentMode !== 'auto') {
-          setMode('auto');
-        // }
+        setMode('auto');
       });
 
-      // 原有按钮绑定
+      // 变焦按钮绑定
       $('#zoomIn').on('click', function () {
         let newVal = (currentZoom === null) ? 100 : Number(currentZoom) + STEP;
         sendSet('setzoom', newVal);
       });
+      
       $('#zoomOut').on('click', function () {
         let newVal = (currentZoom === null) ? 0 : Number(currentZoom) - STEP;
         if (newVal < 0) newVal = 0;
         sendSet('setzoom', newVal);
       });
 
+      // 聚焦按钮绑定
       $('#focusPlus').on('click', function () {
         let newVal = (currentFocus === null) ? 100 : Number(currentFocus) + STEP;
         sendSet('setfocus', newVal);
       });
+      
       $('#focusMinus').on('click', function () {
         let newVal = (currentFocus === null) ? 0 : Number(currentFocus) - STEP;
         if (newVal < 0) newVal = 0;
         sendSet('setfocus', newVal);
+      });
+
+      // 相机自读参数按钮绑定
+      $('#readCamera').on('click', function () {
+        sendReadCamera();
       });
 
       // 启动轮询
@@ -348,8 +396,8 @@
     });
   </script>
 </body>
-<script>
 
+<script>
 const video = document.getElementById('video');
 const message = document.getElementById('message');
 let defaultControls = false;
@@ -390,7 +438,7 @@ window.addEventListener('load', () => {
   loadAttributesFromQuery();
 
   reader = new MediaMTXWebRTCReader({
-    url: new URL('whep', "http://localhost:8889/cam/webrtc/") + window.location.search,
+    url: new URL('whep', `${window.location.protocol}//${window.location.hostname}:8889/cam/webrtc/`) + window.location.search,
     onError: (err) => {
       setMessage(err);
     },
@@ -406,6 +454,6 @@ window.addEventListener('beforeunload', () => {
     reader.close();
   }
 });
-
 </script>
+
 </html>

@@ -11,7 +11,7 @@
     "id": "c1ba72e87ef384ec",
     "type": "http request",
     "z": "e5b6339a0f552a15",
-    "name": "",
+    "name": "命令下发",
     "method": "PUT",
     "ret": "txt",
     "paytoqs": "ignore",
@@ -76,7 +76,8 @@
     "y": 160,
     "wires": [
       [
-        "c1ba72e87ef384ec"
+        "c1ba72e87ef384ec",
+        "415052e541bb7a88"
       ]
     ]
   },
@@ -109,55 +110,6 @@
     "wires": [
       [
         "51e2904ef44b90cf"
-      ]
-    ]
-  },
-  {
-    "id": "fb147bef71c23939",
-    "type": "inject",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 150,
-    "y": 40,
-    "wires": [
-      [
-        "eb94ba194ceca5ba"
-      ]
-    ]
-  },
-  {
-    "id": "eb94ba194ceca5ba",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 32",
-    "func": "global.set(\"cam1url\",\"http://192.168.1.13/\");\n\nreturn msg;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 320,
-    "y": 40,
-    "wires": [
-      [
-        "da1b5f9e56fff103"
       ]
     ]
   },
@@ -283,8 +235,8 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 360,
-    "y": 280,
+    "x": 580,
+    "y": 340,
     "wires": [
       [
         "51e2904ef44b90cf"
@@ -299,8 +251,49 @@
     "links": [
       "b2274bf8610139dc"
     ],
-    "x": 165,
-    "y": 320,
+    "x": 145,
+    "y": 460,
+    "wires": [
+      [
+        "ea041fb6cc676f74"
+      ]
+    ]
+  },
+  {
+    "id": "415052e541bb7a88",
+    "type": "debug",
+    "z": "e5b6339a0f552a15",
+    "name": "debug 32",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 580,
+    "y": 240,
+    "wires": []
+  },
+  {
+    "id": "d87358bc77f9312d",
+    "type": "trigger",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "op1": "1",
+    "op2": "0",
+    "op1type": "str",
+    "op2type": "str",
+    "duration": "-2",
+    "extend": false,
+    "overrideDelay": false,
+    "units": "s",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 1,
+    "x": 340,
+    "y": 340,
     "wires": [
       [
         "afb2b70871c2d239"
@@ -308,7 +301,7 @@
     ]
   },
   {
-    "id": "6a413332820d3f45",
+    "id": "c3fbc1fb9de34742",
     "type": "inject",
     "z": "e5b6339a0f552a15",
     "name": "",
@@ -321,18 +314,119 @@
         "vt": "str"
       }
     ],
-    "repeat": "2",
+    "repeat": "",
     "crontab": "",
     "once": false,
     "onceDelay": 0.1,
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 120,
-    "y": 280,
+    "x": 130,
+    "y": 300,
     "wires": [
       [
-        "afb2b70871c2d239"
+        "d87358bc77f9312d"
+      ]
+    ]
+  },
+  {
+    "id": "b8a54df008ee846f",
+    "type": "link in",
+    "z": "e5b6339a0f552a15",
+    "name": "IN_DO_MANUAL",
+    "links": [
+      "97c3d5bbf7d0cc8d"
+    ],
+    "x": 145,
+    "y": 500,
+    "wires": [
+      [
+        "5104e5d5998ee777"
+      ]
+    ]
+  },
+  {
+    "id": "5104e5d5998ee777",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 49",
+    "func": "\nreturn {payload: 1,reset:1};",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 250,
+    "y": 500,
+    "wires": [
+      [
+        "d87358bc77f9312d"
+      ]
+    ]
+  },
+  {
+    "id": "ea041fb6cc676f74",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 50",
+    "func": "\nreturn {payload: 1};",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 250,
+    "y": 460,
+    "wires": [
+      [
+        "d87358bc77f9312d"
+      ]
+    ]
+  },
+  {
+    "id": "2edc2bb81c613522",
+    "type": "inject",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 270,
+    "y": 40,
+    "wires": [
+      [
+        "da1b5f9e56fff103"
+      ]
+    ]
+  },
+  {
+    "id": "72aef53e6ad2c058",
+    "type": "link in",
+    "z": "e5b6339a0f552a15",
+    "name": "IN_READ_CAMERA",
+    "links": [
+      "57c32e2524ecd17c"
+    ],
+    "x": 355,
+    "y": 80,
+    "wires": [
+      [
+        "da1b5f9e56fff103"
       ]
     ]
   }

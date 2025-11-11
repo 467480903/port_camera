@@ -1,0 +1,57 @@
+[
+  {
+    "id": "39a4b5009cb84f4e",
+    "type": "tab",
+    "label": "onstart",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "fb147bef71c23939",
+    "type": "inject",
+    "z": "39a4b5009cb84f4e",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": true,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 380,
+    "y": 100,
+    "wires": [
+      [
+        "eb94ba194ceca5ba"
+      ]
+    ]
+  },
+  {
+    "id": "eb94ba194ceca5ba",
+    "type": "function",
+    "z": "39a4b5009cb84f4e",
+    "name": "function 32",
+    "func": "global.set(\"cam1url\",\"http://192.168.1.13/\");\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 540,
+    "y": 100,
+    "wires": [
+      []
+    ]
+  }
+]
