@@ -89,14 +89,41 @@
       height: 100%;
       display: flex;
       align-items: center;
-      justify-content: center
+      justify-content: center;
+      position: relative;
     }
 
-    #mjpgStream {
+    .video-container {
+      position: relative;
       width: 100%;
       height: 100%;
-      border-radius: 6px;
-      border: 1px solid #333
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #video {
+      width: 100%;
+      height: 100%;
+      background: rgb(30, 30, 30);
+      display: block;
+    }
+
+    #overlayCanvas {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    #message {
+      position: absolute;
+      color: white;
+      font-size: 18px;
+      z-index: 5;
     }
 
     .title {
@@ -151,15 +178,6 @@
       color: #007acc;
     }
 
-    #video {
-      position: absolute;
-      top: 0;
-      left: 22%;
-      width: 78%;
-      height: 100%;
-      background: rgb(30, 30, 30);
-    }
-
     /* 相机自读参数按钮特殊样式 */
     #readCamera {
       background: #4CAF50;
@@ -174,6 +192,22 @@
 
     #readCamera:active {
       background: #3d8b40;
+    }
+
+    /* 图片分析按钮特殊样式 */
+    #detectBtn {
+      background: #ff9800;
+      color: white;
+      border: 1px solid #f57c00;
+      font-weight: 500;
+    }
+
+    #detectBtn:hover {
+      background: #f57c00;
+    }
+
+    #detectBtn:active {
+      background: #e65100;
     }
 
     /* 步长调节区域样式 */
@@ -282,12 +316,28 @@
         <button id="readCamera">相机自读参数</button>
       </div>
 
+      <!-- 图片分析按钮 -->
+      <div class="control-row">
+        <button id="detectBtn">图片分析</button>
+      </div>
+
+      <div class="control-row">
+        <button id="auto_focus">自动聚焦</button>
+      </div>         
+
+      <div class="control-row">
+        <button id="do_zoom">自动标定</button>
+      </div>      
+
       <div class="status" id="status">状态：初始化中...</div>
     </div>
 
     <div class="right">
       <div class="img-wrap">
-        <video id="video"></video>
+        <div class="video-container">
+          <video id="video"></video>
+          <canvas id="overlayCanvas"></canvas>
+        </div>
         <div id="message"></div>
       </div>
     </div>
@@ -371,26 +421,21 @@
           }
         }).fail(function () { 
           console.error('Failed to poll data from /data endpoint');
-          // 可以选择在这里处理错误，比如重试或显示错误信息
         });
       }
 
-      // 尝试从多种响应格式中解析数字（纯数字、{"value":123}、"{\"value\":123}")
+      // 尝试从多种响应格式中解析数字
       function parseNumericResponse(data) {
         try {
           if (typeof data === 'number') return data;
           if (typeof data === 'string') {
-            // 尝试直接转数字
             let trimmed = data.trim();
             if (trimmed === '') return null;
-            // 如果像是 JSON，尝试解析
             if ((trimmed[0] === '{' || trimmed[0] === '[')) {
               let j = JSON.parse(trimmed);
               if (j && (j.value !== undefined)) return Number(j.value);
-              // 如果是对象且含有数字字段，尝试找到第一个数字
               for (let k in j) { if (typeof j[k] === 'number') return j[k]; }
             }
-            // 最后尝试直接 parseFloat
             let n = parseFloat(trimmed);
             return isNaN(n) ? null : n;
           }
@@ -402,7 +447,6 @@
       function sendSet(endpoint, value) {
         $.get(POLL_BASE + '/' + endpoint, { value: value }).done(function () {
           setStatus(endpoint + ' 已发送: ' + value);
-          // 立即刷新一次数据（试图同步 UI）
           pollValues();
         }).fail(function () { 
           setStatus(endpoint + ' 发送失败'); 
@@ -420,6 +464,144 @@
           });
       }
 
+      // 发送图片分析请求
+      function sendDetect() {
+        setStatus('正在进行图片分析...');
+        
+        $.ajax({
+          url: POLL_BASE + '/detect',
+          method: 'GET',
+          data: { cmd: 'detect' },
+          dataType: 'json'
+        })
+        .done(function (response) {
+          console.log('检测响应:', response);
+          
+          if (response.success && response.circle) {
+            setStatus('图片分析完成 - 检测到圆形');
+            drawCircleOnCanvas(response.circle, response.image);
+          } else {
+            setStatus('图片分析完成 - 未检测到圆形');
+            clearCanvas();
+          }
+        })
+        .fail(function (xhr, status, error) {
+          console.error('检测请求失败:', status, error);
+          setStatus('图片分析请求失败: ' + error);
+        });
+      }
+
+      // 在 Canvas 上绘制圆形
+      function drawCircleOnCanvas(circle, imageInfo) {
+        const canvas = document.getElementById('overlayCanvas');
+        const video = document.getElementById('video');
+        
+        if (!canvas || !video) {
+          console.error('Canvas 或 Video 元素未找到');
+          return;
+        }
+        
+        const ctx = canvas.getContext('2d');
+        
+        // 设置 canvas 尺寸与 video 实际显示尺寸一致
+        const videoRect = video.getBoundingClientRect();
+        canvas.width = video.clientWidth;
+        canvas.height = video.clientHeight;
+        
+        // 清除之前的绘制
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        // 计算缩放比例
+        const scaleX = canvas.width / imageInfo.width;
+        const scaleY = canvas.height / imageInfo.height;
+        
+        // 转换坐标到显示尺寸
+        const centerX = circle.center.x * scaleX;
+        const centerY = circle.center.y * scaleY;
+        const radius = circle.radius * Math.min(scaleX, scaleY);
+        
+        console.log('绘制圆形:', {
+          原始: circle,
+          缩放: { centerX, centerY, radius },
+          canvas尺寸: { width: canvas.width, height: canvas.height }
+        });
+        
+        
+        // 绘制圆形轮廓
+        ctx.beginPath();
+        ctx.arc(centerX, centerY+23, radius, 0, 2 * Math.PI);
+        ctx.strokeStyle = '#00ff00';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // ctx.beginPath();
+        // ctx.arc(centerX, centerY+22, radius, 0, 2 * Math.PI);
+        // ctx.strokeStyle = '#00ffff';
+        // ctx.lineWidth = 1;
+        // ctx.stroke();        
+        
+        // 绘制圆心十字标记
+        // const crossSize = 10;
+        // ctx.beginPath();
+        // ctx.moveTo(centerX - crossSize, centerY);
+        // ctx.lineTo(centerX + crossSize, centerY);
+        // ctx.moveTo(centerX, centerY - crossSize);
+        // ctx.lineTo(centerX, centerY + crossSize);
+        // ctx.strokeStyle = '#ff0000';
+        // ctx.lineWidth = 2;
+        // ctx.stroke();
+        
+        // 绘制圆心点
+        ctx.beginPath();
+        ctx.arc(centerX, centerY+23, 4, 0, 2 * Math.PI);
+        ctx.fillStyle = '#ff0000';
+        ctx.fill();
+        
+        // 绘制信息文字（带背景）
+        const texts = [
+          `中心: (${circle.center.x}, ${circle.center.y})`,
+          `半径: ${circle.radius}px`,
+          `直径: ${circle.diameter}px`
+        ];
+        
+        ctx.font = 'bold 14px Arial';
+        ctx.textAlign = 'left';
+        
+        let textX = centerX + radius + 15;
+        let textY = centerY - 20;
+        
+        // 如果文字会超出右边界，则显示在左边
+        if (textX + 200 > canvas.width) {
+          textX = centerX - radius - 15;
+          ctx.textAlign = 'right';
+        }
+        
+        texts.forEach((text, index) => {
+          const y = textY + (index * 20);
+          
+          // 绘制文字背景
+          const metrics = ctx.measureText(text);
+          const padding = 4;
+          const bgX = ctx.textAlign === 'right' ? textX - metrics.width - padding : textX - padding;
+          
+          ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+          ctx.fillRect(bgX, y - 14, metrics.width + padding * 2, 18);
+          
+          // 绘制文字
+          ctx.fillStyle = '#00ff00';
+          ctx.fillText(text, textX, y);
+        });
+      }
+
+      // 清除 Canvas
+      function clearCanvas() {
+        const canvas = document.getElementById('overlayCanvas');
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+      }
+
       // 模式切换按钮绑定
       $('#manualBtn').on('click', function () {
         setMode('manual');
@@ -428,6 +610,42 @@
       $('#autoBtn').on('click', function () {
         setMode('auto');
       });
+
+      $('#do_zoom').on('click', function () {
+        $.ajax({
+          url: POLL_BASE + '/do_zoom',
+          method: 'GET',
+          data: { cmd: 'do_zoom' },
+          dataType: 'json'
+        })
+        .done(function (response) {
+          sendDetect();
+        })
+        .fail(function (xhr, status, error) {
+          console.error('请求失败:', status, error);
+          setStatus('请求失败: ' + error);
+        });
+      });      
+
+     $('#auto_focus').on('click', function () {
+        $.ajax({
+          url: POLL_BASE + '/auto_focus',
+          method: 'GET',
+          data: { cmd: 'auto_focus' },
+          dataType: 'json'
+        })
+        .done(function (response) {
+          
+        })
+        .fail(function (xhr, status, error) {
+          console.error('请求失败:', status, error);
+          setStatus('请求失败: ' + error);
+        });
+      });
+
+      
+
+      
 
       // 变焦步长调节按钮
       $('#zoomStepPlus').on('click', function () {
@@ -459,7 +677,7 @@
         }
       });
 
-      // 变焦按钮绑定（使用动态步长）
+      // 变焦按钮绑定
       $('#zoomIn').on('click', function () {
         let newVal = (currentZoom === null) ? zoomStep : Number(currentZoom) + zoomStep;
         sendSet('setzoom', newVal);
@@ -471,7 +689,7 @@
         sendSet('setzoom', newVal);
       });
 
-      // 聚焦按钮绑定（使用动态步长）
+      // 聚焦按钮绑定
       $('#focusPlus').on('click', function () {
         let newVal = (currentFocus === null) ? focusStep : Number(currentFocus) + focusStep;
         sendSet('setfocus', newVal);
@@ -486,6 +704,11 @@
       // 相机自读参数按钮绑定
       $('#readCamera').on('click', function () {
         sendReadCamera();
+      });
+
+      // 图片分析按钮绑定
+      $('#detectBtn').on('click', function () {
+        sendDetect();
       });
 
       // 启动轮询

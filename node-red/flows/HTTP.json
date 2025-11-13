@@ -535,5 +535,116 @@
     "x": 755,
     "y": 340,
     "wires": []
+  },
+  {
+    "id": "cde2502b0a28e904",
+    "type": "http in",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "url": "/do_zoom",
+    "method": "get",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 160,
+    "y": 620,
+    "wires": [
+      [
+        "47024385ab1a210a",
+        "d2077359603d19d3"
+      ]
+    ]
+  },
+  {
+    "id": "566d68615c691576",
+    "type": "http response",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 750,
+    "y": 620,
+    "wires": []
+  },
+  {
+    "id": "47024385ab1a210a",
+    "type": "link out",
+    "z": "2f9b58d1f9172efa",
+    "name": "OUT_DO_ZOOM",
+    "mode": "link",
+    "links": [
+      "914a818a87a52063"
+    ],
+    "x": 305,
+    "y": 680,
+    "wires": []
+  },
+  {
+    "id": "d2077359603d19d3",
+    "type": "delay",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "2",
+    "timeoutUnits": "seconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 440,
+    "y": 620,
+    "wires": [
+      [
+        "566d68615c691576"
+      ]
+    ]
+  },
+  {
+    "id": "1ff734c963cedf79",
+    "type": "http in",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "url": "/auto_focus",
+    "method": "get",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 160,
+    "y": 800,
+    "wires": [
+      [
+        "e96a36831945fbcf",
+        "f8d5a0418f4ce7c8"
+      ]
+    ]
+  },
+  {
+    "id": "e96a36831945fbcf",
+    "type": "link out",
+    "z": "2f9b58d1f9172efa",
+    "name": "OUT_AUTO_FOCUS",
+    "mode": "link",
+    "links": [
+      "1c840bf645f028d4"
+    ],
+    "x": 305,
+    "y": 860,
+    "wires": []
+  },
+  {
+    "id": "f8d5a0418f4ce7c8",
+    "type": "http response",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 490,
+    "y": 800,
+    "wires": []
   }
 ]
