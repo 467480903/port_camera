@@ -224,26 +224,6 @@
     "wires": []
   },
   {
-    "id": "afb2b70871c2d239",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "do auto",
-    "func": "// 分段线性插值函数\nfunction getValuesByDistance(distance) {\n    // 数据点按distance排序\n    const dataPoints = [\n        { distance: 0.919, focus: 6390, zoom: 689 },\n        { distance: 1.956, focus: 5332, zoom: 895 },\n        { distance: 2.484, focus: 4228, zoom: 1076 },\n\n        { distance: 3.904, focus: 1476, zoom: 1522 },\n        { distance: 4.307, focus: 1237, zoom: 1595 },\n        { distance: 4.794, focus: 1476, zoom: 1722 },\n        { distance: 4.95, focus: 1882, zoom: 1763 },\n        { distance: 5.567, focus: 5314, zoom: 1923 },\n        { distance: 5.823, focus: 8218, zoom: 1990 },\n        { distance: 7.065, focus: 8590, zoom: 1990 },\n\n    ];\n    \n    // 边界情况：小于最小值\n    if (distance <= dataPoints[0].distance) {\n        return {\n            focus: dataPoints[0].focus,\n            zoom: dataPoints[0].zoom\n        };\n    }\n    \n    // 边界情况：大于最大值\n    if (distance >= dataPoints[dataPoints.length - 1].distance) {\n        const lastPoint = dataPoints[dataPoints.length - 1];\n        return {\n            focus: lastPoint.focus,\n            zoom: lastPoint.zoom\n        };\n    }\n    \n    // 查找插值区间并进行线性插值\n    for (let i = 0; i < dataPoints.length - 1; i++) {\n        const p1 = dataPoints[i];\n        const p2 = dataPoints[i + 1];\n        \n        if (distance >= p1.distance && distance <= p2.distance) {\n            // 计算插值系数\n            const t = (distance - p1.distance) / (p2.distance - p1.distance);\n            \n            // 线性插值计算\n            const focus = Math.round(p1.focus + (p2.focus - p1.focus) * t);\n            const zoom = Math.round(p1.zoom + (p2.zoom - p1.zoom) * t);\n            \n            return {\n                focus: focus,\n                zoom: zoom\n            };\n        }\n    }\n}\n\nvar obj = getValuesByDistance( global.get('laser') );\nglobal.set(\"cam1zoom\",obj.zoom);\nglobal.set(\"cam1focus\", obj.focus);\n\nreturn msg;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 580,
-    "y": 340,
-    "wires": [
-      [
-        "51e2904ef44b90cf"
-      ]
-    ]
-  },
-  {
     "id": "5f306ad82463b988",
     "type": "link in",
     "z": "e5b6339a0f552a15",
@@ -284,19 +264,19 @@
     "op2": "0",
     "op1type": "str",
     "op2type": "str",
-    "duration": "-2",
+    "duration": "-200",
     "extend": false,
     "overrideDelay": false,
-    "units": "s",
+    "units": "ms",
     "reset": "",
     "bytopic": "all",
     "topic": "topic",
     "outputs": 1,
-    "x": 340,
+    "x": 350,
     "y": 340,
     "wires": [
       [
-        "afb2b70871c2d239"
+        "7b6c707a44849ec9"
       ]
     ]
   },
@@ -971,6 +951,44 @@
       [
         "cf462616f7d18887"
       ]
+    ]
+  },
+  {
+    "id": "7b6c707a44849ec9",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "do auto",
+    "func": "// 分段线性插值函数\nfunction getValuesByDistance(distance) {\n    // 数据点按distance排序\n    const dataPoints = [\n        { distance: 2.004, focus: 9443, zoom: 0 },\n        { distance: 3.051, focus: 7625, zoom: 446 },\n        { distance: 4.083, focus: 6519, zoom: 680 },\n        \n        { distance: 5.015, focus: 5522, zoom: 866 },\n\n\n        { distance: 6.042, focus: 4688, zoom: 1006 },\n        { distance: 7.072, focus: 4028, zoom: 1116 },\n        { distance: 8.047, focus: 3534, zoom: 1196 },\n\n        { distance: 9.051, focus: 3144, zoom: 1256 },\n        { distance: 10.035, focus: 2773, zoom: 1316 },\n        { distance: 12, focus: 2280, zoom: 1396 },\n        { distance: 14.054, focus: 1818, zoom: 1486 },\n        { distance: 18.054, focus: 1530, zoom: 1606 },\n        { distance: 21.046, focus: 1712, zoom: 1656 },\n        { distance: 23.708, focus: 1952, zoom: 1696 },\n\n    ];\n    \n    // 边界情况：小于最小值\n    if (distance <= dataPoints[0].distance) {\n        return {\n            focus: dataPoints[0].focus,\n            zoom: dataPoints[0].zoom\n        };\n    }\n    \n    // 边界情况：大于最大值\n    if (distance >= dataPoints[dataPoints.length - 1].distance) {\n        const lastPoint = dataPoints[dataPoints.length - 1];\n        return {\n            focus: lastPoint.focus,\n            zoom: lastPoint.zoom\n        };\n    }\n    \n    // 查找插值区间并进行线性插值\n    for (let i = 0; i < dataPoints.length - 1; i++) {\n        const p1 = dataPoints[i];\n        const p2 = dataPoints[i + 1];\n        \n        if (distance >= p1.distance && distance <= p2.distance) {\n            // 计算插值系数\n            const t = (distance - p1.distance) / (p2.distance - p1.distance);\n            \n            // 线性插值计算\n            const focus = Math.round(p1.focus + (p2.focus - p1.focus) * t);\n            const zoom = Math.round(p1.zoom + (p2.zoom - p1.zoom) * t);\n            \n            return {\n                focus: focus,\n                zoom: zoom\n            };\n        }\n    }\n}\n\nvar obj = getValuesByDistance( global.get('laser') );\nglobal.set(\"cam1zoom\",obj.zoom);\nglobal.set(\"cam1focus\", obj.focus);\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 520,
+    "y": 340,
+    "wires": [
+      [
+        "51e2904ef44b90cf"
+      ]
+    ]
+  },
+  {
+    "id": "afb2b70871c2d239",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "do auto",
+    "func": "// 分段线性插值函数\nfunction getValuesByDistance(distance) {\n    // 数据点按distance排序\n    const dataPoints = [\n        { distance: 0.919, focus: 6390, zoom: 689 },\n        { distance: 1.956, focus: 5332, zoom: 895 },\n        { distance: 2.484, focus: 4228, zoom: 1076 },\n\n        { distance: 3.904, focus: 1476, zoom: 1522 },\n        { distance: 4.307, focus: 1237, zoom: 1595 },\n        { distance: 4.794, focus: 1476, zoom: 1722 },\n        { distance: 4.95, focus: 1882, zoom: 1763 },\n        { distance: 5.567, focus: 5314, zoom: 1923 },\n        { distance: 5.823, focus: 8218, zoom: 1990 },\n        { distance: 7.065, focus: 8590, zoom: 1990 },\n\n    ];\n    \n    // 边界情况：小于最小值\n    if (distance <= dataPoints[0].distance) {\n        return {\n            focus: dataPoints[0].focus,\n            zoom: dataPoints[0].zoom\n        };\n    }\n    \n    // 边界情况：大于最大值\n    if (distance >= dataPoints[dataPoints.length - 1].distance) {\n        const lastPoint = dataPoints[dataPoints.length - 1];\n        return {\n            focus: lastPoint.focus,\n            zoom: lastPoint.zoom\n        };\n    }\n    \n    // 查找插值区间并进行线性插值\n    for (let i = 0; i < dataPoints.length - 1; i++) {\n        const p1 = dataPoints[i];\n        const p2 = dataPoints[i + 1];\n        \n        if (distance >= p1.distance && distance <= p2.distance) {\n            // 计算插值系数\n            const t = (distance - p1.distance) / (p2.distance - p1.distance);\n            \n            // 线性插值计算\n            const focus = Math.round(p1.focus + (p2.focus - p1.focus) * t);\n            const zoom = Math.round(p1.zoom + (p2.zoom - p1.zoom) * t);\n            \n            return {\n                focus: focus,\n                zoom: zoom\n            };\n        }\n    }\n}\n\nvar obj = getValuesByDistance( global.get('laser') );\nglobal.set(\"cam1zoom\",obj.zoom);\nglobal.set(\"cam1focus\", obj.focus);\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 760,
+    "y": 340,
+    "wires": [
+      []
     ]
   }
 ]
