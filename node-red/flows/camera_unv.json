@@ -592,7 +592,7 @@
     "name": "",
     "statusCode": "",
     "headers": {},
-    "x": 690,
+    "x": 1170,
     "y": 640,
     "wires": []
   },
@@ -612,7 +612,8 @@
     "y": 920,
     "wires": [
       [
-        "3a7e58cf30976965"
+        "3a7e58cf30976965",
+        "d4080cba54fdd90f"
       ]
     ]
   },
@@ -632,7 +633,7 @@
     "y": 640,
     "wires": [
       [
-        "3b7e4d5996beb155"
+        "335713bb58a08ac6"
       ]
     ]
   },
@@ -989,6 +990,74 @@
     "y": 340,
     "wires": [
       []
+    ]
+  },
+  {
+    "id": "d4080cba54fdd90f",
+    "type": "debug",
+    "z": "e5b6339a0f552a15",
+    "name": "debug 35",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 520,
+    "y": 920,
+    "wires": []
+  },
+  {
+    "id": "335713bb58a08ac6",
+    "type": "json",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "property": "payload",
+    "action": "obj",
+    "pretty": false,
+    "x": 670,
+    "y": 640,
+    "wires": [
+      [
+        "87faf8bc2c24808e"
+      ]
+    ]
+  },
+  {
+    "id": "87faf8bc2c24808e",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 59",
+    "func": "msg.payload.circle = msg.payload.circles[0];\nmsg.payload.image = msg.payload.circle.image;\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 830,
+    "y": 640,
+    "wires": [
+      [
+        "d70774e011e3412a"
+      ]
+    ]
+  },
+  {
+    "id": "d70774e011e3412a",
+    "type": "json",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "property": "payload",
+    "action": "str",
+    "pretty": false,
+    "x": 990,
+    "y": 640,
+    "wires": [
+      [
+        "3b7e4d5996beb155"
+      ]
     ]
   }
 ]

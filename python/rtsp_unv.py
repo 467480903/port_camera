@@ -5,10 +5,11 @@ from PIL import Image, ImageTk
 import socket
 import json
 import numpy as np
+from datetime import datetime
 
 RTSP_URL = "rtsp://user1:h7Hsu3ULLnLTs*M@192.168.1.13:554/media/video2"
 TCP_HOST = "0.0.0.0"
-TCP_PORT = 8888
+TCP_PORT = 1991
 
 
 def is_good_circle(img_gray, center, radius, debug=False):
@@ -128,7 +129,58 @@ class RTSPPlayer:
             except:
                 break
 
-    def handle_client(self, client, addr):
+    def handle_client(self, conn, addr):
+        print(f"[连接] {addr}")
+        try:
+            buffer = ""
+            while True:
+                data = conn.recv(1024).decode('utf-8')
+                if not data:
+                    break
+                buffer += data
+
+                # 按换行符分割完整消息
+                while '\n' in buffer:
+                    message, buffer = buffer.split('\n', 1)
+                    message = message.strip()
+                    if not message:
+                        continue
+
+                    print(f"[收到] {addr} -> {message}")
+
+                    # 解析 JSON 命令
+                    try:
+                        cmd = json.loads(message)
+                    except json.JSONDecodeError as e:
+                        response = {
+                            "success": False,
+                            "error": "invalid_json",
+                            "message": f"JSON 解析失败: {e}",
+                            "timestamp": datetime.now().isoformat()
+                        }
+                        conn.sendall((json.dumps(response, ensure_ascii=False) + "\n").encode('utf-8'))
+                        continue
+
+                    # 提取 cmd 字段
+                    cmd_name = cmd.get("cmd", "").strip().lower()
+
+                    # 支持 detecet 和 detect（兼容拼写错误）
+                    if cmd_name == "detect":
+                        result = self.detect_circle()
+
+                        response_str = json.dumps(result, ensure_ascii=False) + "\n"
+                        conn.sendall(response_str.encode('utf-8'))
+                        print(f"[响应] {addr} -> {response_str.strip()[:100]}...")
+
+
+
+        except Exception as e:
+            print(f"[错误] {addr} -> {e}")
+        finally:
+            conn.close()
+            print(f"[断开] {addr}")            
+
+    def handle_client_(self, client, addr):
         """处理客户端连接"""
         print(f"客户端连接: {addr}")
         try:
@@ -249,16 +301,17 @@ class RTSPPlayer:
                 x, y, r = int(circle[0]), int(circle[1]), int(circle[2])
                 h, w = gray.shape
                 # 验证是否为黑边框圆（检查边缘像素）
-                if (self.is_center_region(x, y, w, h, grid_size=5) and 
-                    self.is_black_edge_circle(gray, x, y, r)):
-                
+                # if (self.is_center_region(x, y, w, h, grid_size=3) and 
+                #     self.is_black_edge_circle(gray, x, y, r)):
+                if self.is_black_edge_circle(gray, x, y, r):
                     self.detected_circles.append((x, y, r))
                     diameter = 2 * r
                     results.append({
                         "center_x": x,
                         "center_y": y,
                         "radius": r,
-                        "diameter": diameter
+                        "diameter": diameter,
+                        "image": {"width": int(w), "height": int(h)},
                     })
                     print(f"检测到圆: 圆心({x}, {y}), 半径={r}, 直径={diameter}")
 

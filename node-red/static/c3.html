@@ -477,7 +477,7 @@
         .done(function (response) {
           console.log('检测响应:', response);
           
-          if (response.success && response.circle) {
+          if (response.status && response.circle) {
             setStatus('图片分析完成 - 检测到圆形');
             drawCircleOnCanvas(response.circle, response.image);
           } else {
@@ -516,8 +516,8 @@
         const scaleY = canvas.height / imageInfo.height;
         
         // 转换坐标到显示尺寸
-        const centerX = circle.center.x * scaleX;
-        const centerY = circle.center.y * scaleY;
+        const centerX = circle.center_x * scaleX;
+        const centerY = circle.center_y * scaleY;
         const radius = circle.radius * Math.min(scaleX, scaleY);
         
         console.log('绘制圆形:', {
