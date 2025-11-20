@@ -3,3 +3,4 @@
 *.backup
 /node-red/.config.*
 pic.jpg
+/python/*.jpg
