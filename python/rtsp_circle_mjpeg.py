@@ -71,6 +71,7 @@ class RTSPPlayer:
 
         self.frame = None
         self.cap = cv2.VideoCapture(rtsp_url)
+        self.caculated_circles = []
         self.detected_circles = []
 
         # 多线程
@@ -149,6 +150,49 @@ class RTSPPlayer:
         
         # 如果边缘平均灰度值较低，认为是黑边框
         return len(edge_values) > 0 and np.mean(edge_values) < threshold
+    
+    def is_circle_overlap_eroded(self, eroded_img, x, y, r, min_ratio=0.5):
+        """
+        检查圆是否与 eroded 图重合
+        使用 3x3 区域判断命中，只要该区域有任意白点，就认为该点通过
+        """
+        angles = np.linspace(0, 2 * np.pi, 32)  # 圆周采样点
+        hit = 0
+        total = 0
+
+        h, w = eroded_img.shape
+
+        for angle in angles:
+            px = int(x + r * np.cos(angle))
+            py = int(y + r * np.sin(angle))
+
+            # 该采样点是否在图像内
+            if 0 <= px < w and 0 <= py < h:
+                total += 1
+
+                # ---- 新逻辑：检查 3×3 邻域 ----
+                found = False
+                for dx in [-2,-1, 0, 1,2]:
+                    for dy in [-2,-1, 0, 1,2]:
+                        nx = px + dx
+                        ny = py + dy
+                        if 0 <= nx < w and 0 <= ny < h:
+                            if eroded_img[ny, nx] > 127:
+                                found = True
+                                break
+                    if found:
+                        break
+
+                if found:
+                    hit += 1
+
+        if total == 0:
+            return False
+
+        ratio = hit / total
+        # print("eroded overlap ratio =", ratio)
+
+        return ratio >= min_ratio
 
     def detect_circle(self):
         """检测黑边框圆"""
@@ -160,6 +204,20 @@ class RTSPPlayer:
         frame_copy = self.frame.copy()
         img = frame_copy
 
+        # 全局对比度增强
+        alpha = 1.5   # 对比度
+        beta = 0      # 亮度补偿
+        contrast = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
+        cv2.imwrite("contrast_global.jpg", contrast)        
+
+        lap = cv2.Laplacian(img, cv2.CV_16S, ksize=3)
+        lap = cv2.convertScaleAbs(lap)
+        sharpened = cv2.addWeighted(img, 1.0, lap, 1.0, 0)
+
+        cv2.imwrite("sharpened.jpg", sharpened)
+
+        # 后面继续使用 sharpened
+        img = contrast
 
             # 1. 转灰度 + 轻微模糊（保留粗黑边）
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -168,7 +226,7 @@ class RTSPPlayer:
         
         # 2. 关键：只提取极暗的区域（黑胶带通常 < 60）
         #    比 Canny 更稳！因为你的圆是纯黑粗线
-        _, dark = cv2.threshold(blurred, 25, 255, cv2.THRESH_BINARY_INV)
+        _, dark = cv2.threshold(gray, 65, 255, cv2.THRESH_BINARY_INV)
         cv2.imwrite(f"dark.jpg", dark)
 
         kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1,1))    # 5×5 矩形
@@ -188,46 +246,50 @@ class RTSPPlayer:
         )
 
         cv2.imwrite(f"eroded.jpg", eroded)
-        
-        
 
         circles = cv2.HoughCircles(
             eroded,
             cv2.HOUGH_GRADIENT,
             dp=1.4,                    # 精度高一点
-            minDist=150,               # 你的圆很大，最小圆心距设大点防重检
+            minDist=100,               # 你的圆很大，最小圆心距设大点防重检
             param1=100,
-            param2=50,                 # 关键！调低到 30~45，专门检测不完整圆
-            minRadius=10,             # 根据你的图片，圆半径大概 150~300 像素
-            maxRadius=900
+            param2=80,                 # 关键！调低到 30~45，专门检测不完整圆
+            minRadius=30,             # 根据你的图片，圆半径大概 150~300 像素
+            maxRadius=400
         )
         
-
-
-
-
         self.detected_circles = []
+        self.caculated_circles = []
         results = []
 
         if circles is not None:
             circles = np.uint16(np.around(circles))
             for circle in circles[0, :]:
                 x, y, r = int(circle[0]), int(circle[1]), int(circle[2])
+                self.caculated_circles.append((x, y, r))
                 h, w = gray.shape
-                # 验证是否为黑边框圆（检查边缘像素）
-                # if (self.is_center_region(x, y, w, h, grid_size=3) and 
-                #     self.is_black_edge_circle(gray, x, y, r)):
-                if self.is_black_edge_circle(gray, x, y, r):
-                    self.detected_circles.append((x, y, r))
-                    diameter = 2 * r
-                    results.append({
-                        "center_x": x,
-                        "center_y": y,
-                        "radius": r,
-                        "diameter": diameter,
-                        "image": {"width": int(w), "height": int(h)},
-                    })
-                    print(f"检测到圆: 圆心({x}, {y}), 半径={r}, 直径={diameter}")
+
+                # --- ① 黑边框判断 ---
+                if not self.is_black_edge_circle(gray, x, y, r):
+                    continue
+
+                # --- ② 与 eroded 图的重合度判断 ---
+                if not self.is_circle_overlap_eroded(eroded, x, y, r, min_ratio=0.8):
+                    continue
+
+                # 如果两个都满足 -> 记录结果
+                self.detected_circles.append((x, y, r))
+                diameter = 2 * r
+
+                results.append({
+                    "center_x": x,
+                    "center_y": y,
+                    "radius": r,
+                    "diameter": diameter,
+                    "image": {"width": int(w), "height": int(h)},
+                })
+
+                print(f"检测到圆: 圆心({x}, {y}), 半径={r}, 直径={diameter}")
 
         if results:
             self.status_label.config(text=f"检测到 {len(results)} 个圆", fg="green")
@@ -238,6 +300,7 @@ class RTSPPlayer:
 
     def clear_circles(self):
         self.detected_circles = []
+        self.caculated_circles = []
         self.status_label.config(text="已清除所有圆", fg="blue")
 
     # ----------------------------------------------------------
@@ -246,9 +309,14 @@ class RTSPPlayer:
         """Tkinter 显示画面（可保留或删除）"""
         if self.frame is not None:
             img = self.frame.copy()
+
+
+            for (x, y, r) in self.caculated_circles:
+                cv2.circle(img, (x, y), r, (255, 0, 0), 1)     
+
             for (x, y, r) in self.detected_circles:
                 cv2.circle(img, (x, y), r, (0, 255, 0), 2)
-                cv2.circle(img, (x, y), 3, (0, 0, 255), -1)
+                cv2.circle(img, (x, y), 3, (0, 0, 255), -1)        
 
             img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
             im = Image.fromarray(img)

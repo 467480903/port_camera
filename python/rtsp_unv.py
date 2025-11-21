@@ -281,11 +281,11 @@ class RTSPPlayer:
             eroded,
             cv2.HOUGH_GRADIENT,
             dp=1.4,                    # 精度高一点
-            minDist=150,               # 你的圆很大，最小圆心距设大点防重检
+            minDist=100,               # 你的圆很大，最小圆心距设大点防重检
             param1=100,
-            param2=50,                 # 关键！调低到 30~45，专门检测不完整圆
-            minRadius=10,             # 根据你的图片，圆半径大概 150~300 像素
-            maxRadius=900
+            param2=80,                 # 关键！调低到 30~45，专门检测不完整圆
+            minRadius=5,             # 根据你的图片，圆半径大概 150~300 像素
+            maxRadius=850
         )
         
 
