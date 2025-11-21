@@ -646,5 +646,89 @@
     "x": 490,
     "y": 800,
     "wires": []
+  },
+  {
+    "id": "5db1206bb73c51e0",
+    "type": "http in",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "url": "/auto_done",
+    "method": "get",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 160,
+    "y": 960,
+    "wires": [
+      [
+        "87cde7134b9b1988",
+        "8ea33f60c5987d3b",
+        "507220035094e7c7"
+      ]
+    ]
+  },
+  {
+    "id": "87cde7134b9b1988",
+    "type": "http response",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 530,
+    "y": 960,
+    "wires": []
+  },
+  {
+    "id": "8ea33f60c5987d3b",
+    "type": "function",
+    "z": "2f9b58d1f9172efa",
+    "name": "function 60",
+    "func": "msg.payload = JSON.stringify([global.get('laser'), global.get('cam1zoom'), global.get('cam1focus')])+\",\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 290,
+    "y": 1020,
+    "wires": [
+      [
+        "523bba37ef715a4a"
+      ]
+    ]
+  },
+  {
+    "id": "523bba37ef715a4a",
+    "type": "file",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "filename": "D:\\port_camera\\record.json",
+    "filenameType": "str",
+    "appendNewline": true,
+    "createDir": false,
+    "overwriteFile": "false",
+    "encoding": "none",
+    "x": 800,
+    "y": 1020,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "507220035094e7c7",
+    "type": "debug",
+    "z": "2f9b58d1f9172efa",
+    "name": "debug 36",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 420,
+    "y": 920,
+    "wires": []
   }
 ]

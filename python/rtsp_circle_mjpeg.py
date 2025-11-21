@@ -195,101 +195,88 @@ class RTSPPlayer:
         return ratio >= min_ratio
 
     def detect_circle(self):
-        """检测黑边框圆"""
+        """基于轮廓检测黑边空心圆"""
         if self.frame is None:
             self.status_label.config(text="无视频帧", fg="red")
             return {"status": "error", "message": "无视频帧"}
 
-        # 复制当前帧进行处理
         frame_copy = self.frame.copy()
         img = frame_copy
 
-        # 全局对比度增强
-        alpha = 1.5   # 对比度
-        beta = 0      # 亮度补偿
-        contrast = cv2.convertScaleAbs(img, alpha=alpha, beta=beta)
-        cv2.imwrite("contrast_global.jpg", contrast)        
-
-        lap = cv2.Laplacian(img, cv2.CV_16S, ksize=3)
-        lap = cv2.convertScaleAbs(lap)
-        sharpened = cv2.addWeighted(img, 1.0, lap, 1.0, 0)
-
-        cv2.imwrite("sharpened.jpg", sharpened)
-
-        # 后面继续使用 sharpened
-        img = contrast
-
-            # 1. 转灰度 + 轻微模糊（保留粗黑边）
+        # 1. 转灰度 + 轻微模糊
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        blurred = cv2.medianBlur(gray, 5)        # 中值模糊最抗盐椒噪声
+        blurred = cv2.medianBlur(gray, 1)
         cv2.imwrite(f"blurred.jpg", blurred)
-        
-        # 2. 关键：只提取极暗的区域（黑胶带通常 < 60）
-        #    比 Canny 更稳！因为你的圆是纯黑粗线
-        _, dark = cv2.threshold(gray, 65, 255, cv2.THRESH_BINARY_INV)
+
+        scaleabs = cv2.convertScaleAbs(blurred, alpha=1.5, beta=0)
+        cv2.imwrite(f"scaleabs.jpg", scaleabs)
+
+
+        # 2. 提取极暗区域（黑胶带）
+        _, dark = cv2.threshold(scaleabs, 60, 255, cv2.THRESH_BINARY_INV)
         cv2.imwrite(f"dark.jpg", dark)
 
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (1,1))    # 5×5 矩形
-        # 常用三种形状：
-        # cv2.MORPH_RECT   → 矩形（最常用）
-        # cv2.MORPH_ELLIPSE → 圆形（最自然）
-        # cv2.MORPH_CROSS   → 十字形
+        # 3. 先膨胀后腐蚀
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3,3))
 
-        # 2. 腐蚀
-        eroded = cv2.erode(
-            src=dark,
-            kernel=kernel,
-            anchor=(-1, -1),      # 默认中心
-            iterations=4,         # 腐蚀次数，次数越多“瘦”得越厉害
-            borderType=cv2.BORDER_CONSTANT,
-            borderValue=0
-        )
+        # 先膨胀：连接相邻区域，填充小孔
+        dilated = cv2.dilate(dark, kernel, iterations=4)
+        cv2.imwrite(f"dilated.jpg", dilated)
 
+        # 后腐蚀：恢复大致形状，去除毛刺
+        eroded = cv2.erode(dilated, kernel, iterations=4)
         cv2.imwrite(f"eroded.jpg", eroded)
 
-        circles = cv2.HoughCircles(
-            eroded,
-            cv2.HOUGH_GRADIENT,
-            dp=1.4,                    # 精度高一点
-            minDist=100,               # 你的圆很大，最小圆心距设大点防重检
-            param1=100,
-            param2=80,                 # 关键！调低到 30~45，专门检测不完整圆
-            minRadius=30,             # 根据你的图片，圆半径大概 150~300 像素
-            maxRadius=400
-        )
-        
+        # 4. 找轮廓
+        contours, _ = cv2.findContours(eroded, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+        print(contours)
+
         self.detected_circles = []
         self.caculated_circles = []
         results = []
 
-        if circles is not None:
-            circles = np.uint16(np.around(circles))
-            for circle in circles[0, :]:
-                x, y, r = int(circle[0]), int(circle[1]), int(circle[2])
-                self.caculated_circles.append((x, y, r))
-                h, w = gray.shape
+        for cnt in contours:
+            # 跳过太小的噪声
+            if cv2.contourArea(cnt) < 500:  # 根据你的圆大小调整
+                continue
 
-                # --- ① 黑边框判断 ---
-                if not self.is_black_edge_circle(gray, x, y, r):
-                    continue
+            # 计算轮廓面积和周长
+            area = cv2.contourArea(cnt)
+            perimeter = cv2.arcLength(cnt, True)
+            
+            # 圆形度判断
+            if perimeter > 0:
+                circularity = 4 * np.pi * area / (perimeter * perimeter)
+                if circularity > 0.8:  # 接近1表示更接近圆形
 
-                # --- ② 与 eroded 图的重合度判断 ---
-                if not self.is_circle_overlap_eroded(eroded, x, y, r, min_ratio=0.8):
-                    continue
+                    # 计算最小外接圆
+                    (x, y), r = cv2.minEnclosingCircle(cnt)
+                    x, y, r = int(x), int(y), int(r)
 
-                # 如果两个都满足 -> 记录结果
-                self.detected_circles.append((x, y, r))
-                diameter = 2 * r
+                    self.caculated_circles.append((x, y, r))
 
-                results.append({
-                    "center_x": x,
-                    "center_y": y,
-                    "radius": r,
-                    "diameter": diameter,
-                    "image": {"width": int(w), "height": int(h)},
-                })
+                    h, w = gray.shape
 
-                print(f"检测到圆: 圆心({x}, {y}), 半径={r}, 直径={diameter}")
+                    # # --- 黑边判断 ---
+                    # if not self.is_black_edge_circle(gray, x, y, r):
+                    #     continue
+
+                    # # --- 与 eroded 图重合度判断 ---
+                    # if not self.is_circle_overlap_eroded(eroded, x, y, r, min_ratio=0.8):
+                    #     continue
+
+                    # 满足条件 -> 记录结果
+                    self.detected_circles.append((x, y, r))
+                    diameter = 2 * r
+                    results.append({
+                        "center_x": x,
+                        "center_y": y,
+                        "radius": r,
+                        "diameter": diameter,
+                        "image": {"width": int(w), "height": int(h)},
+                    })
+
+                    print(f"检测到圆: 圆心({x}, {y}), 半径={r}, 直径={diameter}")
 
         if results:
             self.status_label.config(text=f"检测到 {len(results)} 个圆", fg="green")
@@ -297,6 +284,7 @@ class RTSPPlayer:
         else:
             self.status_label.config(text="未检测到黑边框圆", fg="orange")
             return {"status": "success", "circles": [], "message": "未检测到圆"}
+
 
     def clear_circles(self):
         self.detected_circles = []

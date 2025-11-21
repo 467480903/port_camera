@@ -745,7 +745,8 @@
     "z": "e5b6339a0f552a15",
     "name": "IN_AUTO_FOCUS",
     "links": [
-      "e96a36831945fbcf"
+      "e96a36831945fbcf",
+      "523bc64f885373b2"
     ],
     "x": 315,
     "y": 1180,
@@ -1029,7 +1030,7 @@
     "type": "function",
     "z": "e5b6339a0f552a15",
     "name": "function 59",
-    "func": "msg.payload.circle = msg.payload.circles[0];\nmsg.payload.image = msg.payload.circle.image;\nreturn msg;",
+    "func": "try{\n    msg.payload.circle = msg.payload.circles[0];\n    msg.payload.image = msg.payload.circle.image;\n    return msg;\n}catch(ex){\n    msg.payload = ex;\n    return msg;\n}",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
