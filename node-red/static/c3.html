@@ -109,15 +109,7 @@
       display: block;
     }
 
-    #overlayCanvas {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 10;
-    }
+
 
     #message {
       position: absolute;
@@ -335,8 +327,7 @@
     <div class="right">
       <div class="img-wrap">
         <div class="video-container">
-          <video id="video"></video>
-          <canvas id="overlayCanvas"></canvas>
+          <img src="http://192.168.0.13:1992/video" style="width:100%;">
         </div>
         <div id="message"></div>
       </div>
@@ -479,10 +470,8 @@
           
           if (response.status && response.circle) {
             setStatus('图片分析完成 - 检测到圆形');
-            drawCircleOnCanvas(response.circle, response.image);
           } else {
             setStatus('图片分析完成 - 未检测到圆形');
-            clearCanvas();
           }
         })
         .fail(function (xhr, status, error) {
@@ -491,116 +480,7 @@
         });
       }
 
-      // 在 Canvas 上绘制圆形
-      function drawCircleOnCanvas(circle, imageInfo) {
-        const canvas = document.getElementById('overlayCanvas');
-        const video = document.getElementById('video');
-        
-        if (!canvas || !video) {
-          console.error('Canvas 或 Video 元素未找到');
-          return;
-        }
-        
-        const ctx = canvas.getContext('2d');
-        
-        // 设置 canvas 尺寸与 video 实际显示尺寸一致
-        const videoRect = video.getBoundingClientRect();
-        canvas.width = video.clientWidth;
-        canvas.height = video.clientHeight;
-        
-        // 清除之前的绘制
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        // 计算缩放比例
-        const scaleX = canvas.width / imageInfo.width;
-        const scaleY = canvas.height / imageInfo.height;
-        
-        // 转换坐标到显示尺寸
-        const centerX = circle.center_x * scaleX;
-        const centerY = circle.center_y * scaleY;
-        const radius = circle.radius * Math.min(scaleX, scaleY);
-        
-        console.log('绘制圆形:', {
-          原始: circle,
-          缩放: { centerX, centerY, radius },
-          canvas尺寸: { width: canvas.width, height: canvas.height }
-        });
-        
-        
-        // 绘制圆形轮廓
-        ctx.beginPath();
-        ctx.arc(centerX, centerY+23, radius, 0, 2 * Math.PI);
-        ctx.strokeStyle = '#00ff00';
-        ctx.lineWidth = 3;
-        ctx.stroke();
-
-        // ctx.beginPath();
-        // ctx.arc(centerX, centerY+22, radius, 0, 2 * Math.PI);
-        // ctx.strokeStyle = '#00ffff';
-        // ctx.lineWidth = 1;
-        // ctx.stroke();        
-        
-        // 绘制圆心十字标记
-        // const crossSize = 10;
-        // ctx.beginPath();
-        // ctx.moveTo(centerX - crossSize, centerY);
-        // ctx.lineTo(centerX + crossSize, centerY);
-        // ctx.moveTo(centerX, centerY - crossSize);
-        // ctx.lineTo(centerX, centerY + crossSize);
-        // ctx.strokeStyle = '#ff0000';
-        // ctx.lineWidth = 2;
-        // ctx.stroke();
-        
-        // 绘制圆心点
-        ctx.beginPath();
-        ctx.arc(centerX, centerY+23, 4, 0, 2 * Math.PI);
-        ctx.fillStyle = '#ff0000';
-        ctx.fill();
-        
-        // 绘制信息文字（带背景）
-        const texts = [
-          `中心: (${circle.center.x}, ${circle.center.y})`,
-          `半径: ${circle.radius}px`,
-          `直径: ${circle.diameter}px`
-        ];
-        
-        ctx.font = 'bold 14px Arial';
-        ctx.textAlign = 'left';
-        
-        let textX = centerX + radius + 15;
-        let textY = centerY - 20;
-        
-        // 如果文字会超出右边界，则显示在左边
-        if (textX + 200 > canvas.width) {
-          textX = centerX - radius - 15;
-          ctx.textAlign = 'right';
-        }
-        
-        texts.forEach((text, index) => {
-          const y = textY + (index * 20);
-          
-          // 绘制文字背景
-          const metrics = ctx.measureText(text);
-          const padding = 4;
-          const bgX = ctx.textAlign === 'right' ? textX - metrics.width - padding : textX - padding;
-          
-          ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-          ctx.fillRect(bgX, y - 14, metrics.width + padding * 2, 18);
-          
-          // 绘制文字
-          ctx.fillStyle = '#00ff00';
-          ctx.fillText(text, textX, y);
-        });
-      }
-
-      // 清除 Canvas
-      function clearCanvas() {
-        const canvas = document.getElementById('overlayCanvas');
-        if (canvas) {
-          const ctx = canvas.getContext('2d');
-          ctx.clearRect(0, 0, canvas.width, canvas.height);
-        }
-      }
+     
 
       // 模式切换按钮绑定
       $('#manualBtn').on('click', function () {
@@ -757,26 +637,7 @@ const loadAttributesFromQuery = () => {
   defaultControls = video.controls;
 };
 
-window.addEventListener('load', () => {
-  loadAttributesFromQuery();
 
-  reader = new MediaMTXWebRTCReader({
-    url: new URL('whep', `${window.location.protocol}//${window.location.hostname}:8889/cam/webrtc/`) + window.location.search,
-    onError: (err) => {
-      setMessage(err);
-    },
-    onTrack: (evt) => {
-      setMessage('');
-      video.srcObject = evt.streams[0];
-    },
-  });
-});
-
-window.addEventListener('beforeunload', () => {
-  if (reader !== null) {
-    reader.close();
-  }
-});
 </script>
 
 </html>

@@ -332,7 +332,7 @@ class RTSPPlayer:
             c = grid_size // 2
             cv2.rectangle(img, (c*cw, c*ch), ((c+1)*cw-1, (c+1)*ch-1), (0,255,255), 3)        
 
-    def is_black_edge_circle(self, gray_img, x, y, r, threshold=55):
+    def is_black_edge_circle(self, gray_img, x, y, r, threshold=80):
         """检查圆边缘是否为黑色"""
         # 采样圆周上的点
         angles = np.linspace(0, 2 * np.pi, 16)
