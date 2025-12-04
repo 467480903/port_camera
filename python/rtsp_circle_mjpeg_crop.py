@@ -186,7 +186,7 @@ class RTSPPlayer:
         self.crop_status_label.config(text="Crop reset - showing original video", fg="blue")
 
     def get_cropped_frame(self, frame):
-        """Get cropped frame if crop is enabled"""
+        """Get cropped frame if crop is enabled and resize to original size"""
         if not self.crop_enabled or frame is None:
             return frame
         
@@ -201,7 +201,13 @@ class RTSPPlayer:
         if x2 <= x1 or y2 <= y1:
             return frame
         
-        return frame[y1:y2, x1:x2]
+        # Crop the frame
+        cropped = frame[y1:y2, x1:x2]
+        
+        # Resize the cropped frame back to original video dimensions
+        resized = cv2.resize(cropped, (w, h), interpolation=cv2.INTER_LINEAR)
+        
+        return resized
 
     # ----------------------------------------------------------
 
