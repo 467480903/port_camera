@@ -90,38 +90,33 @@ class RTSPPlayer:
         crop_controls = tk.Frame(self.tab2)
         crop_controls.pack(pady=10)
 
-        # Step size control
-        step_size_frame = tk.Frame(crop_controls)
-        step_size_frame.pack(pady=5)
-        tk.Label(step_size_frame, text="Step Size:").pack(side=tk.LEFT, padx=5)
-        self.step_size_entry = tk.Entry(step_size_frame, width=10)
-        self.step_size_entry.insert(0, "5")
-        self.step_size_entry.pack(side=tk.LEFT, padx=5)
-        self.step_size_entry.bind("<Return>", self.update_step_size)
-
         # Row 1: Position X and Y
         row1 = tk.Frame(crop_controls)
         row1.pack(pady=5)
         
         tk.Label(row1, text="Crop Position X:").pack(side=tk.LEFT, padx=5)
-        self.crop_x_spinbox = tk.Spinbox(row1, from_=0, to=10000, increment=5, width=10)
-        self.crop_x_spinbox.pack(side=tk.LEFT, padx=5)
+        self.crop_x_entry = tk.Entry(row1, width=10)
+        self.crop_x_entry.insert(0, "0")
+        self.crop_x_entry.pack(side=tk.LEFT, padx=5)
         
         tk.Label(row1, text="Crop Position Y:").pack(side=tk.LEFT, padx=5)
-        self.crop_y_spinbox = tk.Spinbox(row1, from_=0, to=10000, increment=5, width=10)
-        self.crop_y_spinbox.pack(side=tk.LEFT, padx=5)
+        self.crop_y_entry = tk.Entry(row1, width=10)
+        self.crop_y_entry.insert(0, "0")
+        self.crop_y_entry.pack(side=tk.LEFT, padx=5)
 
         # Row 2: Width and Height
         row2 = tk.Frame(crop_controls)
         row2.pack(pady=5)
         
         tk.Label(row2, text="Crop Width:").pack(side=tk.LEFT, padx=5)
-        self.crop_width_spinbox = tk.Spinbox(row2, from_=0, to=10000, increment=5, width=10)
-        self.crop_width_spinbox.pack(side=tk.LEFT, padx=5)
+        self.crop_width_entry = tk.Entry(row2, width=10)
+        self.crop_width_entry.insert(0, "640")
+        self.crop_width_entry.pack(side=tk.LEFT, padx=5)
         
         tk.Label(row2, text="Crop Height:").pack(side=tk.LEFT, padx=5)
-        self.crop_height_spinbox = tk.Spinbox(row2, from_=0, to=10000, increment=5, width=10)
-        self.crop_height_spinbox.pack(side=tk.LEFT, padx=5)
+        self.crop_height_entry = tk.Entry(row2, width=10)
+        self.crop_height_entry.insert(0, "480")
+        self.crop_height_entry.pack(side=tk.LEFT, padx=5)
 
         # Row 3: Buttons
         row3 = tk.Frame(crop_controls)
@@ -160,41 +155,30 @@ class RTSPPlayer:
 
     # ----------------------------------------------------------
 
-def set_crop(self):
-    """Set crop parameters from user input"""
-    try:
-        x = int(self.crop_x_spinbox.get())
-        y = int(self.crop_y_spinbox.get())
-        w = int(self.crop_width_spinbox.get())
-        h = int(self.crop_height_spinbox.get())
-        
-        if x < 0 or y < 0 or w <= 0 or h <= 0:
-            self.crop_status_label.config(text="Invalid values! Must be positive.", fg="red")
-            return
-        
-        self.crop_x = x
-        self.crop_y = y
-        self.crop_w = w
-        self.crop_h = h
-        self.crop_enabled = True
-        
-        self.crop_status_label.config(
-            text=f"Crop applied: ({x}, {y}) - {w}x{h}", 
-            fg="green"
-        )
-    except ValueError:
-        self.crop_status_label.config(text="Invalid input! Please enter numbers.", fg="red")
-
-    def update_step_size(self, event):
-        """Update the step size for all Spinbox widgets"""
+    def set_crop(self):
+        """Set crop parameters from user input"""
         try:
-            step_size = int(self.step_size_entry.get())
-            self.crop_x_spinbox.config(increment=step_size)
-            self.crop_y_spinbox.config(increment=step_size)
-            self.crop_width_spinbox.config(increment=step_size)
-            self.crop_height_spinbox.config(increment=step_size)
+            x = int(self.crop_x_entry.get())
+            y = int(self.crop_y_entry.get())
+            w = int(self.crop_width_entry.get())
+            h = int(self.crop_height_entry.get())
+            
+            if x < 0 or y < 0 or w <= 0 or h <= 0:
+                self.crop_status_label.config(text="Invalid values! Must be positive.", fg="red")
+                return
+            
+            self.crop_x = x
+            self.crop_y = y
+            self.crop_w = w
+            self.crop_h = h
+            self.crop_enabled = True
+            
+            self.crop_status_label.config(
+                text=f"Crop applied: ({x}, {y}) - {w}x{h}", 
+                fg="green"
+            )
         except ValueError:
-            self.crop_status_label.config(text="Invalid step size! Please enter a number.", fg="red")
+            self.crop_status_label.config(text="Invalid input! Please enter numbers.", fg="red")
 
     def reset_crop(self):
         """Reset crop to show original video"""
