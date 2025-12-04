@@ -256,7 +256,7 @@
     "type": "debug",
     "z": "2f9b58d1f9172efa",
     "name": "debug 3",
-    "active": true,
+    "active": false,
     "tosidebar": true,
     "console": false,
     "tostatus": false,
@@ -662,8 +662,9 @@
     "wires": [
       [
         "87cde7134b9b1988",
-        "8ea33f60c5987d3b",
-        "507220035094e7c7"
+        "507220035094e7c7",
+        "5d6b49b273c215f6",
+        "ddfeded37fa5c337"
       ]
     ]
   },
@@ -690,7 +691,7 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 290,
+    "x": 470,
     "y": 1020,
     "wires": [
       [
@@ -729,6 +730,44 @@
     "statusType": "auto",
     "x": 420,
     "y": 920,
+    "wires": []
+  },
+  {
+    "id": "5d6b49b273c215f6",
+    "type": "delay",
+    "z": "2f9b58d1f9172efa",
+    "name": "",
+    "pauseType": "delay",
+    "timeout": "500",
+    "timeoutUnits": "milliseconds",
+    "rate": "1",
+    "nbRateUnits": "1",
+    "rateUnits": "second",
+    "randomFirst": "1",
+    "randomLast": "5",
+    "randomUnits": "seconds",
+    "drop": false,
+    "allowrate": false,
+    "outputs": 1,
+    "x": 310,
+    "y": 1020,
+    "wires": [
+      [
+        "8ea33f60c5987d3b"
+      ]
+    ]
+  },
+  {
+    "id": "ddfeded37fa5c337",
+    "type": "link out",
+    "z": "2f9b58d1f9172efa",
+    "name": "OUT_READ_CAMERA2",
+    "mode": "link",
+    "links": [
+      "72aef53e6ad2c058"
+    ],
+    "x": 335,
+    "y": 980,
     "wires": []
   }
 ]
