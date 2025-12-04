@@ -9,7 +9,7 @@ from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import io
 
-RTSP_URL = "rtsp://user1:h7Hsu3ULLnLTs*M@192.168.1.13:554/media/video2"
+RTSP_URL = "rtsp://user1:h7Hsu3ULLnLTs*M@192.168.1.14:554/media/video2"
 TCP_HOST = "0.0.0.0"
 TCP_PORT = 1991
 
