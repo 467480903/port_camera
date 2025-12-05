@@ -10,7 +10,7 @@ from datetime import datetime
 from http.server import BaseHTTPRequestHandler, HTTPServer
 import io
 
-RTSP_URL = "rtsp://user1:h7Hsu3ULLnLTs*M@192.168.1.14:554/media/video2"
+RTSP_URL = "rtsp://user1:h7Hsu3ULLnLTs*M@192.168.1.13:554/media/video2"
 TCP_HOST = "0.0.0.0"
 TCP_PORT = 1991
 
@@ -99,10 +99,22 @@ class RTSPPlayer:
         self.crop_x_entry.insert(0, "0")
         self.crop_x_entry.pack(side=tk.LEFT, padx=5)
         
+        self.crop_x_inc_btn = tk.Button(row1, text="+", command=lambda: self.increment(self.crop_x_entry, 5))
+        self.crop_x_inc_btn.pack(side=tk.LEFT, padx=5)
+        
+        self.crop_x_dec_btn = tk.Button(row1, text="-", command=lambda: self.decrement(self.crop_x_entry, 5))
+        self.crop_x_dec_btn.pack(side=tk.LEFT, padx=5)
+        
         tk.Label(row1, text="Crop Position Y:").pack(side=tk.LEFT, padx=5)
         self.crop_y_entry = tk.Entry(row1, width=10)
         self.crop_y_entry.insert(0, "0")
         self.crop_y_entry.pack(side=tk.LEFT, padx=5)
+        
+        self.crop_y_inc_btn = tk.Button(row1, text="+", command=lambda: self.increment(self.crop_y_entry, 5))
+        self.crop_y_inc_btn.pack(side=tk.LEFT, padx=5)
+        
+        self.crop_y_dec_btn = tk.Button(row1, text="-", command=lambda: self.decrement(self.crop_y_entry, 5))
+        self.crop_y_dec_btn.pack(side=tk.LEFT, padx=5)
 
         # Row 2: Width and Height
         row2 = tk.Frame(crop_controls)
@@ -113,10 +125,22 @@ class RTSPPlayer:
         self.crop_width_entry.insert(0, "640")
         self.crop_width_entry.pack(side=tk.LEFT, padx=5)
         
+        self.crop_width_inc_btn = tk.Button(row2, text="+", command=lambda: self.increment(self.crop_width_entry, 5))
+        self.crop_width_inc_btn.pack(side=tk.LEFT, padx=5)
+        
+        self.crop_width_dec_btn = tk.Button(row2, text="-", command=lambda: self.decrement(self.crop_width_entry, 5))
+        self.crop_width_dec_btn.pack(side=tk.LEFT, padx=5)
+        
         tk.Label(row2, text="Crop Height:").pack(side=tk.LEFT, padx=5)
         self.crop_height_entry = tk.Entry(row2, width=10)
         self.crop_height_entry.insert(0, "480")
         self.crop_height_entry.pack(side=tk.LEFT, padx=5)
+        
+        self.crop_height_inc_btn = tk.Button(row2, text="+", command=lambda: self.increment(self.crop_height_entry, 5))
+        self.crop_height_inc_btn.pack(side=tk.LEFT, padx=5)
+        
+        self.crop_height_dec_btn = tk.Button(row2, text="-", command=lambda: self.decrement(self.crop_height_entry, 5))
+        self.crop_height_dec_btn.pack(side=tk.LEFT, padx=5)
 
         # Row 3: Buttons
         row3 = tk.Frame(crop_controls)
@@ -132,6 +156,14 @@ class RTSPPlayer:
 
         self.crop_status_label = tk.Label(self.tab2, text="No crop applied", fg="blue")
         self.crop_status_label.pack()
+
+        row4 = tk.Frame(crop_controls)
+        row4.pack(pady=5)
+        
+        tk.Label(row4, text="Increment Step:").pack(side=tk.LEFT, padx=5)
+        self.increment_step_entry = tk.Entry(row4, width=10)
+        self.increment_step_entry.insert(0, "5")
+        self.increment_step_entry.pack(side=tk.LEFT, padx=5)
 
         # Crop parameters
         self.crop_enabled = False
@@ -153,6 +185,28 @@ class RTSPPlayer:
 
         self.update_ui()
 
+
+    def increment(self, entry, step):
+        try:
+            current_value = int(entry.get())
+            entry.delete(0, tk.END)
+            entry.insert(0, str(current_value + step))
+        except ValueError:
+            entry.delete(0, tk.END)
+            entry.insert(0, "0")
+
+        self.set_crop()
+
+    def decrement(self, entry, step):
+        try:
+            current_value = int(entry.get())
+            entry.delete(0, tk.END)
+            entry.insert(0, str(current_value - step))
+        except ValueError:
+            entry.delete(0, tk.END)
+            entry.insert(0, "0")
+
+        self.set_crop()
     # ----------------------------------------------------------
 
     def set_crop(self):
@@ -179,12 +233,20 @@ class RTSPPlayer:
             )
         except ValueError:
             self.crop_status_label.config(text="Invalid input! Please enter numbers.", fg="red")
-
+    
     def reset_crop(self):
         """Reset crop to show original video"""
         self.crop_enabled = False
+        self.crop_x_entry.delete(0, tk.END)
+        self.crop_x_entry.insert(0, "0")
+        self.crop_y_entry.delete(0, tk.END)
+        self.crop_y_entry.insert(0, "0")
+        self.crop_width_entry.delete(0, tk.END)
+        self.crop_width_entry.insert(0, "640")
+        self.crop_height_entry.delete(0, tk.END)
+        self.crop_height_entry.insert(0, "480")
         self.crop_status_label.config(text="Crop reset - showing original video", fg="blue")
-
+    
     def get_cropped_frame(self, frame):
         """Get cropped frame if crop is enabled and resize to original size"""
         if not self.crop_enabled or frame is None:
