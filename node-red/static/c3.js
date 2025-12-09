@@ -13,8 +13,8 @@ $(function () {
   let autoAdjustRunning = false;  // 防止重复触发
   let adjustAttempts = 0;
   const MAX_ATTEMPTS = 15;
-  const TARGET_MIN = 300;
-  const TARGET_MAX = 350;
+  const TARGET_MIN = 300/2;
+  const TARGET_MAX = 350/2;
 
   function setStatus(text) {
     $('#status').text('状态：' + text);

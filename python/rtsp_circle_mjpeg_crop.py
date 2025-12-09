@@ -33,7 +33,7 @@ class MJPEGHandler(BaseHTTPRequestHandler):
         self.end_headers()
 
         while True:
-            frame = self.server.player.get_mjpeg_frame()
+            frame = self.server.player.get_mjpeg_frame2()
             if frame is None:
                 continue
             try:
@@ -234,6 +234,37 @@ class RTSPPlayer:
         except ValueError:
             self.crop_status_label.config(text="Invalid input! Please enter numbers.", fg="red")
     
+    def interpolate(self, distance, x1, y1, w1, h1, x2, y2, w2, h2, d1, d2):
+        t = (distance - d1) / (d2 - d1)
+        x = int(x1 + t * (x2 - x1))
+        y = int(y1 + t * (y2 - y1))
+        w = int(w1 + t * (w2 - w1))
+        h = int(h1 + t * (h2 - h1))
+        return x, y, w, h
+
+    def adjust_by_distance(self, distance):
+        d1 = 15.58
+        d2 = 39.56
+        x1, y1, w1, h1 = 530, 0, 690, 505
+        x2, y2, w2, h2 = 695, 145, 275, 300
+
+        if distance < d1:
+            x, y, w, h = x1, y1, w1, h1
+        elif distance > d2:
+            x, y, w, h = x2, y2, w2, h2
+        else:
+            x, y, w, h = self.interpolate(distance, x1, y1, w1, h1, x2, y2, w2, h2, d1, d2)
+
+        self.crop_x_entry.delete(0, tk.END)
+        self.crop_x_entry.insert(0, str(x))
+        self.crop_y_entry.delete(0, tk.END)
+        self.crop_y_entry.insert(0, str(y))
+        self.crop_width_entry.delete(0, tk.END)
+        self.crop_width_entry.insert(0, str(w))
+        self.crop_height_entry.delete(0, tk.END)
+        self.crop_height_entry.insert(0, str(h))
+        self.set_crop()
+
     def reset_crop(self):
         """Reset crop to show original video"""
         self.crop_enabled = False
@@ -319,6 +350,18 @@ class RTSPPlayer:
                     if cmd.get("cmd") == "detect":
                         result = self.detect_circle()
                         conn.sendall((json.dumps(result, ensure_ascii=False) + "\n").encode('utf-8'))
+                    elif cmd.get("cmd") == "adjustByDistance":
+                        distance = cmd.get("distance")
+                        if distance is None:
+                            conn.sendall(b'{"success":false,"error":"distance_not_provided"}\n')
+                            continue
+                        try:
+                            distance = float(distance)
+                        except ValueError:
+                            conn.sendall(b'{"success":false,"error":"invalid_distance"}\n')
+                            continue
+                        self.adjust_by_distance(distance)
+                        conn.sendall(b'{"success":true,"cmd":"adjustByDistance"}\n')
 
         finally:
             conn.close()
@@ -402,7 +445,7 @@ class RTSPPlayer:
 
 
         # 2. 提取极暗区域（黑胶带）
-        _, dark = cv2.threshold(scaleabs, 60, 255, cv2.THRESH_BINARY_INV)
+        _, dark = cv2.threshold(scaleabs, 80, 255, cv2.THRESH_BINARY_INV)
         cv2.imwrite(f"dark.jpg", dark)
 
         # 3. 先膨胀后腐蚀
@@ -461,6 +504,7 @@ class RTSPPlayer:
                         "center_x": x,
                         "center_y": y,
                         "radius": r,
+                        
                         "diameter": diameter,
                         "image": {"width": int(w), "height": int(h)},
                     })
@@ -469,10 +513,10 @@ class RTSPPlayer:
 
         if results:
             self.status_label.config(text=f"检测到 {len(results)} 个圆", fg="green")
-            return {"status": "success", "circles": results}
+            return {"status": "success", "circles": results, "cmd":"detect"}
         else:
             self.status_label.config(text="未检测到黑边框圆", fg="orange")
-            return {"status": "success", "circles": [], "message": "未检测到圆"}
+            return {"status": "success", "circles": [], "cmd":"detect", "message": "未检测到圆"}
 
 
     def clear_circles(self):
@@ -526,6 +570,30 @@ class RTSPPlayer:
         ret, jpeg = cv2.imencode('.jpg', img)
         if not ret:
             return None
+        return jpeg.tobytes()
+    
+    def get_mjpeg_frame2(self):
+        """返回 cropped JPEG bytes"""
+        if self.frame is None:
+            return None
+        
+        img = self.frame.copy()
+        for (x, y, r) in self.detected_circles:
+            cv2.circle(img, (x, y), r, (0, 255, 0), 2)
+            cv2.circle(img, (x, y), 3, (0, 0, 255), -1)
+
+        
+        # Get the cropped frame
+        cropped_frame = self.get_cropped_frame(img)
+        
+        if cropped_frame is None:
+            return None
+        
+        # Encode the cropped frame to JPEG format
+        ret, jpeg = cv2.imencode('.jpg', cropped_frame)
+        if not ret:
+            return None
+        
         return jpeg.tobytes()
 
     # ----------------------------------------------------------

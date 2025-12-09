@@ -49,35 +49,6 @@
     "wires": []
   },
   {
-    "id": "49a7cb4ad8663d3e",
-    "type": "inject",
-    "z": "c6c10f6d57076b13",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "1",
-    "crontab": "",
-    "once": true,
-    "onceDelay": "2",
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 160,
-    "y": 340,
-    "wires": [
-      [
-        "af639b8982b9af62"
-      ]
-    ]
-  },
-  {
     "id": "af639b8982b9af62",
     "type": "function",
     "z": "c6c10f6d57076b13",
@@ -113,6 +84,51 @@
     "y": 160,
     "wires": [
       []
+    ]
+  },
+  {
+    "id": "9c957c4b4d6325c1",
+    "type": "link in",
+    "z": "c6c10f6d57076b13",
+    "name": "IN_LASER",
+    "links": [
+      "bcbc5be713c846cd"
+    ],
+    "x": 115,
+    "y": 340,
+    "wires": [
+      [
+        "af639b8982b9af62"
+      ]
+    ]
+  },
+  {
+    "id": "44ff31d1bcc6b60b",
+    "type": "inject",
+    "z": "c6c10f6d57076b13",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "0.5",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 160,
+    "y": 540,
+    "wires": [
+      [
+        "af639b8982b9af62"
+      ]
     ]
   }
 ]

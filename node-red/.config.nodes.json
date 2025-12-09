@@ -546,5 +546,27 @@
                 "file": "D:\\port_camera\\node-red\\node_modules\\node-red-contrib-flow-manager\\flow-manager.js"
             }
         }
+    },
+    "node-red-contrib-s7": {
+        "name": "node-red-contrib-s7",
+        "version": "3.1.1",
+        "local": true,
+        "user": true,
+        "nodes": {
+            "s7": {
+                "name": "s7",
+                "types": [
+                    "s7 endpoint",
+                    "s7 in",
+                    "s7 out",
+                    "s7 control"
+                ],
+                "enabled": true,
+                "local": true,
+                "user": false,
+                "module": "node-red-contrib-s7",
+                "file": "D:\\port_camera\\node-red\\node_modules\\node-red-contrib-s7\\red\\s7.js"
+            }
+        }
     }
 }

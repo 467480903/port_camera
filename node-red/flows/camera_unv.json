@@ -276,7 +276,8 @@
     "y": 340,
     "wires": [
       [
-        "7b6c707a44849ec9"
+        "7b6c707a44849ec9",
+        "bcbc5be713c846cd"
       ]
     ]
   },
@@ -430,8 +431,7 @@
     "y": 640,
     "wires": [
       [
-        "1d9fb3a9a00038a1",
-        "f2f61a8fe617af6f"
+        "335713bb58a08ac6"
       ]
     ]
   },
@@ -446,24 +446,8 @@
     "base64": false,
     "end": false,
     "tls": "",
-    "x": 430,
+    "x": 690,
     "y": 720,
-    "wires": []
-  },
-  {
-    "id": "1d9fb3a9a00038a1",
-    "type": "debug",
-    "z": "e5b6339a0f552a15",
-    "name": "debug 33",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 520,
-    "y": 600,
     "wires": []
   },
   {
@@ -527,26 +511,9 @@
     "y": 800,
     "wires": [
       [
-        "09341220111c01fe",
         "5a2b99bb0a2530de"
       ]
     ]
-  },
-  {
-    "id": "09341220111c01fe",
-    "type": "debug",
-    "z": "e5b6339a0f552a15",
-    "name": "debug 34",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 780,
-    "y": 800,
-    "wires": []
   },
   {
     "id": "5a2b99bb0a2530de",
@@ -615,26 +582,6 @@
       [
         "3a7e58cf30976965",
         "d4080cba54fdd90f"
-      ]
-    ]
-  },
-  {
-    "id": "f2f61a8fe617af6f",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 55",
-    "func": "var msg2 = global.get(\"detect_g\");\nmsg2.payload = msg.payload;\nreturn msg2;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 510,
-    "y": 640,
-    "wires": [
-      [
-        "335713bb58a08ac6"
       ]
     ]
   },
@@ -1017,11 +964,12 @@
     "property": "payload",
     "action": "obj",
     "pretty": false,
-    "x": 670,
+    "x": 470,
     "y": 640,
     "wires": [
       [
-        "87faf8bc2c24808e"
+        "5d68b9f3f838aa6d",
+        "b454d00136a6b6bb"
       ]
     ]
   },
@@ -1059,6 +1007,293 @@
       [
         "3b7e4d5996beb155"
       ]
+    ]
+  },
+  {
+    "id": "68c74b3a7e1624e8",
+    "type": "inject",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 110,
+    "y": 740,
+    "wires": [
+      [
+        "d16600a54617376b"
+      ]
+    ]
+  },
+  {
+    "id": "d16600a54617376b",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 61",
+    "func": "msg.payload = {\n    cmd: \"adjustByDistance\",\n    distance: 18\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 270,
+    "y": 740,
+    "wires": [
+      [
+        "19eadc9660e828c6"
+      ]
+    ]
+  },
+  {
+    "id": "f2f61a8fe617af6f",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 55",
+    "func": "var msg2 = global.get(\"detect_g\");\nmsg2.payload = msg.payload;\nreturn msg2;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 650,
+    "y": 600,
+    "wires": [
+      [
+        "87faf8bc2c24808e",
+        "bbdff50b7dd65e6c"
+      ]
+    ]
+  },
+  {
+    "id": "5d68b9f3f838aa6d",
+    "type": "switch",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "property": "payload.cmd",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "detect",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "adjustByDistance",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 2,
+    "x": 610,
+    "y": 660,
+    "wires": [
+      [
+        "f2f61a8fe617af6f"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "e7ee4201f0e20b91",
+    "type": "inject",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 130,
+    "y": 700,
+    "wires": [
+      [
+        "4993a112b570e0fa"
+      ]
+    ]
+  },
+  {
+    "id": "4993a112b570e0fa",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 62",
+    "func": "msg.payload = {\n    cmd: \"adjustByDistance\",\n    distance: 35\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 290,
+    "y": 700,
+    "wires": [
+      [
+        "19eadc9660e828c6"
+      ]
+    ]
+  },
+  {
+    "id": "e595b9dc9c79f76f",
+    "type": "inject",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 290,
+    "y": 860,
+    "wires": [
+      [
+        "2f0e8ead76c22cf9"
+      ]
+    ]
+  },
+  {
+    "id": "2f0e8ead76c22cf9",
+    "type": "trigger",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "op1": "1",
+    "op2": "0",
+    "op1type": "str",
+    "op2type": "str",
+    "duration": "-50",
+    "extend": false,
+    "overrideDelay": false,
+    "units": "ms",
+    "reset": "",
+    "bytopic": "all",
+    "topic": "topic",
+    "outputs": 1,
+    "x": 450,
+    "y": 860,
+    "wires": [
+      [
+        "5f99f476b445a431"
+      ]
+    ]
+  },
+  {
+    "id": "5f99f476b445a431",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 63",
+    "func": "msg.payload = {\n    cmd: \"adjustByDistance\",\n    distance: global.get(\"laser\")\n};\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 670,
+    "y": 880,
+    "wires": [
+      [
+        "19eadc9660e828c6"
+      ]
+    ]
+  },
+  {
+    "id": "bcbc5be713c846cd",
+    "type": "link out",
+    "z": "e5b6339a0f552a15",
+    "name": "OUT_LASER",
+    "mode": "link",
+    "links": [
+      "9c957c4b4d6325c1"
+    ],
+    "x": 515,
+    "y": 420,
+    "wires": []
+  },
+  {
+    "id": "bbdff50b7dd65e6c",
+    "type": "debug",
+    "z": "e5b6339a0f552a15",
+    "name": "debug 33",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 860,
+    "y": 560,
+    "wires": []
+  },
+  {
+    "id": "b454d00136a6b6bb",
+    "type": "debug",
+    "z": "e5b6339a0f552a15",
+    "name": "debug 34",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 620,
+    "y": 520,
+    "wires": []
+  },
+  {
+    "id": "9389cfe1f71cf688",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "do auto",
+    "func": "// 分段线性插值函数\nfunction getValuesByDistance(distance) {\n    // 数据点按distance排序\n    const dataPoints = [\n        { distance: 4.07, focus: 9431, zoom: 6 },\n        { distance: 5.619, focus: 8001, zoom: 366 },\n        { distance: 9.208, focus: 5648, zoom: 846 },\n        \n        { distance: 11.491, focus: 4716, zoom: 1006 },\n\n\n        { distance: 14.193, focus: 3746, zoom: 1166 },\n        { distance: 16.484, focus: 3233, zoom: 1246 },\n        { distance: 19.615, focus: 2761, zoom: 1326 },\n\n        { distance: 22.951, focus: 2290, zoom: 1406 },\n        { distance: 27.469, focus: 1787, zoom: 1526 },\n        { distance: 31.881, focus: 1721, zoom: 1566 },\n        { distance: 37.305, focus: 1805, zoom: 1646 },\n        { distance: 40.7164, focus: 1949, zoom: 1686 },\n        { distance: 44.328, focus: 2237, zoom: 1726 },\n\n\n    ];\n    \n    // 边界情况：小于最小值\n    if (distance <= dataPoints[0].distance) {\n        return {\n            focus: dataPoints[0].focus,\n            zoom: dataPoints[0].zoom\n        };\n    }\n    \n    // 边界情况：大于最大值\n    if (distance >= dataPoints[dataPoints.length - 1].distance) {\n        const lastPoint = dataPoints[dataPoints.length - 1];\n        return {\n            focus: lastPoint.focus,\n            zoom: lastPoint.zoom\n        };\n    }\n    \n    // 查找插值区间并进行线性插值\n    for (let i = 0; i < dataPoints.length - 1; i++) {\n        const p1 = dataPoints[i];\n        const p2 = dataPoints[i + 1];\n        \n        if (distance >= p1.distance && distance <= p2.distance) {\n            // 计算插值系数\n            const t = (distance - p1.distance) / (p2.distance - p1.distance);\n            \n            // 线性插值计算\n            const focus = Math.round(p1.focus + (p2.focus - p1.focus) * t);\n            const zoom = Math.round(p1.zoom + (p2.zoom - p1.zoom) * t);\n            \n            return {\n                focus: focus,\n                zoom: zoom\n            };\n        }\n    }\n}\n\nvar obj = getValuesByDistance( global.get('laser') );\nglobal.set(\"cam1zoom\",obj.zoom);\nglobal.set(\"cam1focus\", obj.focus);\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 760,
+    "y": 420,
+    "wires": [
+      []
     ]
   }
 ]
