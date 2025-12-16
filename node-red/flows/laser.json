@@ -3,7 +3,7 @@
     "id": "c6c10f6d57076b13",
     "type": "tab",
     "label": "laser",
-    "disabled": false,
+    "disabled": true,
     "info": "",
     "env": []
   },

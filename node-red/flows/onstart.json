@@ -41,7 +41,7 @@
     "type": "function",
     "z": "39a4b5009cb84f4e",
     "name": "function 32",
-    "func": "global.set(\"cam1url\",\"http://192.168.1.13/\");\n\nreturn msg;",
+    "func": "global.set(\"cam1url\",\"http://10.10.95.215/\");\n\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,

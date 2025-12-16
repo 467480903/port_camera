@@ -18,5 +18,30 @@
     "out": "time",
     "addchar": "",
     "responsetimeout": 10000
+  },
+  {
+    "id": "f921d8db731589f7",
+    "type": "s7 endpoint",
+    "transport": "iso-on-tcp",
+    "address": "10.10.95.73",
+    "port": "102",
+    "rack": "0",
+    "slot": "2",
+    "localtsaphi": "01",
+    "localtsaplo": "00",
+    "remotetsaphi": "01",
+    "remotetsaplo": "00",
+    "connmode": "rack-slot",
+    "adapter": "",
+    "busaddr": 2,
+    "cycletime": "100",
+    "timeout": 2000,
+    "name": "",
+    "vartable": [
+      {
+        "addr": "DB402,WORD0",
+        "name": "aaa"
+      }
+    ]
   }
 ]

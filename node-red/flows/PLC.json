@@ -1,0 +1,62 @@
+[
+  {
+    "id": "cf60d2d395b0b7cb",
+    "type": "tab",
+    "label": "PLC",
+    "disabled": false,
+    "info": "",
+    "env": []
+  },
+  {
+    "id": "369b8ac6ee709ab3",
+    "type": "s7 in",
+    "z": "cf60d2d395b0b7cb",
+    "endpoint": "f921d8db731589f7",
+    "mode": "single",
+    "variable": "aaa",
+    "diff": false,
+    "name": "",
+    "x": 530,
+    "y": 80,
+    "wires": [
+      [
+        "1e585c3102d3b767",
+        "9c32050ce297a4f5"
+      ]
+    ]
+  },
+  {
+    "id": "1e585c3102d3b767",
+    "type": "debug",
+    "z": "cf60d2d395b0b7cb",
+    "name": "debug 37",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 600,
+    "y": 180,
+    "wires": []
+  },
+  {
+    "id": "9c32050ce297a4f5",
+    "type": "function",
+    "z": "cf60d2d395b0b7cb",
+    "name": "function 64",
+    "func": "global.set(\"plc1\",msg.payload/100)\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 550,
+    "y": 240,
+    "wires": [
+      []
+    ]
+  }
+]

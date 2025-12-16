@@ -3,7 +3,7 @@
     "id": "b48f1bf98b8323df",
     "type": "tab",
     "label": "hk_test",
-    "disabled": false,
+    "disabled": true,
     "info": "",
     "env": []
   },
