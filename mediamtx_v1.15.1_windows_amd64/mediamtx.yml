@@ -1,6 +1,15 @@
 paths:
   cam1/webrtc:
-    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.215:554/media/video2
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.215:554/media/video1
 
   cam2/webrtc:
-    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video2
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video1
+
+  cam3/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.218:554/media/video1
+
+  cam4/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.219:554/media/video1
+
+  cam5/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.220:554/media/video1

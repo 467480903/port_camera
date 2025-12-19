@@ -41,20 +41,21 @@
             font-size: 16px;
         }
     </style>
+    <script defer src="node-red\static\reader.js"></script>
 </head>
 <body>
     <div class="container">
         <div class="video-container">
-            <img src="http://127.0.0.1:5001/video_feed1" class="video" alt="Camera 1">
+            <video id="video1" autoplay playsinline class="video"></video>
         </div>
         <div class="video-container">
-            <img src="http://127.0.0.1:5000/video_feed2" class="video" alt="Camera 2">
+            <video id="video2" autoplay playsinline class="video"></video>
         </div>
         <div class="video-container">
-            <img src="http://127.0.0.1:5000/video_feed3" class="video" alt="Camera 3">
+            <video id="video3" autoplay playsinline class="video"></video>
         </div>
         <div class="video-container">
-            <img src="http://127.0.0.1:5000/merged_video_feed" class="video" alt="Camera 4">
+            <video id="video4" autoplay playsinline class="video"></video>
         </div>
         <div class="video-container">
             <video id="video5" autoplay playsinline class="video"></video>
@@ -71,7 +72,7 @@
             </div>
         </div>
         <div class="video-container">
-            <video id="video6" autoplay playsinline class="video"></video>
+            
             <div class="controls">
                 <div></div>
                 <div><button onmousedown="sendCommand('ball2', 'up', 1)" onmouseup="sendCommand('ball2', 'up', 2)">Up</button></div>
@@ -85,7 +86,7 @@
             </div>
         </div>
         <div class="video-container">
-            <img src="http://127.0.0.1:5000/video_feed9" class="video" alt="Camera 9">
+            <img src="http://127.0.0.1:5000/merged_video_feed" class="video" alt="Camera 9">
         </div>
     </div>
     <script>
@@ -105,20 +106,151 @@
         window.addEventListener('load', setVideoContainerHeight);
         window.addEventListener('resize', setVideoContainerHeight);
 
-var video = document.getElementById('video5');
+
+// const message = document.getElementById('message');
+        let defaultControls5 = false;
+        let defaultControls4 = false;
+        let defaultControls3 = false;
+        let defaultControls2 = false;
+        let defaultControls1 = false;
+let reader1 = null;
+let reader2 = null;
+let reader3 = null;
+let reader4 = null;
+let reader5 = null;
+
+const setMessage = (str) => {
+  if (str !== '') {
+    video.controls = false;
+  } else {
+    video.controls = defaultControls;
+  }
+//   message.innerText = str;
+};
+
+const parseBoolString = (str, defaultVal) => {
+  str = (str || '');
+
+  if (['1', 'yes', 'true'].includes(str.toLowerCase())) {
+    return true;
+  }
+  if (['0', 'no', 'false'].includes(str.toLowerCase())) {
+    return false;
+  }
+  return defaultVal;
+};
+
+
+var video1 = document.getElementById('video1');
+var video2 = document.getElementById('video2');
+var video3 = document.getElementById('video3');
+var video4 = document.getElementById('video4');
+var video5 = document.getElementById('video5');
+
+const loadAttributesFromQuery = () => {
+  const params = new URLSearchParams(window.location.search);
+  video5.controls = parseBoolString(params.get('controls'), true);
+  video5.muted = parseBoolString(params.get('muted'), true);
+  video5.autoplay = parseBoolString(params.get('autoplay'), true);
+  video5.playsInline = parseBoolString(params.get('playsinline'), true);
+  video5.disablepictureinpicture = parseBoolString(params.get('disablepictureinpicture'), false);
+  defaultControls5 = video5.controls;
+
+    video4.controls = parseBoolString(params.get('controls'), true);
+  video4.muted = parseBoolString(params.get('muted'), true);
+  video4.autoplay = parseBoolString(params.get('autoplay'), true);
+  video4.playsInline = parseBoolString(params.get('playsinline'), true);
+  video4.disablepictureinpicture = parseBoolString(params.get('disablepictureinpicture'), false);
+  defaultControls4 = video4.controls;
+
+
+          video3.controls = parseBoolString(params.get('controls'), true);
+          video3.muted = parseBoolString(params.get('muted'), true);
+          video3.autoplay = parseBoolString(params.get('autoplay'), true);
+          video3.playsInline = parseBoolString(params.get('playsinline'), true);
+          video3.disablepictureinpicture = parseBoolString(params.get('disablepictureinpicture'), false);
+          defaultControls3 = video3.controls;
+
+          video2.controls = parseBoolString(params.get('controls'), true);
+          video2.muted = parseBoolString(params.get('muted'), true);
+          video2.autoplay = parseBoolString(params.get('autoplay'), true);
+          video2.playsInline = parseBoolString(params.get('playsinline'), true);
+          video2.disablepictureinpicture = parseBoolString(params.get('disablepictureinpicture'), false);
+          defaultControls2 = video2.controls;
+
+          video1.controls = parseBoolString(params.get('controls'), true);
+          video1.muted = parseBoolString(params.get('muted'), true);
+          video1.autoplay = parseBoolString(params.get('autoplay'), true);
+          video1.playsInline = parseBoolString(params.get('playsinline'), true);
+          video1.disablepictureinpicture = parseBoolString(params.get('disablepictureinpicture'), false);
+          defaultControls1 = video1.controls;
+
+};
+
 window.addEventListener('load', () => {
+  loadAttributesFromQuery();
 
 
-  reader = new MediaMTXWebRTCReader({
+  reader5 = new MediaMTXWebRTCReader({
     url: new URL('whep', `${window.location.protocol}//${window.location.hostname}:8889/cam1/webrtc/`) ,
     onError: (err) => {
-      setMessage(err);
+    //   setMessage(err);
     },
     onTrack: (evt) => {
-      setMessage('');
-      video.srcObject = evt.streams[0];
+    //   setMessage('');
+      video5.controls = defaultControls5;
+      video5.srcObject = evt.streams[0];
     },
   });
+
+  reader4 = new MediaMTXWebRTCReader({
+    url: new URL('whep', `${window.location.protocol}//${window.location.hostname}:8889/cam2/webrtc/`) ,
+    onError: (err) => {
+    //   setMessage(err);
+    },
+    onTrack: (evt) => {
+    //   setMessage('');
+      video4.controls = defaultControls4;
+      video4.srcObject = evt.streams[0];
+    },
+  });
+
+          reader3 = new MediaMTXWebRTCReader({
+            url: new URL('whep', `${window.location.protocol}//${window.location.hostname}:8889/cam3/webrtc/`) ,
+            onError: (err) => {
+            //   setMessage(err);
+            },
+            onTrack: (evt) => {
+            //   setMessage('');
+              video3.controls = defaultControls3;
+              video3.srcObject = evt.streams[0];
+            },
+          });
+
+          reader2 = new MediaMTXWebRTCReader({
+            url: new URL('whep', `${window.location.protocol}//${window.location.hostname}:8889/cam4/webrtc/`) ,
+            onError: (err) => {
+            //   setMessage(err);
+            },
+            onTrack: (evt) => {
+            //   setMessage('');
+              video2.controls = defaultControls2;
+              video2.srcObject = evt.streams[0];
+            },
+          });
+
+          reader1 = new MediaMTXWebRTCReader({
+            url: new URL('whep', `${window.location.protocol}//${window.location.hostname}:8889/cam5/webrtc/`) ,
+            onError: (err) => {
+            //   setMessage(err);
+            },
+            onTrack: (evt) => {
+            //   setMessage('');
+              video1.controls = defaultControls1;
+              video1.srcObject = evt.streams[0];
+            },
+          });
+
 });
 
 
