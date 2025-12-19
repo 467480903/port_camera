@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RTSP 9 Parts</title>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 0;
+            height: 100vh;
+        }
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+        .video {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        body{
+            margin: 0px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="video-container">
+            <img src="http://127.0.0.1:5000/video_feed1" class="video" alt="Camera 1">
+        </div>
+        <div class="video-container">
+            <img src="http://127.0.0.1:5000/video_feed2" class="video" alt="Camera 2">
+        </div>
+        <div class="video-container">
+            <img src="http://127.0.0.1:5000/video_feed3" class="video" alt="Camera 3">
+        </div>
+        <div class="video-container">
+            <img src="http://127.0.0.1:5000/video_feed4" class="video" alt="Camera 4">
+        </div>
+        <div class="video-container">
+            <img src="http://127.0.0.1:5000/video_feed5" class="video" alt="Camera 5">
+        </div>
+        <div class="video-container">
+            <img src="http://127.0.0.1:5000/video_feed6" class="video" alt="Camera 6">
+        </div>
+        <div class="video-container">
+            <img src="http://127.0.0.1:5000/video_feed7" class="video" alt="Camera 7">
+        </div>
+        <div class="video-container">
+            <img src="http://127.0.0.1:5000/video_feed8" class="video" alt="Camera 8">
+        </div>
+        <div class="video-container">
+            <img src="http://127.0.0.1:5000/video_feed9" class="video" alt="Camera 9">
+        </div>
+    </div>
+</body>
+</html>
