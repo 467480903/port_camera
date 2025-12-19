@@ -1,4 +1,5 @@
 import cv2
+import threading
 from flask import Flask, Response, stream_with_context
 
 app = Flask(__name__)
@@ -14,30 +15,50 @@ cap1 = cv2.VideoCapture(RTSP_URLS[0])
 cap2 = cv2.VideoCapture(RTSP_URLS[1])
 frame1 = None
 frame2 = None
+frame1_lock = threading.Lock()
+frame2_lock = threading.Lock()
+
+def save_initial_frame(rtsp_url, filename):
+    cap = cv2.VideoCapture(rtsp_url)
+    success, frame = cap.read()
+    if success:
+        cv2.imwrite(filename, frame)
+    cap.release()
+
+def generate_frames(cap, frame, frame_lock):
+    global frame1, frame2
+    while True:
+        success, new_frame = cap.read()
+        if not success:
+            break
+        with frame_lock:
+            frame[:] = new_frame
 
 def merge_videos():
     global frame1, frame2
     
     while True:
-        success1, frame1 = cap1.read()
-        success2, frame2 = cap2.read()
+        with frame1_lock:
+            frame1_copy = frame1.copy() if frame1 is not None else None
+        with frame2_lock:
+            frame2_copy = frame2.copy() if frame2 is not None else None
         
-        if not success1 or not success2:
-            break
+        if frame1_copy is None or frame2_copy is None:
+            continue
         
         # Get the width and height of the frames
-        height1, width1, _ = frame1.shape
-        height2, width2, _ = frame2.shape
+        height1, width1, _ = frame1_copy.shape
+        height2, width2, _ = frame2_copy.shape
         
         # Resize frames if necessary to have the same height
         if height1 != height2:
-            frame1 = cv2.resize(frame1, (width1, height2))
+            frame1_copy = cv2.resize(frame1_copy, (width1, height2))
         
         # Take left 2/3 of frame1
-        left_frame1 = frame1[:, :int(width1 * 60/100)]
+        left_frame1 = frame1_copy[:, :int(width1 * 60/100)]
         
         # Take right 2/3 of frame2
-        right_frame2 = frame2[:, int(width2 * 40/100):]
+        right_frame2 = frame2_copy[:, int(width2 * 40/100):]
         
         # Concatenate the frames horizontally
         combined_frame = cv2.hconcat([left_frame1, right_frame2])
@@ -47,30 +68,25 @@ def merge_videos():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + combined_frame + b'\r\n')
 
+def gen_frame_wrapper(frame, frame_lock):
+    while True:
+        with frame_lock:
+            if frame is not None:
+                ret, buffer = cv2.imencode('.jpg', frame)
+                frame_bytes = buffer.tobytes()
+                yield (b'--frame\r\n'
+                       b'Content-Type: image/jpeg\r\n\r\n' + frame_bytes + b'\r\n')
+
 @app.route('/video_feed2')
 def video_feed2():
-    def gen_frame_wrapper1():
-        global frame1
-        while True:
-            if frame1 is not None:
-                ret, buffer = cv2.imencode('.jpg', frame1)
-                frame = buffer.tobytes()
-                yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-    return Response(stream_with_context(gen_frame_wrapper1()),
+    global frame1, frame1_lock
+    return Response(stream_with_context(gen_frame_wrapper(frame1, frame1_lock)),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/video_feed3')
 def video_feed3():
-    def gen_frame_wrapper2():
-        global frame2
-        while True:
-            if frame2 is not None:
-                ret, buffer = cv2.imencode('.jpg', frame2)
-                frame = buffer.tobytes()
-                yield (b'--frame\r\n'
-                       b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n')
-    return Response(stream_with_context(gen_frame_wrapper2()),
+    global frame2, frame2_lock
+    return Response(stream_with_context(gen_frame_wrapper(frame2, frame2_lock)),
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 @app.route('/merged_video_feed')
@@ -79,8 +95,25 @@ def merged_video_feed():
                     mimetype='multipart/x-mixed-replace; boundary=frame')
 
 if __name__ == '__main__':
+    # Initialize frame buffers
+    success1, frame1 = cap1.read()
+    success2, frame2 = cap2.read()
+    if not success1 or not success2:
+        print("Failed to read initial frames")
+        exit(1)
+    
+    # Start threads for frame generation
+    frame_thread1 = threading.Thread(target=generate_frames, args=(cap1, frame1, frame1_lock))
+    frame_thread2 = threading.Thread(target=generate_frames, args=(cap2, frame2, frame2_lock))
+    frame_thread1.daemon = True
+    frame_thread2.daemon = True
+    frame_thread1.start()
+    frame_thread2.start()
+    
     try:
         app.run(host='0.0.0.0', port=5000)
     except KeyboardInterrupt:
         cap1.release()
         cap2.release()
+        frame_thread1.join()
+        frame_thread2.join()

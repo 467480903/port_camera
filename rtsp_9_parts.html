@@ -8,9 +8,9 @@
         .container {
             display: grid;
             grid-template-columns: 1fr 1fr 1fr;
-            grid-template-rows: 1fr 1fr 1fr;
-            gap: 0;
+            grid-template-rows: repeat(3, 1fr);
             height: 100vh;
+            gap: 0;
         }
         .video-container {
             display: flex;
@@ -22,18 +22,30 @@
             border: 0;
         }
         .video {
-            max-width: 100%;
-            max-height: 100%;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         body{
             margin: 0px;
+        }
+        .controls {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            grid-template-rows: 1fr 1fr 1fr;
+            gap: 10px;
+        }
+        .controls button {
+            width: 100px;
+            height: 100px;
+            font-size: 16px;
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="video-container">
-            <img src="http://127.0.0.1:5000/video_feed1" class="video" alt="Camera 1">
+            <img src="http://127.0.0.1:5001/video_feed1" class="video" alt="Camera 1">
         </div>
         <div class="video-container">
             <img src="http://127.0.0.1:5000/video_feed2" class="video" alt="Camera 2">
@@ -45,20 +57,57 @@
             <img src="http://127.0.0.1:5000/merged_video_feed" class="video" alt="Camera 4">
         </div>
         <div class="video-container">
-            <img src="http://127.0.0.1:5000/video_feed5" class="video" alt="Camera 5">
+            <img src="http://127.0.0.1:5001/video_feed2" class="video" alt="Camera 5">
         </div>
         <div class="video-container">
-            <img src="http://127.0.0.1:5000/video_feed6" class="video" alt="Camera 6">
+            <img src="http://127.0.0.1:5001/video_feed3" class="video" alt="Camera 6">
         </div>
         <div class="video-container">
-            <img src="http://127.0.0.1:5000/video_feed7" class="video" alt="Camera 7">
+            <div class="controls">
+                <div></div>
+                <div><button onmousedown="sendCommand('ball1', 'up', 1)" onmouseup="sendCommand('ball1', 'up', 2)">Up</button></div>
+                <div></div>
+                <div><button onmousedown="sendCommand('ball1', 'left', 1)" onmouseup="sendCommand('ball1', 'left', 2)">Left</button></div>
+                <div></div>
+                <div><button onmousedown="sendCommand('ball1', 'right', 1)" onmouseup="sendCommand('ball1', 'right', 2)">Right</button></div>
+                <div></div>
+                <div><button onmousedown="sendCommand('ball1', 'down', 1)" onmouseup="sendCommand('ball1', 'down', 2)">Down</button></div>
+                <div></div>
+            </div>
         </div>
         <div class="video-container">
-            <img src="http://127.0.0.1:5000/video_feed8" class="video" alt="Camera 8">
+            <div class="controls">
+                <div></div>
+                <div><button onmousedown="sendCommand('ball2', 'up', 1)" onmouseup="sendCommand('ball2', 'up', 2)">Up</button></div>
+                <div></div>
+                <div><button onmousedown="sendCommand('ball2', 'left', 1)" onmouseup="sendCommand('ball2', 'left', 2)">Left</button></div>
+                <div></div>
+                <div><button onmousedown="sendCommand('ball2', 'right', 1)" onmouseup="sendCommand('ball2', 'right', 2)">Right</button></div>
+                <div></div>
+                <div><button onmousedown="sendCommand('ball2', 'down', 1)" onmouseup="sendCommand('ball2', 'down', 2)">Down</button></div>
+                <div></div>
+            </div>
         </div>
         <div class="video-container">
             <img src="http://127.0.0.1:5000/video_feed9" class="video" alt="Camera 9">
         </div>
     </div>
+    <script>
+        function sendCommand(ball, direction, data) {
+            const url = `http://127.0.0.1:1881/${ball}_${direction}?data=${data}`;
+            fetch(url, { method: 'GET' });
+        }
+
+        function setVideoContainerHeight() {
+            const docHeight = document.documentElement.clientHeight;
+            const videoContainers = document.querySelectorAll('.video-container');
+            videoContainers.forEach(container => {
+                container.style.height = `${docHeight / 3}px`;
+            });
+        }
+
+        window.addEventListener('load', setVideoContainerHeight);
+        window.addEventListener('resize', setVideoContainerHeight);
+    </script>
 </body>
 </html>
