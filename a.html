@@ -105,45 +105,23 @@
         window.addEventListener('load', setVideoContainerHeight);
         window.addEventListener('resize', setVideoContainerHeight);
 
-        // WebRTC setup
-        async function setupWebRTC(videoElement, path) {
-            const peerConnection = new RTCPeerConnection();
-            const videoTrack = peerConnection.addTransceiver('video', { direction: 'recvonly' }).receiver.track;
+var video = document.getElementById('video5');
+window.addEventListener('load', () => {
 
-            videoElement.srcObject = new MediaStream([videoTrack]);
 
-            peerConnection.onicecandidate = event => {
-                if (event.candidate) {
-                    console.log('ICE candidate:', event.candidate);
-                }
-            };
+  reader = new MediaMTXWebRTCReader({
+    url: new URL('whep', `${window.location.protocol}//${window.location.hostname}:8889/cam1/webrtc/`) ,
+    onError: (err) => {
+      setMessage(err);
+    },
+    onTrack: (evt) => {
+      setMessage('');
+      video.srcObject = evt.streams[0];
+    },
+  });
+});
 
-            const offer = await peerConnection.createOffer();
-            await peerConnection.setLocalDescription(offer);
 
-            const response = await fetch(`http://localhost:8889/cam/webrtc/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    method: 'mediasoup.createAnswer',
-                    params: {
-                        offer: offer.sdp,
-                        direction: 'recvonly',
-                        path: path
-                    }
-                })
-            });
-
-            const answer = await response.json();
-            await peerConnection.setRemoteDescription({ type: 'answer', sdp: answer.result.sdp });
-
-            console.log('WebRTC connection established for', path);
-        }
-
-        window.addEventListener('load', async () => {
-            await setupWebRTC(document.getElementById('video5'), 'cam/webrtc');
-            // await setupWebRTC(document.getElementById('video6'), 'cam/webrtc');
-        });
     </script>
 </body>
 </html>

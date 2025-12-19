@@ -1,3 +1,6 @@
 paths:
-  cam/webrtc:
+  cam1/webrtc:
     source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.215:554/media/video2
+
+  cam2/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video2
