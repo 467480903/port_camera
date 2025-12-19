@@ -108,6 +108,30 @@
 
         window.addEventListener('load', setVideoContainerHeight);
         window.addEventListener('resize', setVideoContainerHeight);
+
+
+window.addEventListener('load', () => {
+  loadAttributesFromQuery();
+
+  reader = new MediaMTXWebRTCReader({
+    url: new URL('whep', `${window.location.protocol}//${window.location.hostname}:8889/cam/webrtc/`) + window.location.search,
+    onError: (err) => {
+      setMessage(err);
+    },
+    onTrack: (evt) => {
+      setMessage('');
+      video.srcObject = evt.streams[0];
+    },
+  });
+});
+
+window.addEventListener('beforeunload', () => {
+  if (reader !== null) {
+    reader.close();
+  }
+});
+
+
     </script>
 </body>
 </html>
