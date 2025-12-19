@@ -1,0 +1,4 @@
+paths:
+  cam/webrtc:
+    webrtcAddress: 8789
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video2
