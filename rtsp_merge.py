@@ -6,8 +6,8 @@ app = Flask(__name__)
 
 # Replace these with your RTSP URLs
 RTSP_URLS = [
-    "rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video1",
-    "rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.218:554/media/video1"
+    "rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video2",
+    "rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.218:554/media/video2"
 ]
 
 # Global variables
