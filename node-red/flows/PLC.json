@@ -3,7 +3,7 @@
     "id": "cf60d2d395b0b7cb",
     "type": "tab",
     "label": "PLC",
-    "disabled": false,
+    "disabled": true,
     "info": "",
     "env": []
   },

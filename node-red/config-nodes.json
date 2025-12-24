@@ -22,6 +22,7 @@
   {
     "id": "f921d8db731589f7",
     "type": "s7 endpoint",
+    "d": true,
     "transport": "iso-on-tcp",
     "address": "10.10.95.73",
     "port": "102",
@@ -43,5 +44,11 @@
         "name": "aaa"
       }
     ]
+  },
+  {
+    "id": "504ae0e96127e059",
+    "type": "websocket-listener",
+    "path": "/setA",
+    "wholemsg": "false"
   }
 ]

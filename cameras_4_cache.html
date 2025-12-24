@@ -102,12 +102,17 @@
 
 <body>
     <div id="container">
-        <div class="video-container" id="video1"></div>
-        <div class="video-container" id="video2"></div>
-        <div class="video-container" id="video3"></div>
-        <div class="video-container" id="video4"></div>
+        <div class="video-container" id="c_video1">  </div>
+        <div class="video-container" id="c_video2"> </div>
+        <div class="video-container" id="c_video3">  </div>
+        <div class="video-container" id="c_video4">    </div>
     </div>
-
+    <div id="container_hide" style="display: none;">
+        <video id="video1" attr1="cache" class="video" autoplay playsinline></video>    
+        <video id="video2" attr1="cache" class="video" autoplay playsinline></video>
+        <video id="video3" attr1="cache" class="video" autoplay playsinline></video>
+        <video id="video4" attr1="cache" class="video" autoplay playsinline></video>
+    </div>
     <div id="toolbar">
         <div class="toolbar-content">
             <button onclick="toggleFullScreen()">Fullscreen</button>
@@ -166,66 +171,46 @@
         };
 
         let readers = [];
+        let cached_readers = [];
 
-        const loadAttributesFromQuery = () => {
-            const params = new URLSearchParams(window.location.search);
-            const videoContainers = document.querySelectorAll('.video-container');
-            videoContainers.forEach((container, index) => {
-                const videoElement = container.querySelector('video');
-                if (videoElement) {
-                    videoElement.controls = parseBoolString(params.get('controls'), true);
-                    videoElement.muted = parseBoolString(params.get('muted'), true);
-                    videoElement.autoplay = parseBoolString(params.get('autoplay'), true);
-                    videoElement.playsInline = parseBoolString(params.get('playsinline'), true);
-                    videoElement.disablepictureinpicture = parseBoolString(params.get('disablepictureinpicture'), false);
-                }
-            });
-        };
+        const cached_streams = [
+            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video' },
+            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' },
+            { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' },
+            { address: 'http://localhost:8889/cam4/webrtc/', type: 'video_control' },
+        ];
 
         const loadDefaultStreams = () => {
-            const defaultStreams = [
-                'http://localhost:8889/cam6/webrtc/',
-                'http://localhost:8889/cam7/webrtc/',
-                'http://localhost:8889/cam8/webrtc/',
-                'http://localhost:8889/cam9/webrtc/',
-            ];
 
-            defaultStreams.forEach((streamUrl, index) => {
+
+            cached_streams.forEach((item, index) => {
                 if (index < 4) {
-                    const videoContainer = document.getElementById(`video${index + 1}`);
-                    // Clear existing content
-                    videoContainer.innerHTML = '';
-                    const videoElement = document.createElement('video');
-                    videoElement.id = `video${index + 1}`;
-                    videoElement.className = 'video';
-                    videoElement.autoplay = true;
-                    videoElement.playsInline = true;
-                    videoContainer.appendChild(videoElement);
-
+ 
+                    const videoElement = document.getElementById(`video${index + 1}`);
+                    videoElement.setAttribute("attr1", item.address);
+                    var asdf = function(evt){
+                        videoElement.autoplay = true;
+                        videoElement.controls = true;
+                        videoElement.muted = true;
+                        videoElement.playsInline = true;
+                        videoElement.disablepictureinpicture = false;
+                        videoElement.srcObject = evt.streams[0];
+                    }
                     const reader = new MediaMTXWebRTCReader({
-                        url: new URL('whep', streamUrl),
+                        url: new URL('whep', item.address),
                         onError: (err) => {
                             // setMessage(err);
                         },
-                        onTrack: (evt) => {
-                            // setMessage('');
-                            // console.debug(evt);
-                            videoElement.autoplay = true;
-                            videoElement.controls = true;
-                            videoElement.muted = true;
-                            videoElement.playsInline = true;
-                            videoElement.disablepictureinpicture = false;
-                            videoElement.srcObject = evt.streams[0];
-
-                        },
+                        onTrack: asdf,
+                        asdf: asdf,
                     });
-                    readers.push(reader);
+                    cached_readers.push(reader);
                 }
             });
         };
 
         window.addEventListener('load', () => {
-            loadAttributesFromQuery();
+
 
             const ws = new WebSocket('ws://10.10.95.222:1881/setA');
             ws.onmessage = function (event) {
@@ -233,49 +218,70 @@
                 readers.forEach(reader => {
                     reader.close();
                 });
-
                 // Clear the readers array
                 readers = [];
 
+                document.getElementById("container_hide").append(document.getElementById("video1"));
+                document.getElementById("container_hide").append(document.getElementById("video2"));
+                document.getElementById("container_hide").append(document.getElementById("video3"));
+                document.getElementById("container_hide").append(document.getElementById("video4"));
+
+
+
                 const data = JSON.parse(event.data);
                 console.debug(data);
-                data.forEach(item => {
-                    if (item.type === 'video' && readers.length < 4) {
-                        const videoContainer = document.getElementById(`video${readers.length + 1}`);
-                        // Clear existing content
-                        videoContainer.innerHTML = '';
-                        const videoElement = document.createElement('video');
-                        videoElement.id = `video${readers.length + 1}`;
-                        videoElement.className = 'video';
-                        videoElement.autoplay = true;
-                        videoElement.playsInline = true;
-                        videoContainer.appendChild(videoElement);
+                data.forEach((item, index) => {
+                    if (item.type === 'video' ) {
 
-                        const reader = new MediaMTXWebRTCReader({
-                            url: new URL('whep', item.address),
-                            onError: (err) => {
-                                // setMessage(err);
-                            },
-                            onTrack: (evt) => {
-                                // setMessage('');
+
+                        let container = document.getElementById('c_video'+(index+1));
+                        container.innerHTML = '';
+
+                        let appended = false;
+                        for(var i=0;i<4;i++){
+                            
+                            console.debug(item.address);
+                            console.debug(cached_readers[i].address);
+                            if(item.address+"whep" == cached_readers[i].conf.url.href ){
+                                container.appendChild(document.getElementById("video"+(i+1)));
+                                console.debug(1112);
+                                appended = true;
+                                break;
+                            }
+                        }
+
+
+                        if(!appended){
+
+                            const videoElement = document.createElement('video');
+                            videoElement.id = 'video_'+(i+1);
+                            videoElement.className = 'video';
+                            videoElement.autoplay = true;
+                            videoElement.playsInline = true;
+                            container.appendChild(videoElement);
+
+                            var asdf = function(evt){
                                 videoElement.autoplay = true;
                                 videoElement.controls = true;
                                 videoElement.muted = true;
                                 videoElement.playsInline = true;
                                 videoElement.disablepictureinpicture = false;
                                 videoElement.srcObject = evt.streams[0];
-                            },
-                        });
-                        readers.push(reader);
+                            }
+                            const reader = new MediaMTXWebRTCReader({
+                                url: new URL('whep', item.address),
+                                onError: (err) => {
+                                    // setMessage(err);
+                                },
+                                onTrack: asdf,
+                            });
+                            readers.push(reader);
+                        }
+
+
+
                     } else if (item.type === 'video_control' && readers.length < 4) {
-                        const videoContainer = document.getElementById(`video${readers.length + 1}`);
-                        // Clear existing content
-                        videoContainer.innerHTML = '';
-                        const videoElement = document.createElement('video');
-                        videoElement.id = `video${readers.length + 1}`;
-                        videoElement.className = 'video';
-                        videoElement.autoplay = true;
-                        videoElement.playsInline = true;
+
                         videoContainer.appendChild(videoElement);
 
                         const controlDiv = document.createElement('div');
@@ -293,20 +299,7 @@
                         `;
                         videoContainer.appendChild(controlDiv);
 
-                        const reader = new MediaMTXWebRTCReader({
-                            url: new URL('whep', item.address),
-                            onError: (err) => {
-                            },
-                            onTrack: (evt) => {
-                                videoElement.autoplay = true;
-                                videoElement.controls = true;
-                                videoElement.muted = true;
-                                videoElement.playsInline = true;
-                                videoElement.disablepictureinpicture = false;
-                                videoElement.srcObject = evt.streams[0];
-                            },
-                        });
-                        readers.push(reader);
+
                     }
                 });
             };
@@ -331,7 +324,7 @@
                 if (readers.length === 0) {
                     loadDefaultStreams();
                 }
-            }, 5000); // Wait 5 seconds for data, then load defaults if no data received
+            }, 2000); // Wait 5 seconds for data, then load defaults if no data received
         });
     </script>
 </body>

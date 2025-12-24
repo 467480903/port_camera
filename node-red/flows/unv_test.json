@@ -1366,5 +1366,194 @@
     "x": 520,
     "y": 1660,
     "wires": []
+  },
+  {
+    "id": "dfaebd70fcc58eb2",
+    "type": "websocket out",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "server": "504ae0e96127e059",
+    "client": "",
+    "x": 680,
+    "y": 1940,
+    "wires": []
+  },
+  {
+    "id": "316533b62d3d743b",
+    "type": "websocket in",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "server": "504ae0e96127e059",
+    "client": "",
+    "x": 320,
+    "y": 1900,
+    "wires": [
+      [
+        "8c1c7a4ef646fc5e"
+      ]
+    ]
+  },
+  {
+    "id": "8c1c7a4ef646fc5e",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 9",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 500,
+    "y": 1860,
+    "wires": []
+  },
+  {
+    "id": "01f959b032e31bc1",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 220,
+    "y": 2020,
+    "wires": [
+      [
+        "8b49ef68e4f01a64"
+      ]
+    ]
+  },
+  {
+    "id": "8b49ef68e4f01a64",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 65",
+    "func": "msg.payload = [\n    { type: \"video\", address: \"http://localhost:8889/cam1/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam2/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam3/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam4/webrtc/\" },\n\n];\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 430,
+    "y": 2020,
+    "wires": [
+      [
+        "dfaebd70fcc58eb2"
+      ]
+    ]
+  },
+  {
+    "id": "55416dea4d769618",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 300,
+    "y": 2140,
+    "wires": [
+      [
+        "bba30be23ce40120"
+      ]
+    ]
+  },
+  {
+    "id": "bba30be23ce40120",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 66",
+    "func": "msg.payload = [\n    { type: \"video\", address: \"http://localhost:8889/cam10/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam9/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam8/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam7/webrtc/\" },\n\n];\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 510,
+    "y": 2140,
+    "wires": [
+      [
+        "dfaebd70fcc58eb2"
+      ]
+    ]
+  },
+  {
+    "id": "b5774be951a0f8aa",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 800,
+    "y": 2120,
+    "wires": [
+      [
+        "81f053f62d40bb17"
+      ]
+    ]
+  },
+  {
+    "id": "81f053f62d40bb17",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 67",
+    "func": "msg.payload = [\n    { type: \"video\", address: \"http://localhost:8889/cam4/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam2/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam3/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam1/webrtc/\" },\n\n];\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 1010,
+    "y": 2120,
+    "wires": [
+      [
+        "dfaebd70fcc58eb2"
+      ]
+    ]
   }
 ]

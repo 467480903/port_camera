@@ -30,6 +30,7 @@ class MediaMTXWebRTCReader {
   constructor(conf) {
     this.retryPause = 2000;
     this.conf = conf;
+    this.sender_ = null;
     this.state = 'getting_codecs';
     this.restartTimeout = null;
     this.pc = null;
@@ -564,7 +565,7 @@ class MediaMTXWebRTCReader {
 
   #onTrack(evt) {
     if (this.conf.onTrack !== undefined) {
-      this.conf.onTrack(evt);
+      this.sender_ = this.conf.onTrack(evt);
     }
   }
 }
