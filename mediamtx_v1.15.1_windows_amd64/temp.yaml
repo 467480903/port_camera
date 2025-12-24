@@ -1,0 +1,30 @@
+paths:
+  cam1/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.215:554/media/video1
+
+  cam2/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video1
+
+  cam3/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.218:554/media/video1
+
+  cam4/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.219:554/media/video1
+
+  cam5/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.220:554/media/video1
+    
+  cam6/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.221:554/Streaming/Channels/101
+
+  cam7/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.226:554/Streaming/Channels/101
+
+  cam8/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.223:554/Streaming/Channels/101
+
+  cam9/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.224:554/Streaming/Channels/101
+
+  cam10/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.225:554/Streaming/Channels/101

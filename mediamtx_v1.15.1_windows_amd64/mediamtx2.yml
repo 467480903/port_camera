@@ -4,3 +4,18 @@ paths:
   cam/webrtc:
     
     source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video2
+
+
+
+
+      cam7/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.222:554/media/video1
+
+  cam8/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.223:554/media/video1
+
+  cam9/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.224:554/media/video1
+
+  cam10/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.225:554/media/video1    
