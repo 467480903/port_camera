@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cameras with Absolute Position</title>
+    <style>
+        .hidden-video {
+            position: absolute;
+            visibility: hidden;
+        }
+
+        .visible-video {
+            position: absolute;
+            visibility: visible;
+        }
+    </style>
+    <script defer src="node-red/static/reader.js"></script>
+</head>
+
+<body>
+    <div id="video-container">
+        <video id="video1" class="hidden-video" width="960" height="540" autoplay playsinline></video>
+        <video id="video2" class="hidden-video" width="960" height="540" autoplay playsinline></video>
+        <video id="video3" class="hidden-video" width="960" height="540" autoplay playsinline></video>
+        <video id="video4" class="hidden-video" width="960" height="540" autoplay playsinline></video>
+    </div>
+
+    <script>
+        const long_connected_streams = [
+            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video' },
+            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' },
+            { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' },
+            { address: 'http://localhost:8889/cam4/webrtc/', type: 'video' },
+        ];
+
+        const long_connected_readers = [];
+        const disconnectable_readers = [];
+        const videoElements = [
+            document.getElementById('video1'),
+            document.getElementById('video2'),
+            document.getElementById('video3'),
+            document.getElementById('video4')
+        ];
+
+        // Establish WebSocket connection
+        const socket = new WebSocket('ws://127.0.0.1:1881/ws');
+
+        socket.onopen = function (event) {
+            console.log('WebSocket connection established');
+        };
+
+        socket.onmessage = function (event) {
+            const received_data = JSON.parse(event.data);
+            handleWebSocketData(received_data);
+        };
+
+        socket.onerror = function (error) {
+            console.error('WebSocket error:', error);
+        };
+
+        socket.onclose = function (event) {
+            console.log('WebSocket connection closed');
+        };
+
+        // Function to handle received data from WebSocket
+        function handleWebSocketData(msg) {
+            if (msg.cmd == 'setCameras') {
+                // Close all disconnectable readers
+                disconnectable_readers.forEach(reader => {
+                    reader.close();
+                });
+                disconnectable_readers.length = 0;
+
+                // Remove all disconnectable video elements
+                const disconnectableVideos = document.querySelectorAll('.disconnectable-video');
+                disconnectableVideos.forEach(video => {
+                    video.remove();
+                });
+
+                // Hide all long connected videos
+                videoElements.forEach(video => {
+                    video.style.visibility = 'hidden';
+                });
+
+                // Process received data
+                data.forEach((stream, index) => {
+
+                    console.debug(stream.address);
+                    const video = videoElements.find(videoEl => videoEl.getAttribute('attr1') === stream.address);
+                    console.debug(videoElements[0].getAttribute('attr1'));
+                    if (video) {
+                        // Long connected video element
+                        video.style.visibility = 'visible';
+                        video.style.position = 'absolute';
+                        video.style.left = `${stream.x}px`;
+                        video.style.top = `${stream.y}px`;
+                        video.style.width = `${stream.width}px`;
+                        video.style.height = `${stream.height}px`;
+                    } else {
+                        // Create new video element for disconnectable stream
+                        const newVideo = document.createElement('video');
+                        newVideo.className = 'disconnectable-video visible-video';
+                        newVideo.setAttribute("attr1", stream.address);
+                        newVideo.style.position = 'absolute';
+                        newVideo.style.left = `${stream.x}px`;
+                        newVideo.style.top = `${stream.y}px`;
+                        newVideo.style.width = `${stream.width}px`;
+                        newVideo.style.height = `${stream.height}px`;
+                        newVideo.autoplay = true;
+                        newVideo.controls = true;
+                        newVideo.muted = true;
+                        newVideo.playsInline = true;
+                        newVideo.disablepictureinpicture = false;
+                        document.body.appendChild(newVideo);
+
+                        // Create new WebRTC connection
+                        const trackf = function (evt) {
+                            newVideo.autoplay = true;
+                            newVideo.controls = true;
+                            newVideo.muted = true;
+                            newVideo.playsInline = true;
+                            newVideo.disablepictureinpicture = false;
+                            newVideo.srcObject = evt.streams[0];
+                        };
+
+                        const reader = new MediaMTXWebRTCReader({
+                            url: new URL('whep', stream.address),
+                            onError: (err) => {
+                                console.error(err);
+                            },
+                            onTrack: trackf,
+                        });
+
+                        disconnectable_readers.push(reader);
+                    }
+                });
+            }
+            else if(cmd=='drawBox'){
+                
+            }
+        }
+
+        // Initialize long connected readers
+        setTimeout(function () {
+            long_connected_streams.forEach((stream, index) => {
+                let videoElement = videoElements[index];
+                videoElement.setAttribute("attr1", stream.address);
+                const trackf = function (evt) {
+                    videoElement.autoplay = true;
+                    videoElement.controls = true;
+                    videoElement.muted = true;
+                    videoElement.playsInline = true;
+                    videoElement.disablepictureinpicture = false;
+                    videoElement.srcObject = evt.streams[0];
+                    console.debug(111);
+                };
+
+                const reader = new MediaMTXWebRTCReader({
+                    url: new URL('whep', stream.address),
+                    onError: (err) => {
+                        console.error(err);
+                    },
+                    onTrack: trackf,
+                });
+
+                long_connected_readers.push(reader);
+            });
+        }, 1000);
+
+    </script>
+</body>
+
+</html>

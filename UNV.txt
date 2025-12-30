@@ -24,3 +24,5 @@ TIP:
 how to set the webRTC in linux, 
 
 download the mediamtx linux from github , unzip it 
+
+download the nodejs , install the node-red , 

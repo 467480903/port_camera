@@ -1374,7 +1374,7 @@
     "name": "",
     "server": "504ae0e96127e059",
     "client": "",
-    "x": 680,
+    "x": 820,
     "y": 1940,
     "wires": []
   },
@@ -1385,7 +1385,7 @@
     "name": "",
     "server": "504ae0e96127e059",
     "client": "",
-    "x": 320,
+    "x": 310,
     "y": 1900,
     "wires": [
       [
@@ -1410,7 +1410,61 @@
     "wires": []
   },
   {
-    "id": "01f959b032e31bc1",
+    "id": "bb0b4faf899c11a3",
+    "type": "tcp in",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "server": "client",
+    "host": "localhost",
+    "port": "1994",
+    "datamode": "stream",
+    "datatype": "utf8",
+    "newline": "\\n",
+    "topic": "",
+    "trim": false,
+    "base64": false,
+    "tls": "",
+    "x": 330,
+    "y": 2380,
+    "wires": [
+      [
+        "e99bb89988c71271"
+      ]
+    ]
+  },
+  {
+    "id": "4d1740a1ef623e89",
+    "type": "tcp out",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "host": "",
+    "port": "",
+    "beserver": "reply",
+    "base64": false,
+    "end": false,
+    "tls": "",
+    "x": 610,
+    "y": 2520,
+    "wires": []
+  },
+  {
+    "id": "e99bb89988c71271",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 10",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 560,
+    "y": 2360,
+    "wires": []
+  },
+  {
+    "id": "bf5e27708d8eabd4",
     "type": "inject",
     "z": "2c27b5a30c1815ba",
     "name": "",
@@ -1430,36 +1484,36 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 220,
-    "y": 2020,
+    "x": 690,
+    "y": 1800,
     "wires": [
       [
-        "8b49ef68e4f01a64"
+        "efe6a2b40894d1e6"
       ]
     ]
   },
   {
-    "id": "8b49ef68e4f01a64",
+    "id": "efe6a2b40894d1e6",
     "type": "function",
     "z": "2c27b5a30c1815ba",
-    "name": "function 65",
-    "func": "msg.payload = [\n    { type: \"video\", address: \"http://localhost:8889/cam1/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam2/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam3/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam4/webrtc/\" },\n\n];\nreturn msg;",
+    "name": "function 69",
+    "func": "msg.payload = [\n    \n            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' , x: 5, y: 5, width: 1920/2, height: 1080/2 },\n            { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' , x: 5 + 1920/2, y: 5, width: 1920/2, height: 1080/2},\n            { address: 'http://localhost:8889/cam4/webrtc/', type: 'video' , x: 5+1920/2, y: 5+1080/2, width: 1920/2, height: 1080/2},\n            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video_control' , x: 5, y: 5+1080/2, width: 1920/2, height: 1080/2},\n];\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 430,
-    "y": 2020,
+    "x": 900,
+    "y": 1800,
     "wires": [
       [
-        "dfaebd70fcc58eb2"
+        "cd9b8dc163b763e6"
       ]
     ]
   },
   {
-    "id": "55416dea4d769618",
+    "id": "a8db24b9e0965f94",
     "type": "inject",
     "z": "2c27b5a30c1815ba",
     "name": "",
@@ -1479,77 +1533,48 @@
     "topic": "",
     "payload": "",
     "payloadType": "date",
-    "x": 300,
-    "y": 2140,
+    "x": 690,
+    "y": 1840,
     "wires": [
       [
-        "bba30be23ce40120"
+        "1d2b2a41982fd23b"
       ]
     ]
   },
   {
-    "id": "bba30be23ce40120",
+    "id": "1d2b2a41982fd23b",
     "type": "function",
     "z": "2c27b5a30c1815ba",
-    "name": "function 66",
-    "func": "msg.payload = [\n    { type: \"video\", address: \"http://localhost:8889/cam10/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam9/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam8/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam7/webrtc/\" },\n\n];\nreturn msg;",
+    "name": "function 70",
+    "func": "msg.payload = [\n    \n            { address: 'http://localhost:8889/cam5/webrtc/', type: 'video' , x: 5, y: 5, width: 1920/2, height: 1080/2 },\n            { address: 'http://localhost:8889/cam6/webrtc/', type: 'video' , x: 5 + 1920/2, y: 5, width: 1920/2, height: 1080/2},\n            { address: 'http://localhost:8889/cam7/webrtc/', type: 'video' , x: 5+1920/2, y: 5+1080/2, width: 1920/2, height: 1080/2},\n            { address: 'http://localhost:8889/cam8/webrtc/', type: 'video_control' , x: 5, y: 5+1080/2, width: 1920/2, height: 1080/2},\n];\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 510,
-    "y": 2140,
+    "x": 900,
+    "y": 1840,
     "wires": [
       [
-        "dfaebd70fcc58eb2"
+        "cd9b8dc163b763e6"
       ]
     ]
   },
   {
-    "id": "b5774be951a0f8aa",
-    "type": "inject",
-    "z": "2c27b5a30c1815ba",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 800,
-    "y": 2120,
-    "wires": [
-      [
-        "81f053f62d40bb17"
-      ]
-    ]
-  },
-  {
-    "id": "81f053f62d40bb17",
+    "id": "cd9b8dc163b763e6",
     "type": "function",
     "z": "2c27b5a30c1815ba",
-    "name": "function 67",
-    "func": "msg.payload = [\n    { type: \"video\", address: \"http://localhost:8889/cam4/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam2/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam3/webrtc/\" },\n    { type: \"video\", address: \"http://localhost:8889/cam1/webrtc/\" },\n\n];\nreturn msg;",
+    "name": "function 71",
+    "func": "msg.payload = {cmd:'setCameras',data:msg.payload};\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 1010,
-    "y": 2120,
+    "x": 590,
+    "y": 1920,
     "wires": [
       [
         "dfaebd70fcc58eb2"

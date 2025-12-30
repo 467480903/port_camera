@@ -48,7 +48,7 @@
   {
     "id": "504ae0e96127e059",
     "type": "websocket-listener",
-    "path": "/setA",
+    "path": "/ws",
     "wholemsg": "false"
   }
 ]

@@ -5,7 +5,7 @@
     "private": true,
     "dependencies": {
         "@bartbutenaers/node-red-rtsp-to-mjpeg": "~1.0.0",
-        "node-red-contrib-flow-manager": "^0.7.4",
+        "node-red-contrib-flow-manager": "~0.7.4",
         "node-red-contrib-image-tools": "~2.1.1",
         "node-red-contrib-s7": "~3.1.1",
         "node-red-node-serialport": "~2.0.3"

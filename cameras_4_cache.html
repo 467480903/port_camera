@@ -103,16 +103,20 @@
 
 <body>
     <div id="container">
-        <div class="video-container" id="c_video1">  </div>
+        <div class="video-container" id="c_video1"> </div>
         <div class="video-container" id="c_video2"> </div>
-        <div class="video-container" id="c_video3">  </div>
-        <div class="video-container" id="c_video4">    </div>
+        <div class="video-container" id="c_video3"> </div>
+        <div class="video-container" id="c_video4"> </div>
     </div>
-    <div id="container_hide" style="display: none;">
-        <video id="video1" attr1="cache" class="video" autoplay playsinline></video>    
-        <video id="video2" attr1="cache" class="video" autoplay playsinline></video>
-        <video id="video3" attr1="cache" class="video" autoplay playsinline></video>
-        <video id="video4" attr1="cache" class="video" autoplay playsinline></video>
+    <div id="container_hide" style="display: hidden">
+            <video id="video1" attr1="cache" class="video" autoplay playsinline></video>
+
+            <video id="video2" attr1="cache" class="video" autoplay playsinline></video>
+
+            <video id="video3" attr1="cache" class="video" autoplay playsinline></video>
+
+            <video id="video4" attr1="cache" class="video" autoplay playsinline></video>
+
     </div>
     <div id="toolbar">
         <div class="toolbar-content">
@@ -175,10 +179,10 @@
         let cached_readers = [];
 
         const cached_streams = [
-            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video' },
-            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' },
-            { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' },
-            { address: 'http://localhost:8889/cam4/webrtc/', type: 'video_control' },
+            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video' , x: 5, y: 5, width: 1920/2, height: 1080/2 },
+            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' , x: 5 + 1920/2, y: 5, width: 1920/2, height: 1080/2},
+            { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' , x: 5+1920/2, y: 5+1080/2, width: 1920/2, height: 1080/2},
+            { address: 'http://localhost:8889/cam4/webrtc/', type: 'video_control' , x: 5, y: 5+1080/2, width: 1920/2, height: 1080/2},
         ];
 
         const loadDefaultStreams = () => {
@@ -186,10 +190,10 @@
 
             cached_streams.forEach((item, index) => {
                 if (index < 4) {
- 
+
                     const videoElement = document.getElementById(`video${index + 1}`);
                     videoElement.setAttribute("attr1", item.address);
-                    var asdf = function(evt){
+                    var asdf = function (evt) {
                         videoElement.autoplay = true;
                         videoElement.controls = true;
                         videoElement.muted = true;
@@ -213,7 +217,7 @@
         window.addEventListener('load', () => {
 
 
-            const ws = new WebSocket('ws://10.10.95.222:1881/setA');
+            const ws = new WebSocket('ws://127.0.0.1:1881/setA');
             ws.onmessage = function (event) {
                 // Close all WebRTC connections
                 readers.forEach(reader => {
@@ -232,19 +236,19 @@
                 const data = JSON.parse(event.data);
                 console.debug(data);
                 data.forEach((item, index) => {
-                    if (item.type === 'video' ) {
+                    if (item.type === 'video') {
 
 
-                        let container = document.getElementById('c_video'+(index+1));
+                        let container = document.getElementById('c_video' + (index + 1));
                         container.innerHTML = '';
 
                         let appended = false;
-                        for(var i=0;i<4;i++){
-                            
+                        for (var i = 0; i < 4; i++) {
+
                             console.debug(item.address);
                             console.debug(cached_readers[i].address);
-                            if(item.address+"whep" == cached_readers[i].conf.url.href ){
-                                container.appendChild(document.getElementById("video"+(i+1)));
+                            if (item.address + "whep" == cached_readers[i].conf.url.href) {
+                                container.appendChild(document.getElementById("video" + (i + 1)));
                                 console.debug(1112);
                                 appended = true;
                                 break;
@@ -252,16 +256,16 @@
                         }
 
 
-                        if(!appended){
+                        if (!appended) {
 
                             const videoElement = document.createElement('video');
-                            videoElement.id = 'video_'+(i+1);
+                            videoElement.id = 'video_' + (i + 1);
                             videoElement.className = 'video';
                             videoElement.autoplay = true;
                             videoElement.playsInline = true;
                             container.appendChild(videoElement);
 
-                            var asdf = function(evt){
+                            var asdf = function (evt) {
                                 videoElement.autoplay = true;
                                 videoElement.controls = true;
                                 videoElement.muted = true;
@@ -325,7 +329,7 @@
                 if (readers.length === 0) {
                     loadDefaultStreams();
                 }
-            }, 2000); 
+            }, 2000);
         });
 
 
