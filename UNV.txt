@@ -15,6 +15,10 @@ admin/Zc@emergen135  Evna12345@
 10.10.95.224, HK1
 10.10.95.225, HK1
 
+10.10.95.227, YY1
+10.10.95.228, YY2
+
+
 TIP:
 
 how to set the webRTC in linux, 
