@@ -15,6 +15,11 @@
             position: absolute;
             visibility: visible;
         }
+
+        .video-canvas {
+            position: absolute;
+            border: 1px solid transparent; /* Optional: to see the canvas */
+        }
     </style>
     <script defer src="node-red/static/reader.js"></script>
 </head>
@@ -22,9 +27,13 @@
 <body>
     <div id="video-container">
         <video id="video1" class="hidden-video" width="960" height="540" autoplay playsinline></video>
+        <canvas id="canvas1" class="video-canvas" width="960" height="540" style="left: 0; top: 0;"></canvas>
         <video id="video2" class="hidden-video" width="960" height="540" autoplay playsinline></video>
+        <canvas id="canvas2" class="video-canvas" width="960" height="540" style="left: 0; top: 0;"></canvas>
         <video id="video3" class="hidden-video" width="960" height="540" autoplay playsinline></video>
+        <canvas id="canvas3" class="video-canvas" width="960" height="540" style="left: 0; top: 0;"></canvas>
         <video id="video4" class="hidden-video" width="960" height="540" autoplay playsinline></video>
+        <canvas id="canvas4" class="video-canvas" width="960" height="540" style="left: 0; top: 0;"></canvas>
     </div>
 
     <script>
@@ -42,6 +51,12 @@
             document.getElementById('video2'),
             document.getElementById('video3'),
             document.getElementById('video4')
+        ];
+        const canvasElements = [
+            document.getElementById('canvas1'),
+            document.getElementById('canvas2'),
+            document.getElementById('canvas3'),
+            document.getElementById('canvas4')
         ];
 
         // Establish WebSocket connection
@@ -67,6 +82,7 @@
         // Function to handle received data from WebSocket
         function handleWebSocketData(msg) {
             if (msg.cmd == 'setCameras') {
+                data = msg.data;
                 // Close all disconnectable readers
                 disconnectable_readers.forEach(reader => {
                     reader.close();
@@ -86,7 +102,6 @@
 
                 // Process received data
                 data.forEach((stream, index) => {
-
                     console.debug(stream.address);
                     const video = videoElements.find(videoEl => videoEl.getAttribute('attr1') === stream.address);
                     console.debug(videoElements[0].getAttribute('attr1'));
@@ -98,6 +113,14 @@
                         video.style.top = `${stream.y}px`;
                         video.style.width = `${stream.width}px`;
                         video.style.height = `${stream.height}px`;
+
+                        // Position the corresponding canvas
+                        const canvas = canvasElements[index];
+                        canvas.style.position = 'absolute';
+                        canvas.style.left = `${stream.x}px`;
+                        canvas.style.top = `${stream.y}px`;
+                        canvas.style.width = `${stream.width}px`;
+                        canvas.style.height = `${stream.height}px`;
                     } else {
                         // Create new video element for disconnectable stream
                         const newVideo = document.createElement('video');
@@ -115,6 +138,16 @@
                         newVideo.disablepictureinpicture = false;
                         document.body.appendChild(newVideo);
 
+                        // Create new canvas element for disconnectable stream
+                        const newCanvas = document.createElement('canvas');
+                        newCanvas.className = 'video-canvas';
+                        newCanvas.style.position = 'absolute';
+                        newCanvas.style.left = `${stream.x}px`;
+                        newCanvas.style.top = `${stream.y}px`;
+                        newCanvas.style.width = `${stream.width}px`;
+                        newCanvas.style.height = `${stream.height}px`;
+                        document.body.appendChild(newCanvas);
+
                         // Create new WebRTC connection
                         const trackf = function (evt) {
                             newVideo.autoplay = true;
@@ -123,6 +156,7 @@
                             newVideo.playsInline = true;
                             newVideo.disablepictureinpicture = false;
                             newVideo.srcObject = evt.streams[0];
+                            console.debug(111);
                         };
 
                         const reader = new MediaMTXWebRTCReader({
@@ -136,9 +170,17 @@
                         disconnectable_readers.push(reader);
                     }
                 });
-            }
-            else if(cmd=='drawBox'){
-                
+            } else if (msg.cmd == 'drawBox') {
+                // Assuming msg.data contains the box data
+                const canvas = canvasElements[0]; // Assuming we always draw on the first video for this example
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                msg.data.forEach(box => {
+                    ctx.strokeStyle = 'red';
+                    ctx.lineWidth = 2;
+                    ctx.strokeRect(box.x1, box.y1, box.x2 - box.x1, box.y2 - box.y1);
+                });
             }
         }
 

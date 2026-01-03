@@ -1428,7 +1428,8 @@
     "y": 2380,
     "wires": [
       [
-        "e99bb89988c71271"
+        "e99bb89988c71271",
+        "5602333bbfa7dc47"
       ]
     ]
   },
@@ -1578,6 +1579,91 @@
     "wires": [
       [
         "dfaebd70fcc58eb2"
+      ]
+    ]
+  },
+  {
+    "id": "42f6606f63526e20",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 65",
+    "func": "const res_cam = [1280,720];\nconst res_vid = [ 1920 / 2,  1080 / 2];\nconst offset_vid = [5,5];\n\nmsg.payload[0].x1 = msg.payload[0].x1 * res_vid[0] / res_cam[0] + offset_vid[0];\nmsg.payload[0].x2 = msg.payload[0].x2 * res_vid[0] / res_cam[0] + offset_vid[0];\nmsg.payload[0].y1 = msg.payload[0].y1 * res_vid[1] / res_cam[1] + offset_vid[1];\nmsg.payload[0].y2 = msg.payload[0].y2 * res_vid[1] / res_cam[1] + offset_vid[1];\n\nmsg.payload = {cmd:'drawBox',data:msg.payload};\nmsg.rate = 100;\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 570,
+    "y": 2180,
+    "wires": [
+      [
+        "dfaebd70fcc58eb2"
+      ]
+    ]
+  },
+  {
+    "id": "5602333bbfa7dc47",
+    "type": "json",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "property": "payload",
+    "action": "obj",
+    "pretty": false,
+    "x": 470,
+    "y": 2260,
+    "wires": [
+      [
+        "42f6606f63526e20"
+      ]
+    ]
+  },
+  {
+    "id": "a16423aa52414109",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 610,
+    "y": 2100,
+    "wires": [
+      [
+        "38a4e0c60da26e0a"
+      ]
+    ]
+  },
+  {
+    "id": "38a4e0c60da26e0a",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 66",
+    "func": "msg.payload = [\n    \n            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' , x: 5, y: 5, width: 1920/2, height: 1080/2 , name: 'diaoju'},\n            { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' , x: 5 + 1920/2, y: 5, width: 1920/2, height: 1080/2},\n            { address: 'http://localhost:8889/cam4/webrtc/', type: 'video' , x: 5+1920/2, y: 5+1080/2, width: 1920/2, height: 1080/2},\n            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video_control' , x: 5, y: 5+1080/2, width: 1920/2, height: 1080/2},\n];\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 820,
+    "y": 2100,
+    "wires": [
+      [
+        "cd9b8dc163b763e6"
       ]
     ]
   }

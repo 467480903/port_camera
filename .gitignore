@@ -6,3 +6,4 @@ pic.jpg
 /python/*.jpg
 *.exe
 /mediamtx_v1.15.1_windows_amd64/*.exe
+*.pt
