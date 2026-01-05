@@ -86,9 +86,9 @@ def display_combined_frames():
             combined_frame = cv2.hconcat([left_part, right_part])
 
             # Display the combined frame in a window
-            cv2.imshow('Combined Stream', combined_frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+            # cv2.imshow('Combined Stream', combined_frame)
+            # if cv2.waitKey(1) & 0xFF == ord('q'):
+            #     break
         else:
             time.sleep(0.1)  # Sleep to prevent high CPU usage when frames are not available
 

@@ -1,0 +1,104 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebRTC and MJPEG Streams</title>
+    <style>
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: repeat(2, 1fr);
+            height: 100vh;
+            width: 100vw;
+            gap: 0;
+        }
+        .video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+        .video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        body {
+            margin: 0px;
+        }
+    </style>
+    <script defer src="reader.js"></script>
+</head>
+<body>
+    <div class="container" id="video-container">
+        <div class="video-container">
+            <video id="webrtc1" autoplay playsinline class="video"></video>
+        </div>
+        <div class="video-container">
+            <video id="webrtc2" autoplay playsinline class="video"></video>
+        </div>
+        <div class="video-container">
+            <video id="webrtc3" autoplay playsinline class="video"></video>
+        </div>
+        <div class="video-container">
+            <img id="mjpeg-stream" src="http://localhost:5000/video_feed" style="max-width: 100%;height:auto;" alt="MJPEG Stream">
+        </div>
+    </div>
+    <script>
+        let reader1 = null;
+        let reader2 = null;
+        let reader3 = null;
+
+        window.addEventListener('load', () => {
+            const container = document.getElementById('video-container');
+            const height = container.clientHeight / 2;
+            const width = container.clientWidth / 2;
+            const videos = document.querySelectorAll('.video-container .video');
+            videos.forEach(video => {
+                video.style.height = `${height}px`;
+                video.style.width = `${width}px`;
+            });
+
+            const mjpegStream = document.getElementById('mjpeg-stream');
+            mjpegStream.style.height = `${height}px`;
+            mjpegStream.style.width = `${width}px`;
+
+            reader1 = new MediaMTXWebRTCReader({
+                url: new URL('whep', `http://localhost:8889/cam2/webrtc/`),
+                onError: (err) => {
+                    console.error(err);
+                },
+                onTrack: (evt) => {
+                    document.getElementById('webrtc1').controls = true;
+                    document.getElementById('webrtc1').srcObject = evt.streams[0];
+                },
+            });
+
+            reader2 = new MediaMTXWebRTCReader({
+                url: new URL('whep', `http://localhost:8889/cam3/webrtc/`),
+                onError: (err) => {
+                    console.error(err);
+                },
+                onTrack: (evt) => {
+                    document.getElementById('webrtc2').controls = true;
+                    document.getElementById('webrtc2').srcObject = evt.streams[0];
+                },
+            });
+
+            reader3 = new MediaMTXWebRTCReader({
+                url: new URL('whep', `http://localhost:8889/cam4/webrtc/`),
+                onError: (err) => {
+                    console.error(err);
+                },
+                onTrack: (evt) => {
+                    document.getElementById('webrtc3').controls = true;
+                    document.getElementById('webrtc3').srcObject = evt.streams[0];
+                },
+            });
+        });
+    </script>
+</body>
+</html>
