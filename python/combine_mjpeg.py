@@ -75,22 +75,60 @@ def display_combined_frames():
             frame2_copy, cup2 = frame2[0] if frame2[0] is not None else (None, None)
 
         if frame1_copy is not None and frame2_copy is not None and cup1 is not None and cup2 is not None:
-            # Split frames based on cup position
-            cup_x1 = cup1[2]  # Right side of cup in frame1
-            cup_x2 = cup2[0]  # Left side of cup in frame2
-
-            left_part = frame1_copy[:, :cup_x1]
-            right_part = frame2_copy[:, cup_x2:]
-
+            # Calculate cup center points
+            cup1_center_x = (cup1[0] + cup1[2]) // 2  # x-center of cup in frame1
+            cup2_center_x = (cup2[0] + cup2[2]) // 2  # x-center of cup in frame2
+            
+            # Take left half of cup from frame1 (everything up to center of cup)
+            left_part = frame1_copy[:, :cup1_center_x]
+            
+            # Take right half of cup from frame2 (from center of cup to end)
+            right_part = frame2_copy[:, cup2_center_x:]
+            
             # Combine the left and right parts
             combined_frame = cv2.hconcat([left_part, right_part])
-
-            # Display the combined frame in a window
-            # cv2.imshow('Combined Stream', combined_frame)
-            # if cv2.waitKey(1) & 0xFF == ord('q'):
-            #     break
+            
+            # Get the stitching position (width of left part)
+            stitch_x = left_part.shape[1]
+            
+            # Draw a vertical line at the stitching position
+            height = combined_frame.shape[0]
+            cv2.line(combined_frame, (stitch_x, 0), (stitch_x, height), (0, 255, 0), 2)  # Green line, thickness 2
+            
+            # Add label at the stitching line
+            cv2.putText(combined_frame, "Stitching Line", 
+                       (stitch_x - 100, 30),  # Position text near the line
+                       cv2.FONT_HERSHEY_SIMPLEX, 
+                       0.7,  # Font scale
+                       (0, 255, 0),  # Green color
+                       2)  # Thickness
+            
+            # Also visualize the cup halves on the original frames (for debugging)
+            # Draw rectangle around left half of cup in frame1_copy
+            cv2.rectangle(frame1_copy, (cup1[0], cup1[1]), (cup1_center_x, cup1[3]), (255, 0, 0), 2)
+            cv2.putText(frame1_copy, "Left Half", (cup1[0], cup1[1]-10), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 1)
+            
+            # Draw rectangle around right half of cup in frame2_copy
+            cv2.rectangle(frame2_copy, (cup2_center_x, cup2[1]), (cup2[2], cup2[3]), (0, 0, 255), 2)
+            cv2.putText(frame2_copy, "Right Half", (cup2_center_x, cup2[1]-10), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 1)
+            
+            # Display individual frames for debugging (optional)
+            # cv2.imshow('Left Camera', frame1_copy)
+            # cv2.imshow('Right Camera', frame2_copy)
+            
         else:
-            time.sleep(0.1)  # Sleep to prevent high CPU usage when frames are not available
+            # Create a blank frame if no cups detected
+            combined_frame = np.zeros((480, 640, 3), dtype=np.uint8)
+            cv2.putText(combined_frame, "Waiting for cup detection...", 
+                       (100, 240), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 255), 2)
+            time.sleep(0.1)
+
+        # Display the combined frame in a window
+        cv2.imshow('Combined Stream', combined_frame)
+        if cv2.waitKey(1) & 0xFF == ord('q'):
+            break
 
 def generate_frames():
     global combined_frame

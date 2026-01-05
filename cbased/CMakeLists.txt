@@ -1,16 +1,18 @@
- The suggested code is actually the same as the previous one. However, if you can provide some additional suggestions or improvements to the CMake script, I would be very grateful.
+cmake_minimum_required(VERSION 3.10)
+project(VideoCombine)
 
-Certainly! The suggested CMake script is indeed the same as the original one. However, I can provide some additional suggestions for improvement and best practices in CMake:
+# Set C++ standard to C++11 or later
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-1. **Use Modern CMake Practices**: Use `target_include_directories` and `target_link_libraries` with `INTERFACE`, `PUBLIC`, or `PRIVATE` keywords to specify the scope of the include directories and libraries.
+# Find OpenCV
+find_package(OpenCV 4 REQUIRED)
 
-2. **Use `set` for Variables**: Use `set` to define variables for paths or configurations, which can make the script more readable and maintainable.
+# Add the executable (must come BEFORE target_include_directories)
+add_executable(video_combine video_combine.cpp)
 
-3. **Add Version Information**: If necessary, add version information for your project.
+# Include OpenCV headers
+target_include_directories(video_combine PUBLIC ${OpenCV_INCLUDE_DIRS})
 
-4. **Enable C++11 or Later**: Make sure your project is compiled with a modern C++ standard.
-
-5. **Check for Required Files**: Ensure that the source files exist before adding them to the executable.
-
-Here is an enhanced version of your CMake script with these improvements:
-
+# Link OpenCV libraries
+target_link_libraries(video_combine PRIVATE ${OpenCV_LIBS})
