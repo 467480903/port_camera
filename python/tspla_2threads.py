@@ -43,7 +43,7 @@ def main():
 
     # 创建并启动两个线程
     # 视频 1 延迟 4 秒，视频 2 立即开始
-    t1 = threading.Thread(target=video_reader_thread, args=(path1, q1, 7))
+    t1 = threading.Thread(target=video_reader_thread, args=(path1, q1, 13))
     t2 = threading.Thread(target=video_reader_thread, args=(path2, q2, 0))
     
     t1.daemon = True # 设置为守护线程，主程序退出时自动结束

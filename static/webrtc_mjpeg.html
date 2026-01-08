@@ -67,7 +67,7 @@
             mjpegStream.style.width = `${width}px`;
 
             reader1 = new MediaMTXWebRTCReader({
-                url: new URL('whep', `http://localhost:8889/cam2/webrtc/`),
+                url: new URL('whep', `http://localhost:8889/cam9/webrtc/`),
                 onError: (err) => {
                     console.error(err);
                 },
@@ -78,7 +78,7 @@
             });
 
             reader2 = new MediaMTXWebRTCReader({
-                url: new URL('whep', `http://localhost:8889/cam3/webrtc/`),
+                url: new URL('whep', `http://localhost:8889/cam10/webrtc/`),
                 onError: (err) => {
                     console.error(err);
                 },
@@ -89,7 +89,7 @@
             });
 
             reader3 = new MediaMTXWebRTCReader({
-                url: new URL('whep', `http://localhost:8889/cam4/webrtc/`),
+                url: new URL('whep', `http://localhost:8889/cam1/webrtc/`),
                 onError: (err) => {
                     console.error(err);
                 },

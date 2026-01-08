@@ -1,0 +1,26 @@
+<annotation>
+	<folder>62</folder>
+	<filename>frame_0016.jpg</filename>
+	<path>/home/yy/port_camera/label/label/62/frame_0016.jpg</path>
+	<source>
+		<database>Unknown</database>
+	</source>
+	<size>
+		<width>1920</width>
+		<height>1080</height>
+		<depth>3</depth>
+	</size>
+	<segmented>0</segmented>
+	<object>
+		<name>left_gear</name>
+		<pose>Unspecified</pose>
+		<truncated>0</truncated>
+		<difficult>0</difficult>
+		<bndbox>
+			<xmin>1274</xmin>
+			<ymin>241</ymin>
+			<xmax>1385</xmax>
+			<ymax>900</ymax>
+		</bndbox>
+	</object>
+</annotation>

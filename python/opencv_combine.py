@@ -2,8 +2,11 @@ import cv2
 import numpy as np
 
 # 1. 加载图像
-image1 = cv2.imread("/home/yy/port_camera/python/p1.png")
-image2 = cv2.imread("/home/yy/port_camera/python/p2.png")
+image1 = cv2.imread("/home/yy/port_camera/python/b.png")
+image2 = cv2.imread("/home/yy/port_camera/python/c.png")
+
+cv2.imshow("image1", image1)
+cv2.imshow("image2", image2)
 
 # 2. 转换为灰度图
 gray1 = cv2.cvtColor(image1, cv2.COLOR_BGR2GRAY)
