@@ -1,5 +1,5 @@
 train: /home/yy/port_camera/yoloTrain/train
 val: /home/yy/port_camera/yoloTrain/val
 test: /home/yy/port_camera/yoloTrain/test
-nc: 1
-names: ['aa']
+nc: 2
+names: ['left','right']

@@ -1,7 +1,7 @@
 import cv2
 import os
 
-def extract_images_from_video(video_path, output_folder):
+def extract_images_from_video(video_path, output_folder, interval_seconds=3):
     # Ensure the output folder exists
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
@@ -19,6 +19,9 @@ def extract_images_from_video(video_path, output_folder):
     frame_count = 0
     image_count = 0
     
+    # Calculate frames per interval
+    frames_per_interval = int(fps * interval_seconds)
+    
     while True:
         # Capture frame-by-frame
         ret, frame = cap.read()
@@ -27,9 +30,9 @@ def extract_images_from_video(video_path, output_folder):
         if not ret:
             break
         
-        # Save the frame as an image file every second
-        if frame_count % int(fps) == 0:
-            frame_path = os.path.join(output_folder, f'frame_{image_count:04d}.jpg')
+        # Save the frame as an image file every interval_seconds
+        if frame_count % frames_per_interval == 0:
+            frame_path = os.path.join(output_folder, f'right_{image_count:04d}.jpg')
             cv2.imwrite(frame_path, frame)
             image_count += 1
             print(f'Saved {frame_path}')
@@ -39,10 +42,11 @@ def extract_images_from_video(video_path, output_folder):
     
     # Release the video capture object
     cap.release()
+    print(f"Extraction complete. Total frames: {frame_count}, Images saved: {image_count}")
 
 # Define video path and output folder
-video_path = '/home/yy/62.mp4'
-output_folder = 'label/62/'
+video_path = '/home/yy/63.mp4'
+output_folder = 'label/63/'
 
-# Extract images
-extract_images_from_video(video_path, output_folder)
+# Extract images every 3 seconds
+extract_images_from_video(video_path, output_folder, interval_seconds=3)

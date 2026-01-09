@@ -1,6 +1,6 @@
 task: detect
 mode: train
-model: ../python/yolo11n.pt
+model: ./yolo11n.pt
 data: data.yaml
 epochs: 100
 time: null
