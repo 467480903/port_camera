@@ -5,33 +5,39 @@ import numpy as np
 import threading
 import time
 from collections import deque
+import logging
+
+def setup_logging():
+    logging.getLogger('ultralytics').setLevel(logging.ERROR)
+setup_logging()
 
 # Global frames and data
-frame_62 = None
-frame_63 = None
-frame_lock_62 = threading.Lock()
-frame_lock_63 = threading.Lock()
+frame_left = None
+frame_right = None
+frame_lock_left = threading.Lock()
+frame_lock_right = threading.Lock()
 
 # Global center points (store multiple detections)
-centers_62 = []  # List of (x, y) tuples for video 62
-centers_63 = []  # List of (x, y) tuples for video 63
-centers_lock_62 = threading.Lock()
-centers_lock_63 = threading.Lock()
+centers_left = []  # List of (x, y) tuples for video 62
+centers_right = []  # List of (x, y) tuples for video 63
+centers_lock_left = threading.Lock()
+centers_lock_right = threading.Lock()
+
+# Load model
+device = 'cuda' if torch.cuda.is_available() else 'cpu'
+model = YOLO("../yoloTrain2/runs/detect/train/weights/best_left_right_2.pt", task="detect").to(device)
 
 # Control flags
 running = True
 
-def process_video_62():
-    global frame_62, centers_62, running
-    
-    # Load model
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = YOLO("./best.pt", task="detect").to(device)
-    
+def process_video_left():
+    global frame_left, centers_left, running, model
+
     # Open video
-    cap = cv2.VideoCapture("/home/yy/62.mp4")
+    file = "/home/yy/10.10.95.219_001M_202601091536527BD2.mp4"
+    cap = cv2.VideoCapture(file)
     if not cap.isOpened():
-        print("Error: Could not open 62.mp4")
+        print("Error: Could not open "+file)
         return
         
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -46,16 +52,13 @@ def process_video_62():
             continue
         
         height, width = frame.shape[:2]
-        
-        # Clear previous centers
-        with centers_lock_62:
-            centers_62 = []
             
         # Detect class 0
         results = model(frame, save=False, classes=[0])
         
         # Draw detections and collect centers
-        current_centers = []
+        if(len(results)>0):
+            current_centers = []
         for result in results:
             boxes = result.boxes.cpu().numpy()
             for box in boxes:
@@ -77,13 +80,13 @@ def process_video_62():
                     cv2.line(frame, (center_x, center_y), (width, center_y), (0, 255, 0), 2)
         
         # Update global centers
-        with centers_lock_62:
-            centers_62 = current_centers.copy()
+        with centers_lock_left:
+            centers_left = current_centers.copy()
         
         # Store in global frame
-        with frame_lock_62:
-            frame_62 = frame
-            
+        with frame_lock_left:
+            frame_left = frame
+        
         # Maintain timing
         elapsed = time.time() - start_time
         sleep_time = max(0, delay - elapsed)
@@ -92,17 +95,13 @@ def process_video_62():
             
     cap.release()
 
-def process_video_63():
-    global frame_63, centers_63, running
+def process_video_right():
+    global frame_right, centers_right, running, model
     
-    # Load model
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
-    model = YOLO("./best.pt", task="detect").to(device)
-    
-    # Open video
-    cap = cv2.VideoCapture("/home/yy/63_2.mp4")
+    file = "/home/yy/10.10.95.219_002M_202601091536524732.mp4"
+    cap = cv2.VideoCapture(file)
     if not cap.isOpened():
-        print("Error: Could not open 63.mp4")
+        print("Error: Could not open "+file)
         return
         
     fps = cap.get(cv2.CAP_PROP_FPS)
@@ -117,16 +116,13 @@ def process_video_63():
             continue
         
         height, width = frame.shape[:2]
-        
-        # Clear previous centers
-        with centers_lock_63:
-            centers_63 = []
             
         # Detect class 1
         results = model(frame, save=False, classes=[1])
-        
+        if(len(results)>0):
+            current_centers = []
+
         # Draw detections and collect centers
-        current_centers = []
         for result in results:
             boxes = result.boxes.cpu().numpy()
             for box in boxes:
@@ -148,12 +144,12 @@ def process_video_63():
                     cv2.line(frame, (center_x, center_y), (0, center_y), (255, 255, 0), 2)
         
         # Update global centers
-        with centers_lock_63:
-            centers_63 = current_centers.copy()
+        with centers_lock_right:
+            centers_right = current_centers.copy()
         
         # Store in global frame
-        with frame_lock_63:
-            frame_63 = frame
+        with frame_lock_right:
+            frame_right = frame
             
         # Maintain timing
         elapsed = time.time() - start_time
@@ -179,146 +175,208 @@ def calculate_y_alignment_offset(centers_left, centers_right):
     
     return y_diff
 
+def get_average_x_position(centers):
+    """
+    Get average x position from a list of centers.
+    Returns average x position or None if no centers.
+    """
+    if not centers:
+        return None
+    return int(np.mean([center[0] for center in centers]))
+
 def display_combined():
-    global frame_62, frame_63, centers_62, centers_63, running
+    global frame_left, frame_right, centers_left, centers_right, running
     
     cv2.namedWindow('Dual Video Detection', cv2.WINDOW_NORMAL)
     
+    # Display mode: 0 = original, 1 = combined view
+    display_mode = 1
+    
     while running:
         # Get frames with locks
-        with frame_lock_62:
-            local_frame_62 = frame_62.copy() if frame_62 is not None else None
+        with frame_lock_left:
+            local_frame_left = frame_left.copy() if frame_left is not None else None
             
-        with frame_lock_63:
-            local_frame_63 = frame_63.copy() if frame_63 is not None else None
+        with frame_lock_right:
+            local_frame_right = frame_right.copy() if frame_right is not None else None
             
-        with centers_lock_62:
-            local_centers_62 = centers_62.copy()
+        with centers_lock_left:
+            local_centers_left = centers_left.copy()
             
-        with centers_lock_63:
-            local_centers_63 = centers_63.copy()
+        with centers_lock_right:
+            local_centers_right = centers_right.copy()
             
-        if local_frame_62 is None or local_frame_63 is None:
+        if local_frame_left is None or local_frame_right is None:
             time.sleep(0.01)
             continue
             
         # Get original dimensions
-        h62, w62 = local_frame_62.shape[:2]
-        h63, w63 = local_frame_63.shape[:2]
+        h_left, w_left = local_frame_left.shape[:2]
+        h_right, w_right = local_frame_right.shape[:2]
         
         # Resize to same height (use min height)
-        target_height = min(h62, h63)
+        target_height = min(h_left, h_right)
         
         # Initialize variables
-        new_width_62 = w62
-        new_width_63 = w63
-        rolled_frame_63 = local_frame_63
+        new_width_left = w_left
+        new_width_right = w_right
+        rolled_frame_right = local_frame_right
         
         # Resize left frame if needed
-        if h62 != target_height:
-            scale = target_height / h62
-            new_width_62 = int(w62 * scale)
-            local_frame_62 = cv2.resize(local_frame_62, (new_width_62, target_height))
+        if h_left != target_height:
+            scale = target_height / h_left
+            new_width_left = int(w_left * scale)
+            local_frame_left = cv2.resize(local_frame_left, (new_width_left, target_height))
             # Adjust centers for resized frame
-            scale_x_62 = new_width_62 / w62
-            scale_y_62 = target_height / h62
-            local_centers_62 = [(int(x * scale_x_62), int(y * scale_y_62)) for x, y in local_centers_62]
+            scale_x_left = new_width_left / w_left
+            scale_y_left = target_height / h_left
+            local_centers_left = [(int(x * scale_x_left), int(y * scale_y_left)) for x, y in local_centers_left]
         else:
             # Use original dimensions
-            new_width_62 = w62
+            new_width_left = w_left
         
         # Resize right frame if needed
-        if h63 != target_height:
-            scale = target_height / h63
-            new_width_63 = int(w63 * scale)
-            local_frame_63 = cv2.resize(local_frame_63, (new_width_63, target_height))
+        if h_right != target_height:
+            scale = target_height / h_right
+            new_width_right = int(w_right * scale)
+            local_frame_right = cv2.resize(local_frame_right, (new_width_right, target_height))
             # Adjust centers for resized frame
-            scale_x_63 = new_width_63 / w63
-            scale_y_63 = target_height / h63
-            local_centers_63 = [(int(x * scale_x_63), int(y * scale_y_63)) for x, y in local_centers_63]
+            scale_x_right = new_width_right / w_right
+            scale_y_right = target_height / h_right
+            local_centers_right = [(int(x * scale_x_right), int(y * scale_y_right)) for x, y in local_centers_right]
         else:
             # Use original dimensions
-            new_width_63 = w63
+            new_width_right = w_right
         
         # Calculate Y-difference for alignment
-        y_diff = calculate_y_alignment_offset(local_centers_62, local_centers_63)
+        y_diff = calculate_y_alignment_offset(local_centers_left, local_centers_right)
         
         # Apply vertical roll to right frame based on Y-difference
-        if y_diff != 0 and local_frame_63 is not None:
+        if y_diff != 0 and local_frame_right is not None:
             # Roll the right frame vertically
             roll_amount = -y_diff  # Negative because np.roll rolls downward with positive values
             
             # Create a copy of the right frame
-            rolled_frame_63 = np.roll(local_frame_63, roll_amount, axis=0)
+            rolled_frame_right = np.roll(local_frame_right, roll_amount, axis=0)
             
             # Fill the empty area with black
             if roll_amount > 0:
                 # Rolled downward, fill top with black
-                rolled_frame_63[:roll_amount, :] = 0
+                rolled_frame_right[:roll_amount, :] = 0
             elif roll_amount < 0:
                 # Rolled upward, fill bottom with black
-                rolled_frame_63[roll_amount:, :] = 0
+                rolled_frame_right[roll_amount:, :] = 0
         else:
-            rolled_frame_63 = local_frame_63
+            rolled_frame_right = local_frame_right
         
-        # Draw alignment line on left frame (for visualization)
-        if local_centers_62:
-            # Draw horizontal line at average Y position of left centers
-            avg_left_y = int(np.mean([center[1] for center in local_centers_62]))
-            cv2.line(local_frame_62, (0, avg_left_y), (new_width_62, avg_left_y), 
-                    (255, 255, 0), 1)  # Light blue horizontal reference line
-        
-        # Draw alignment line on right frame (for visualization)
-        if local_centers_63 and rolled_frame_63 is not None:
-            # Draw horizontal line at average Y position of right centers (after adjustment)
-            # Adjust right centers for roll
-            adjusted_right_centers = [(x, (y - y_diff) % target_height) for x, y in local_centers_63]
-            avg_right_y = int(np.mean([center[1] for center in adjusted_right_centers]))
-            cv2.line(rolled_frame_63, (0, avg_right_y), (new_width_63, avg_right_y), 
-                    (255, 255, 0), 1)  # Light blue horizontal reference line
-        
-        # Combine frames
-        if rolled_frame_63 is not None:
-            combined = np.hstack((local_frame_62, rolled_frame_63))
+        # Get average x positions for cutting
+        avg_x_left = get_average_x_position(local_centers_left)
+        avg_x_right = get_average_x_position(local_centers_right)
+        print( [y_diff, avg_x_left, avg_x_right] )
+        # Prepare display based on mode
+        if display_mode == 1 and avg_x_left is not None and avg_x_right is not None:
+            # MODE 1: Combined view - cut and merge frames
+            
+            # Cut left frame: from left to center (inclusive of center)
+            # We'll take the portion from the center to the right edge for left video
+            left_cut = local_frame_left[:, 0:avg_x_left ]
+            
+            # Cut right frame: from center to right (inclusive of center)
+            # We'll take the portion from the left edge to the center for right video
+            right_cut = rolled_frame_right[:, avg_x_right: new_width_right]
+            
+            # Combine the two cuts
+            if left_cut.shape[1] > 0 and right_cut.shape[1] > 0:
+                combined = np.hstack((left_cut, right_cut))
+            elif left_cut.shape[1] > 0:
+                combined = left_cut
+            elif right_cut.shape[1] > 0:
+                combined = right_cut
+            else:
+                combined = np.hstack((local_frame_left, rolled_frame_right))
+            
+            # Add vertical line at the junction
+            if left_cut.shape[1] > 0 and right_cut.shape[1] > 0:
+                # Draw a vertical line at the junction point
+                junction_x = left_cut.shape[1]
+                cv2.line(combined, (junction_x, 0), (junction_x, target_height), (0, 255, 255), 2)
+                
+                # Add text at junction
+                cv2.putText(combined, "JUNCTION", (junction_x - 60, 60), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 255), 2)
+            
+            # Add info text for combined mode
+            cv2.putText(combined, "COMBINED VIEW - Left portion + Right portion", (10, 30), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (0, 255, 0), 2)
+            
         else:
-            combined = local_frame_62
+            # MODE 0: Original view - both full videos side by side
+            if rolled_frame_right is not None:
+                combined = np.hstack((local_frame_left, rolled_frame_right))
+            else:
+                combined = local_frame_left
+            
+            # Add info text for original mode
+            cv2.putText(combined, "ORIGINAL VIEW - Both videos side by side", (10, 30), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
         
-        # Add info and legend
-        cv2.putText(combined, f"Video 62 (Class 0) - Detections: {len(local_centers_62)}", (10, 30), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
-        cv2.putText(combined, f"Video 63 (Class 1) - Detections: {len(local_centers_63)}", 
-                   (new_width_62 + 10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+        # Add detection info
+        cv2.putText(combined, f"Video 62 (Class 0) - Detections: {len(local_centers_left)}", (10, 60), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        cv2.putText(combined, f"Video 63 (Class 1) - Detections: {len(local_centers_right)}", 
+                   (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        
+        # Add X position info if available
+        if avg_x_left is not None:
+            cv2.putText(combined, f"Left X: {avg_x_left}", (10, 120), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 200, 200), 1)
+        if avg_x_right is not None:
+            cv2.putText(combined, f"Right X: {avg_x_right}", (10, 150), 
+                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (200, 255, 200), 1)
         
         # Add alignment info
-        if local_centers_62 and local_centers_63:
+        if local_centers_left and local_centers_right:
             cv2.putText(combined, f"Y-Diff: {y_diff}px (Roll: {-y_diff}px)", 
-                       (new_width_62 // 2 - 100, target_height - 20), 
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
+                       (10, 180), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 1)
         
-        # Add detailed legend
-        legend_y = target_height - 10
-        cv2.putText(combined, "Left: Blue box, Red center, Green line", (10, legend_y - 90), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-        cv2.putText(combined, "Right: Red box, Yellow center, Cyan line", (10, legend_y - 70), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-        cv2.putText(combined, "Light blue: Alignment reference lines", (10, legend_y - 50), 
-                   cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+        # Add cut line visualization on original frames (in original mode)
+        if display_mode == 0:
+            # Draw cut lines on left frame
+            if avg_x_left is not None:
+                cv2.line(combined, (avg_x_left, 0), (avg_x_left, target_height), (255, 255, 0), 2)
+                cv2.putText(combined, "Left cut", (avg_x_left + 10, 30), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 0), 1)
+            
+            # Draw cut lines on right frame
+            if avg_x_right is not None:
+                right_frame_start = new_width_left
+                right_cut_x = right_frame_start + avg_x_right
+                cv2.line(combined, (right_cut_x, 0), (right_cut_x, target_height), (255, 200, 0), 2)
+                cv2.putText(combined, "Right cut", (right_cut_x + 10, 30), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 200, 0), 1)
         
-        # Display center coordinates if needed (optional)
-        # if local_centers_62:
-        #     cv2.putText(combined, f"Centers 62: {local_centers_62}", (10, legend_y - 30), 
-        #                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
-        # if local_centers_63:
-        #     cv2.putText(combined, f"Centers 63: {local_centers_63}", (new_width_62 + 10, legend_y - 30), 
-        #                cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255, 255, 255), 1)
+        # Add mode info
+        mode_text = "Mode: COMBINED (cut & merge)" if display_mode == 1 else "Mode: ORIGINAL (side by side)"
+        cv2.putText(combined, mode_text, (10, target_height - 10), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
+        
+        # Display controls info
+        cv2.putText(combined, "Press 'c' to toggle mode | 'q' to quit", 
+                   (combined.shape[1] - 300, target_height - 10), 
+                   cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
         
         # Display
-        cv2.imshow('Dual Video Detection - Y-Aligned', combined)
+        window_title = 'Dual Video - Combined View' if display_mode == 1 else 'Dual Video - Original View'
+        cv2.imshow(window_title, combined)
         
         key = cv2.waitKey(1) & 0xFF
         if key == ord('q'):
             running = False
             break
+        elif key == ord('c'):
+            # Toggle between display modes
+            display_mode = 1 - display_mode  # Toggle between 0 and 1
+            print(f"Switched to {'COMBINED' if display_mode == 1 else 'ORIGINAL'} mode")
         elif key == ord('r'):
             # Reset alignment (show without roll)
             print("Reset alignment")
@@ -329,22 +387,19 @@ def main():
     global running
     
     # Start processing threads
-    thread_62 = threading.Thread(target=process_video_62, daemon=True)
-    thread_63 = threading.Thread(target=process_video_63, daemon=True)
+    thread_left = threading.Thread(target=process_video_left, daemon=True)
+    thread_right = threading.Thread(target=process_video_right, daemon=True)
     thread_display = threading.Thread(target=display_combined, daemon=True)
     
-    print("Starting threads...")
-    print("Features:")
-    print("1. Left video detects Class 0, Right video detects Class 1")
-    print("2. Global center points stored for alignment")
-    print("3. Automatic Y-axis alignment using np.roll")
-    print("4. Light blue lines show alignment reference")
-    print("5. Press 'q' to quit")
-    print("6. Press 'r' to reset alignment")
-    
-    thread_62.start()
-    thread_63.start()
+    thread_left.start()
+    thread_right.start()
     thread_display.start()
+    
+    print("\n=== Dual Video Processing ===")
+    print("Controls:")
+    print("  'c' - Toggle between Original and Combined view")
+    print("  'q' - Quit the application")
+    print("  'r' - Reset alignment\n")
     
     try:
         # Keep main thread alive
@@ -355,8 +410,8 @@ def main():
         running = False
         
     # Wait for threads to finish
-    thread_62.join(timeout=1)
-    thread_63.join(timeout=1)
+    thread_left.join(timeout=1)
+    thread_right.join(timeout=1)
     thread_display.join(timeout=1)
     print("All threads stopped.")
 

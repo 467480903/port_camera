@@ -15,11 +15,11 @@ def copy_files(source_dir, labels_dir, images_dir, files):
         shutil.copy(jpg_file, images_dir)
 
 def main():
-    source_dir = '../label/label/63/'
-    train_labels_dir = '../yoloTrain/train/labels/'
-    train_images_dir = '../yoloTrain/train/images/'
-    val_labels_dir = '../yoloTrain/val/labels/'
-    val_images_dir = '../yoloTrain/val/images/'
+    source_dir = '../label/left/'
+    train_labels_dir = '../yoloTrain3/train/labels/'
+    train_images_dir = '../yoloTrain3/train/images/'
+    val_labels_dir = '../yoloTrain3/val/labels/'
+    val_images_dir = '../yoloTrain3/val/images/'
 
     # Filter out classes.txt and only get actual annotation files
     txt_files = sorted([f for f in os.listdir(source_dir) 

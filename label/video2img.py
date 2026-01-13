@@ -32,7 +32,7 @@ def extract_images_from_video(video_path, output_folder, interval_seconds=3):
         
         # Save the frame as an image file every interval_seconds
         if frame_count % frames_per_interval == 0:
-            frame_path = os.path.join(output_folder, f'right_{image_count:04d}.jpg')
+            frame_path = os.path.join(output_folder, f'left_{image_count:04d}.jpg')
             cv2.imwrite(frame_path, frame)
             image_count += 1
             print(f'Saved {frame_path}')
@@ -45,8 +45,17 @@ def extract_images_from_video(video_path, output_folder, interval_seconds=3):
     print(f"Extraction complete. Total frames: {frame_count}, Images saved: {image_count}")
 
 # Define video path and output folder
-video_path = '/home/yy/63.mp4'
-output_folder = 'label/63/'
+# video_path = '/home/yy/63.mp4'
+# output_folder = 'label/63/'
+
+# video_path = '/home/yy/62_2.mp4'
+# output_folder = 'label/62/'
+
+video_path = '/home/yy/10.10.95.219_001M_202601091536527BD2.mp4'
+output_folder = 'left/'
+
+# video_path = '/home/yy/10.10.95.219_002M_202601091536524732.mp4'
+# output_folder = 'right/'
 
 # Extract images every 3 seconds
-extract_images_from_video(video_path, output_folder, interval_seconds=3)
+extract_images_from_video(video_path, output_folder, interval_seconds=5)
