@@ -46,7 +46,7 @@ display_mode = 1  # 0 = original, 1 = combined
 FIXED_COMBINED_WIDTH = 2560
 FIXED_COMBINED_HEIGHT = 720
 
-modelpath = "/home/yy/port_camera/yoloTrain4/runs/detect/train/weights/best.pt"
+modelpath = "/home/yy/port_camera/best.pt"
 # modelpath = "/home/yy/port_camera/python/yolo11n.pt"
 
 # Flask app for MJPEG streaming
