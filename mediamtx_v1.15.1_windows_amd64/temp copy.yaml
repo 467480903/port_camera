@@ -1,0 +1,123 @@
+# Enable all protocols
+protocols: [tcp, udp]
+rtspAddress: :8554
+rtmpAddress: :1935
+hlsAddress: :8888
+webrtcAddress: :8889
+
+paths:
+  # ========================================
+  # Python 处理后的流（由 Python 推送）
+  # ========================================
+  left:
+    # 不设置 source，允许 Python 作为 publisher 推流
+    runOnReady: echo "Left stream connected"
+    runOnNotReady: echo "Left stream disconnected"
+    
+  right:
+    # 不设置 source，允许 Python 作为 publisher 推流
+    runOnReady: echo "Right stream connected"
+    runOnNotReady: echo "Right stream disconnected"
+    
+  combined:
+    # 不设置 source，允许 Python 作为 publisher 推流
+    runOnReady: echo "Combined stream connected"
+    runOnNotReady: echo "Combined stream disconnected"
+
+  # ========================================
+  # 原有的摄像头流
+  # ========================================
+  cam1:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.215:554/media/video1
+    sourceProtocol: tcp  # Force TCP for reliability
+    sourceOnDemand: yes  # Only connect when client requests
+    overridePublisher: yes  # Allow multiple connections
+    
+  cam1/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.215:554/media/video1
+    sourceProtocol: tcp
+    
+  # cam2:
+  #   source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video1
+  #   sourceProtocol: tcp
+  #   sourceOnDemand: yes
+  #   overridePublisher: yes
+  # cam2/webrtc:
+  #   source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video1
+  #   sourceProtocol: tcp
+    
+  # Camera 3
+  # cam3:
+  #   source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.218:554/media/video1
+  #   sourceProtocol: tcp
+  #   sourceOnDemand: yes
+  #   overridePublisher: yes
+  # cam3/webrtc:
+  #   source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.218:554/media/video1
+  #   sourceProtocol: tcp
+    
+  # Camera 4
+  cam4:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.219:554/media/video1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  cam4/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.219:554/media/video1
+    sourceProtocol: tcp
+    
+  # Camera 5
+  cam5:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.220:554/media/video1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  cam5/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.220:554/media/video1
+    sourceProtocol: tcp
+    
+  # Hikvision Cameras (6-10)
+  cam6:
+    source: rtsp://admin:abcd12345@10.10.95.221:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  cam6/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.221:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    
+  cam7:
+    source: rtsp://admin:abcd12345@10.10.95.226:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  cam7/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.226:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    
+  cam8:
+    source: rtsp://admin:abcd12345@10.10.95.223:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  cam8/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.223:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    
+  cam9:
+    source: rtsp://admin:abcd12345@10.10.95.224:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  cam9/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.224:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    
+  cam10:
+    source: rtsp://admin:abcd12345@10.10.95.225:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  cam10/webrtc:
+    source: rtsp://admin:abcd12345@10.10.95.225:554/Streaming/Channels/101
+    sourceProtocol: tcp

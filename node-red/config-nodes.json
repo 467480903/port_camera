@@ -22,9 +22,8 @@
   {
     "id": "f921d8db731589f7",
     "type": "s7 endpoint",
-    "d": true,
     "transport": "iso-on-tcp",
-    "address": "10.10.95.73",
+    "address": "10.10.95.60",
     "port": "102",
     "rack": "0",
     "slot": "2",
@@ -41,7 +40,11 @@
     "vartable": [
       {
         "addr": "DB402,WORD0",
-        "name": "aaa"
+        "name": "height"
+      },
+      {
+        "addr": "DB402,WORD5",
+        "name": "speed"
       }
     ]
   },

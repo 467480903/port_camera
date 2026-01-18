@@ -1,5 +1,5 @@
 IP: 192.168.1.13
-admin/Zc@emergen135  Evna12345@
+admin/   Evna12345@
 
 10.10.95.214, PLC
 10.10.95.215, camera1

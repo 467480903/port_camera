@@ -1652,7 +1652,7 @@
     "type": "function",
     "z": "2c27b5a30c1815ba",
     "name": "function 66",
-    "func": "msg.payload = [\n    \n            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' , x: 5, y: 5, width: 1920/2, height: 1080/2 , name: 'diaoju'},\n            { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' , x: 5 + 1920/2, y: 5, width: 1920/2, height: 1080/2},\n            { address: 'http://localhost:8889/cam4/webrtc/', type: 'video' , x: 5+1920/2, y: 5+1080/2, width: 1920/2, height: 1080/2},\n            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video_control' , x: 5, y: 5+1080/2, width: 1920/2, height: 1080/2},\n];\nreturn msg;",
+    "func": "msg.payload = [\n    \n    { address: 'http://localhost:8889/cam2/webrtc/', type: 'video', x: 0, y: 0, width: 1920 / 2, height: 1080 / 2 },\n    { address: 'http://localhost:8889/cam3/webrtc/', type: 'video', x: 1920 / 2, y: 0, width: 1920 / 2, height: 1080 / 2 },\n\n\n\n    { address: 'http://localhost:8889/fhjt52/webrtc/', type: 'video', x: 0, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 4 },\n    { address: 'http://localhost:8889/fhjt51/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 4 },\n    { address: 'http://localhost:8889/fhjt55/webrtc/', type: 'video', x: 0, y: 1080 * 3 / 4, width: 1920 / 4, height: 1080 / 4 },\n    { address: 'http://localhost:8889/fhjt50/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 3 / 4, width: 1920 / 4, height: 1080 / 4 },\n\n    { address: 'http://localhost:8889/cam1/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },\n];\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -1664,6 +1664,55 @@
     "wires": [
       [
         "cd9b8dc163b763e6"
+      ]
+    ]
+  },
+  {
+    "id": "1bbc454e41c148f5",
+    "type": "function",
+    "z": "2c27b5a30c1815ba",
+    "name": "function 67",
+    "func": "msg.payload = [\n    \n            { address: 'http://localhost:8889/combined/webrtc/', type: 'video' , x: 0, y: 0, width: 1920, height: 1080/2 , name: 'diaoju'},\n\n            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video' , x: 1920/2, y: 1080/2, width: 1920/2, height: 1080/2},\n\n\n            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' , x: 0, y: 1080*2/4, width: 1920/4, height: 1080/4},\n            { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' , x: 1920 * 1/4, y: 1080*2/4, width: 1920/4, height: 1080/4},\n            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video' , x: 0, y: 1080*3/4, width: 1920/4, height: 1080/4},\n            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' , x: 1920 * 1/4, y: 1080*3/4, width: 1920/4, height: 1080/4},\n\n\n\n];\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 830,
+    "y": 2140,
+    "wires": [
+      [
+        "cd9b8dc163b763e6"
+      ]
+    ]
+  },
+  {
+    "id": "c65643518aba1ac4",
+    "type": "inject",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 710,
+    "y": 2240,
+    "wires": [
+      [
+        "1bbc454e41c148f5"
       ]
     ]
   }

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
+<head >
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cameras with Absolute Position</title>
@@ -21,10 +21,10 @@
             border: 1px solid transparent; /* Optional: to see the canvas */
         }
     </style>
-    <script defer src="node-red/static/reader.js"></script>
+    <script defer src="reader.js"></script>
 </head>
 
-<body>
+<body style="overflow: hidden;">
     <div id="video-container">
         <video id="video1" class="hidden-video" width="960" height="540" autoplay playsinline></video>
         <canvas id="canvas1" class="video-canvas" width="960" height="540" style="left: 0; top: 0;"></canvas>
@@ -38,9 +38,9 @@
 
     <script>
         const long_connected_streams = [
-            { address: 'http://localhost:8889/cam1/webrtc/', type: 'video' },
-            { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' },
-            { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' },
+            { address: 'http://localhost:8889/cam9/webrtc/', type: 'video' },
+            // { address: 'http://localhost:8889/cam2/webrtc/', type: 'video' },
+            // { address: 'http://localhost:8889/cam3/webrtc/', type: 'video' },
             { address: 'http://localhost:8889/cam4/webrtc/', type: 'video' },
         ];
 

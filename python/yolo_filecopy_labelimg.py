@@ -15,7 +15,7 @@ def copy_files(source_dir, labels_dir, images_dir, files):
         shutil.copy(jpg_file, images_dir)
 
 def main():
-    source_dir = '../label/left/'
+    source_dir = '../label/all/'
     train_labels_dir = '../yoloTrain3/train/labels/'
     train_images_dir = '../yoloTrain3/train/images/'
     val_labels_dir = '../yoloTrain3/val/labels/'

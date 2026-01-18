@@ -1,0 +1,5 @@
+train: /home/yy/port_camera/yoloTrain4/train
+val: /home/yy/port_camera/yoloTrain4/val
+test: /home/yy/port_camera/yoloTrain4/test
+nc: 1
+names: ['center']
