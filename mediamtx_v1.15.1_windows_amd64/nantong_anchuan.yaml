@@ -1,0 +1,186 @@
+# Enable all protocols
+protocols: [tcp, udp]
+rtspAddress: :8554
+rtmpAddress: :1935
+hlsAddress: :8888
+webrtcAddress: :8889
+
+paths:
+  # ========================================
+  # Python 处理后的流（由 Python 推送）
+  # ========================================
+  # left:
+  #   # 不设置 source，允许 Python 作为 publisher 推流
+  #   runOnReady: echo "Left stream connected"
+  #   runOnNotReady: echo "Left stream disconnected"
+
+  # left/webrtc:
+  #   source: rtsp://localhost:8554/left
+  #   sourceProtocol: tcp
+    
+  # right:
+  #   # 不设置 source，允许 Python 作为 publisher 推流
+  #   runOnReady: echo "Right stream connected"
+  #   runOnNotReady: echo "Right stream disconnected"
+
+  # right/webrtc:
+  #   source: rtsp://localhost:8554/right
+  #   sourceProtocol: tcp
+    
+  # combined:
+  #   # 不设置 source，允许 Python 作为 publisher 推流
+  #   runOnReady: echo "Combined stream connected"
+  #   runOnNotReady: echo "Combined stream disconnected"
+
+  # combined/webrtc:
+  #   source: rtsp://localhost:8554/combined
+  #   sourceProtocol: tcp
+
+
+# ========================================
+  # 原有的摄像头流
+  # ========================================
+  c85:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@172.27.61.85:554/media/video1
+    sourceProtocol: tcp  # Force TCP for reliability
+    sourceOnDemand: yes  # Only connect when client requests
+    overridePublisher: yes  # Allow multiple connections
+    
+  c85/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@172.27.61.85:554/media/video1
+    sourceProtocol: tcp
+    
+  c86:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@172.27.61.86:554/media/video1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c86/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@172.27.61.86:554/media/video1
+    sourceProtocol: tcp
+
+  c45:
+    source: rtsp://172.27.61.45:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c45/webrtc:
+    source: rtsp://172.27.61.45:554/1/h264major
+    sourceProtocol: tcp      
+
+  c46:
+    source: rtsp://172.27.61.46:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c46/webrtc:
+    source: rtsp://172.27.61.46:554/1/h264major
+    sourceProtocol: tcp   
+
+  c47:
+    source: rtsp://172.27.61.47:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c47/webrtc:
+    source: rtsp://172.27.61.47:554/1/h264major
+    sourceProtocol: tcp       
+
+  c48:
+    source: rtsp://172.27.61.48:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c48/webrtc:
+    source: rtsp://172.27.61.48:554/1/h264major
+    sourceProtocol: tcp       
+
+  c49:
+    source: rtsp://172.27.61.49:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c49/webrtc:
+    source: rtsp://172.27.61.49:554/1/h264major
+    sourceProtocol: tcp       
+
+  c50:
+    source: rtsp://172.27.61.50:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c50/webrtc:
+    source: rtsp://172.27.61.50:554/1/h264major
+    sourceProtocol: tcp      
+
+  c53:
+    source: rtsp://admin:admin@172.27.61.53:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c53/webrtc:
+    source: rtsp://admin:admin@172.27.61.53:554/1/h264major
+    sourceProtocol: tcp       
+
+  c55:
+    source: rtsp://172.27.61.55:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c55/webrtc:
+    source: rtsp://172.27.61.55:554/1/h264major
+    sourceProtocol: tcp      
+
+  c56:
+    source: rtsp://172.27.61.56:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c56/webrtc:
+    source: rtsp://172.27.61.56:554/1/h264major
+    sourceProtocol: tcp        
+
+  c57:
+    source: rtsp://admin:admin@172.27.61.57:554/stream1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c57/webrtc:
+    source: rtsp://admin:admin@172.27.61.57:554/stream1
+    sourceProtocol: tcp        
+
+  c58:
+    source: rtsp://admin:admin@172.27.61.58:554/stream1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c58/webrtc:
+    source: rtsp://admin:admin@172.27.61.58:554/stream1
+    sourceProtocol: tcp  
+
+  c59:
+    source: rtsp://admin:admin@172.27.61.59:554/stream1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c59/webrtc:
+    source: rtsp://admin:admin@172.27.61.59:554/stream1
+    sourceProtocol: tcp  
+
+  c60:
+    source: rtsp://admin:admin@172.27.61.60:554/stream1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c60/webrtc:
+    source: rtsp://admin:admin@172.27.61.60:554/stream1
+    sourceProtocol: tcp              
+
+  c80:
+    source: rtsp://172.27.61.80:554/1/h264major
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c80/webrtc:
+    source: rtsp://172.27.61.80:554/1/h264major
+    sourceProtocol: tcp             

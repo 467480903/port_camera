@@ -1,0 +1,119 @@
+# Enable all protocols
+protocols: [tcp, udp]
+rtspAddress: :8554
+rtmpAddress: :1935
+hlsAddress: :8888
+webrtcAddress: :8889
+
+paths:
+  # ========================================
+  # Python 处理后的流（由 Python 推送）
+  # ========================================
+  # left:
+  #   # 不设置 source，允许 Python 作为 publisher 推流
+  #   runOnReady: echo "Left stream connected"
+  #   runOnNotReady: echo "Left stream disconnected"
+
+  # left/webrtc:
+  #   source: rtsp://localhost:8554/left
+  #   sourceProtocol: tcp
+    
+  # right:
+  #   # 不设置 source，允许 Python 作为 publisher 推流
+  #   runOnReady: echo "Right stream connected"
+  #   runOnNotReady: echo "Right stream disconnected"
+
+  # right/webrtc:
+  #   source: rtsp://localhost:8554/right
+  #   sourceProtocol: tcp
+    
+  # combined:
+  #   # 不设置 source，允许 Python 作为 publisher 推流
+  #   runOnReady: echo "Combined stream connected"
+  #   runOnNotReady: echo "Combined stream disconnected"
+
+  # combined/webrtc:
+  #   source: rtsp://localhost:8554/combined
+  #   sourceProtocol: tcp
+
+
+# ========================================
+  # 原有的摄像头流
+  # ========================================
+  cam1:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.215:554/media/video1
+    sourceProtocol: tcp  # Force TCP for reliability
+    sourceOnDemand: yes  # Only connect when client requests
+    overridePublisher: yes  # Allow multiple connections
+    
+  cam1/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.215:554/media/video1
+    sourceProtocol: tcp
+    
+  cam2:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  cam2/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.216:554/media/video1
+    sourceProtocol: tcp
+    
+  # Camera 3
+  cam3:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.218:554/media/video1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  cam3/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@10.10.95.218:554/media/video1
+    sourceProtocol: tcp
+    
+
+
+  fhjt49:
+    source: rtsp://admin:fhjt12345@10.10.95.49:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  fhjt49/webrtc:
+    source: rtsp://admin:fhjt12345@10.10.95.49:554/Streaming/Channels/101
+    sourceProtocol: tcp      
+
+  fhjt50:
+    source: rtsp://admin:fhjt12345@10.10.95.50:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  fhjt50/webrtc:
+    source: rtsp://admin:fhjt12345@10.10.95.50:554/Streaming/Channels/101
+    sourceProtocol: tcp  
+
+  fhjt51:
+    source: rtsp://admin:fhjt12345@10.10.95.51:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  fhjt51/webrtc:
+    source: rtsp://admin:fhjt12345@10.10.95.51:554/Streaming/Channels/101
+    sourceProtocol: tcp  
+
+  fhjt52:
+    source: rtsp://admin:fhjt12345@10.10.95.52:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  fhjt52/webrtc:
+    source: rtsp://admin:fhjt12345@10.10.95.52:554/Streaming/Channels/101
+    sourceProtocol: tcp  
+
+  fhjt55:
+    source: rtsp://admin:fhjt12345@10.10.95.55:554/Streaming/Channels/101
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  fhjt55/webrtc:
+    source: rtsp://admin:fhjt12345@10.10.95.55:554/Streaming/Channels/101
+    sourceProtocol: tcp                  
+
+         

@@ -423,7 +423,7 @@
     "y": 240,
     "wires": [
       [
-        "63539e6983dec721"
+        "a6d284db47e73b9d"
       ]
     ]
   },
@@ -442,7 +442,7 @@
     "id": "63539e6983dec721",
     "type": "function",
     "z": "2f9b58d1f9172efa",
-    "name": "function 48",
+    "name": "nantong_ximenzi",
     "func": "msg.payload = [25 - (20 - global.get(\"plc1\") ) ,\nglobal.get(\"cam1zoom\"),\nglobal.get(\"cam1focus\")]\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
@@ -450,12 +450,10 @@
     "initialize": "",
     "finalize": "",
     "libs": [],
-    "x": 740,
+    "x": 790,
     "y": 240,
     "wires": [
-      [
-        "2f542e1c3d08abc8"
-      ]
+      []
     ]
   },
   {
@@ -766,6 +764,40 @@
     ],
     "x": 335,
     "y": 980,
+    "wires": []
+  },
+  {
+    "id": "a6d284db47e73b9d",
+    "type": "function",
+    "z": "2f9b58d1f9172efa",
+    "name": "nantong_anchuan",
+    "func": "msg.payload = [global.get(\"plc1\") ,\nglobal.get(\"cam1zoom\"),\nglobal.get(\"cam1focus\")]\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 750,
+    "y": 200,
+    "wires": [
+      [
+        "2f542e1c3d08abc8",
+        "06c4b97df294ec41"
+      ]
+    ]
+  },
+  {
+    "id": "06c4b97df294ec41",
+    "type": "link out",
+    "z": "2f9b58d1f9172efa",
+    "name": "DATA_READ",
+    "mode": "link",
+    "links": [
+      "72aef53e6ad2c058"
+    ],
+    "x": 955,
+    "y": 160,
     "wires": []
   }
 ]

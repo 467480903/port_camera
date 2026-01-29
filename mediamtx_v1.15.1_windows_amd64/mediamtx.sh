@@ -1,3 +1,3 @@
 #/bin/bash
 
-mediamtx temp.yaml
+mediamtx nantong_anchuan.yaml

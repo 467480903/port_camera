@@ -59,5 +59,73 @@
     "wires": [
       []
     ]
+  },
+  {
+    "id": "a5c02ba4c3b2a013",
+    "type": "modbus-read",
+    "z": "cf60d2d395b0b7cb",
+    "name": "",
+    "topic": "",
+    "showStatusActivities": false,
+    "logIOActivities": false,
+    "showErrors": false,
+    "showWarnings": true,
+    "unitid": "",
+    "dataType": "HoldingRegister",
+    "adr": "230",
+    "quantity": "1",
+    "rate": "300",
+    "rateUnit": "ms",
+    "delayOnStart": false,
+    "enableDeformedMessages": false,
+    "startDelayTime": "",
+    "server": "482b530de32245b5",
+    "useIOFile": false,
+    "ioFile": "",
+    "useIOForPayload": false,
+    "emptyMsgOnFail": false,
+    "x": 450,
+    "y": 640,
+    "wires": [
+      [
+        "24093427c6afc19c",
+        "6321b1b786e99a48"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "6321b1b786e99a48",
+    "type": "debug",
+    "z": "cf60d2d395b0b7cb",
+    "name": "debug 12",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 700,
+    "y": 660,
+    "wires": []
+  },
+  {
+    "id": "24093427c6afc19c",
+    "type": "function",
+    "z": "cf60d2d395b0b7cb",
+    "name": "function 48",
+    "func": "if(msg.payload[0]>=0xF000){\n    msg.payload[0] = 0;\n}\nglobal.set(\"plc1\",msg.payload[0]);\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 650,
+    "y": 500,
+    "wires": [
+      []
+    ]
   }
 ]

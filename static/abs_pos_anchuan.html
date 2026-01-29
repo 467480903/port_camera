@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mixed Media Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            background-color: #000;
+        }
+
+        #media-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .media-element {
+            position: absolute;
+            border: 1px solid rgba(0, 255, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .media-element.hidden {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .media-element.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #status {
+        display: none;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #0f0;
+            font-family: monospace;
+            font-size: 12px;
+            z-index: 9999;
+            border: 1px solid #0f0;
+            border-radius: 4px;
+        }
+
+        .status-dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+
+        .status-connected {
+            background-color: #0f0;
+        }
+
+        .status-disconnected {
+            background-color: #f00;
+        }
+    </style>
+    <script defer src="reader.js"></script>
+</head>
+
+<body>
+    <div id="status">
+        <div>WebSocket: <span class="status-dot status-disconnected" id="ws-status"></span><span id="ws-text">Disconnected</span></div>
+        <div>Active Streams: <span id="stream-count">0</span></div>
+    </div>
+
+    <div id="media-container"></div>
+
+    <script>
+        // Initial configuration
+        var initialStreams = [
+            // { address: 'http://127.0.0.1:5000/video_feed', type: 'image', x: 0, y: 0, width: 1920, height: 1080 / 2 },
+
+            { address: 'http://localhost:8889/c85/webrtc/', type: 'video', x: 0, y: 0, width: 1920/2, height: 1080 / 2 },
+            { address: 'http://localhost:8889/c86/webrtc/', type: 'video', x: 1920/2, y: 0, width: 1920/2, height: 1080 / 2 },
+
+            { address: 'http://localhost:8889/c53/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },
+
+            { address: 'http://localhost:8889/c47/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 2 },
+
+            { address: 'http://localhost:8889/c48/webrtc/', type: 'video', x: 0, y: 1080 * 3 / 6, width: 1920 / 4, height: 1080 / 6 },
+            { address: 'http://localhost:8889/c60/webrtc/', type: 'video', x: 0, y: 1080 * 4 / 6, width: 1920 / 4, height: 1080 / 6 },
+            { address: 'http://localhost:8889/c80/webrtc/', type: 'video', x: 0, y: 1080 * 5 / 6, width: 1920 / 4, height: 1080 / 6 },
+        ];
+
+        initialStreams = [
+       
+            { address: 'http://localhost:8889/c59/webrtc/', type: 'video', x: 0,      y: 0, width: 1920/2, height: 1080 / 2 },
+            { address: 'http://localhost:8889/c48/webrtc/', type: 'video', x: 1920/2, y: 0, width: 1920/2, height: 1080 / 2 },
+
+            { address: 'http://localhost:8889/c57/webrtc/', type: 'video', x: 0,      y: 1080 / 2, width: 1920/2, height: 1080 / 2 },
+            { address: 'http://localhost:8889/c47/webrtc/', type: 'video', x: 1920/2, y: 1080 / 2, width: 1920/2, height: 1080 / 2 },
+        ];
+
+        // Storage for created elements and WebRTC readers
+        const mediaElements = new Map(); // address -> element
+        const webrtcReaders = new Map(); // address -> reader
+        const container = document.getElementById('media-container');
+
+        // WebSocket connection
+        let socket = null;
+        let reconnectInterval = null;
+
+        function connectWebSocket() {
+            socket = new WebSocket('ws://127.0.0.1:1881/ws');
+
+            socket.onopen = function (event) {
+                console.log('WebSocket connection established');
+                updateStatus(true);
+                if (reconnectInterval) {
+                    clearInterval(reconnectInterval);
+                    reconnectInterval = null;
+                }
+            };
+
+            socket.onmessage = function (event) {
+                const received_data = JSON.parse(event.data);
+                handleWebSocketData(received_data);
+            };
+
+            socket.onerror = function (error) {
+                console.error('WebSocket error:', error);
+                updateStatus(false);
+            };
+
+            socket.onclose = function (event) {
+                console.log('WebSocket connection closed');
+                updateStatus(false);
+                
+                // Auto-reconnect after 3 seconds
+                if (!reconnectInterval) {
+                    reconnectInterval = setInterval(() => {
+                        console.log('Attempting to reconnect WebSocket...');
+                        connectWebSocket();
+                    }, 3000);
+                }
+            };
+        }
+
+        function updateStatus(connected) {
+            const wsStatus = document.getElementById('ws-status');
+            const wsText = document.getElementById('ws-text');
+            if (connected) {
+                wsStatus.className = 'status-dot status-connected';
+                wsText.textContent = 'Connected';
+            } else {
+                wsStatus.className = 'status-dot status-disconnected';
+                wsText.textContent = 'Disconnected';
+            }
+        }
+
+        function updateStreamCount() {
+            const visibleCount = Array.from(mediaElements.values()).filter(el => 
+                el.classList.contains('visible')
+            ).length;
+            document.getElementById('stream-count').textContent = visibleCount;
+        }
+
+        // Create MJPEG image element
+        function createImageElement(stream) {
+            const img = document.createElement('img');
+            img.className = 'media-element visible';
+            img.src = stream.address;
+            img.style.left = `${stream.x}px`;
+            img.style.top = `${stream.y}px`;
+            img.style.width = `${stream.width}px`;
+            img.style.height = `${stream.height}px`;
+            img.setAttribute('data-address', stream.address);
+            img.setAttribute('data-type', 'image');
+            
+            container.appendChild(img);
+            mediaElements.set(stream.address, img);
+            
+            console.log(`Created MJPEG image: ${stream.address}`);
+            return img;
+        }
+
+        // Create WebRTC video element
+        function createVideoElement(stream) {
+            const video = document.createElement('video');
+            video.className = 'media-element visible';
+            video.autoplay = true;
+            video.muted = true;
+            video.playsInline = true;
+            video.disablePictureInPicture = true;
+            video.style.left = `${stream.x}px`;
+            video.style.top = `${stream.y}px`;
+            video.style.width = `${stream.width}px`;
+            video.style.height = `${stream.height}px`;
+            video.setAttribute('data-address', stream.address);
+            video.setAttribute('data-type', 'video');
+            
+            container.appendChild(video);
+            mediaElements.set(stream.address, video);
+
+            // Create WebRTC connection
+            const reader = new MediaMTXWebRTCReader({
+                url: new URL('whep', stream.address),
+                onError: (err) => {
+                    console.error(`WebRTC error for ${stream.address}:`, err);
+                },
+                onTrack: (evt) => {
+                    video.srcObject = evt.streams[0];
+                    console.log(`WebRTC track received for ${stream.address}`);
+                },
+            });
+
+            webrtcReaders.set(stream.address, reader);
+            
+            console.log(`Created WebRTC video: ${stream.address}`);
+            return video;
+        }
+
+        // Update element position and size
+        function updateElementPosition(element, stream) {
+            element.style.left = `${stream.x}px`;
+            element.style.top = `${stream.y}px`;
+            element.style.width = `${stream.width}px`;
+            element.style.height = `${stream.height}px`;
+        }
+
+        // Handle WebSocket data
+        function handleWebSocketData(msg) {
+            if (msg.cmd === 'setCameras') {
+                const data = msg.data;
+                console.log('Received setCameras command:', data);
+
+                // Hide all existing elements first
+                mediaElements.forEach((element, address) => {
+                    element.classList.remove('visible');
+                    element.classList.add('hidden');
+                });
+
+                // Process received streams
+                data.forEach(stream => {
+                    const existingElement = mediaElements.get(stream.address);
+
+                    if (existingElement) {
+                        // Element already exists, just update position and show it
+                        updateElementPosition(existingElement, stream);
+                        existingElement.classList.remove('hidden');
+                        existingElement.classList.add('visible');
+                        console.log(`Updated existing element: ${stream.address}`);
+                    } else {
+                        // Create new element based on type
+                        if (stream.type === 'image') {
+                            createImageElement(stream);
+                        } else if (stream.type === 'video') {
+                            createVideoElement(stream);
+                        }
+                    }
+                });
+
+                updateStreamCount();
+            }
+        }
+
+        // Initialize streams on page load
+        function initializeStreams() {
+            console.log('Initializing streams...');
+            
+            initialStreams.forEach(stream => {
+                if (stream.type === 'image') {
+                    createImageElement(stream);
+                } else if (stream.type === 'video') {
+                    createVideoElement(stream);
+                }
+            });
+
+            updateStreamCount();
+            console.log(`Initialized ${initialStreams.length} streams`);
+        }
+
+        // Start everything
+        window.addEventListener('DOMContentLoaded', () => {
+            console.log('DOM loaded, initializing...');
+            
+            // Wait a bit for reader.js to load
+            setTimeout(() => {
+                initializeStreams();
+                connectWebSocket();
+            }, 500);
+        });
+
+        // Cleanup on page unload
+        window.addEventListener('beforeunload', () => {
+            if (socket) {
+                socket.close();
+            }
+            // Note: We don't close WebRTC readers as they should stay connected
+        });
+
+        document.addEventListener('keypress', function(event) {
+            if (event.key === 'a' || event.key === 'A') {
+                var msg = {cmd: "setCameras", data: [
+               
+
+                                { address: 'http://127.0.0.1:5000/video_feed', type: 'image', x: 0, y: 0, width: 1920, height: 1080 / 2 },
+
+
+
+                    { address: 'http://localhost:8889/fhjt51/webrtc/', type: 'video', x: 0, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },
+
+                    { address: 'http://localhost:8889/fhjt52/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },
+
+                ]};
+                handleWebSocketData( msg )
+            }
+            if (event.key === 'b' || event.key === 'B') {
+                var msg = {cmd: "setCameras", data: [
+                                { address: 'http://127.0.0.1:5000/video_feed', type: 'image', x: 0, y: 0, width: 1920, height: 1080 / 2 },
+
+
+
+
+                    { address: 'http://localhost:8889/fhjt52/webrtc/', type: 'video', x: 0, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 4 },
+                    { address: 'http://localhost:8889/fhjt51/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 4 },
+                    { address: 'http://localhost:8889/fhjt55/webrtc/', type: 'video', x: 0, y: 1080 * 3 / 4, width: 1920 / 4, height: 1080 / 4 },
+                    { address: 'http://localhost:8889/fhjt50/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 3 / 4, width: 1920 / 4, height: 1080 / 4 },
+
+                    { address: 'http://localhost:8889/cam1/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },
+
+                ]};
+                handleWebSocketData( msg )
+            }            
+        })
+    </script>
+</body>
+
+</html>
