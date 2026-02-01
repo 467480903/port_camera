@@ -96,12 +96,12 @@
     <script>
         // Initial configuration
         var initialStreams = [
-            // { address: 'http://127.0.0.1:5000/video_feed', type: 'image', x: 0, y: 0, width: 1920, height: 1080 / 2 },
+            { address: 'http://127.0.0.1:5000/video_feed', type: 'image', x: 0, y: 0, width: 1920, height: 1080 / 2 },
 
-            { address: 'http://localhost:8889/c85/webrtc/', type: 'video', x: 0, y: 0, width: 1920/2, height: 1080 / 2 },
-            { address: 'http://localhost:8889/c86/webrtc/', type: 'video', x: 1920/2, y: 0, width: 1920/2, height: 1080 / 2 },
+            // { address: 'http://localhost:8889/c85/webrtc/', type: 'video', x: 0, y: 0, width: 1920/2, height: 1080 / 2 },
+            // { address: 'http://localhost:8889/c86/webrtc/', type: 'video', x: 1920/2, y: 0, width: 1920/2, height: 1080 / 2 },
 
-            { address: 'http://localhost:8889/c53/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },
+            { address: 'http://localhost:8889/c84/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },
 
             { address: 'http://localhost:8889/c47/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 2 },
 
@@ -110,7 +110,7 @@
             { address: 'http://localhost:8889/c80/webrtc/', type: 'video', x: 0, y: 1080 * 5 / 6, width: 1920 / 4, height: 1080 / 6 },
         ];
 
-        initialStreams = [
+        initialStreams_ = [
        
             { address: 'http://localhost:8889/c59/webrtc/', type: 'video', x: 0,      y: 0, width: 1920/2, height: 1080 / 2 },
             { address: 'http://localhost:8889/c48/webrtc/', type: 'video', x: 1920/2, y: 0, width: 1920/2, height: 1080 / 2 },
@@ -317,40 +317,7 @@
             // Note: We don't close WebRTC readers as they should stay connected
         });
 
-        document.addEventListener('keypress', function(event) {
-            if (event.key === 'a' || event.key === 'A') {
-                var msg = {cmd: "setCameras", data: [
-               
-
-                                { address: 'http://127.0.0.1:5000/video_feed', type: 'image', x: 0, y: 0, width: 1920, height: 1080 / 2 },
-
-
-
-                    { address: 'http://localhost:8889/fhjt51/webrtc/', type: 'video', x: 0, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },
-
-                    { address: 'http://localhost:8889/fhjt52/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },
-
-                ]};
-                handleWebSocketData( msg )
-            }
-            if (event.key === 'b' || event.key === 'B') {
-                var msg = {cmd: "setCameras", data: [
-                                { address: 'http://127.0.0.1:5000/video_feed', type: 'image', x: 0, y: 0, width: 1920, height: 1080 / 2 },
-
-
-
-
-                    { address: 'http://localhost:8889/fhjt52/webrtc/', type: 'video', x: 0, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 4 },
-                    { address: 'http://localhost:8889/fhjt51/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 4 },
-                    { address: 'http://localhost:8889/fhjt55/webrtc/', type: 'video', x: 0, y: 1080 * 3 / 4, width: 1920 / 4, height: 1080 / 4 },
-                    { address: 'http://localhost:8889/fhjt50/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 3 / 4, width: 1920 / 4, height: 1080 / 4 },
-
-                    { address: 'http://localhost:8889/cam1/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },
-
-                ]};
-                handleWebSocketData( msg )
-            }            
-        })
+        
     </script>
 </body>
 

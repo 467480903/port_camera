@@ -8,7 +8,11 @@ import logging
 import av
 import os
 import warnings
+from datetime import datetime
 from flask import Flask, Response
+
+FAIL_DIR = "/home/yy/fail/"
+os.makedirs(FAIL_DIR, exist_ok=True)
 
 def setup_logging():
     """Suppress all unnecessary warnings and logging"""
@@ -17,14 +21,18 @@ def setup_logging():
     logging.getLogger('libav').setLevel(logging.ERROR)
     
     # Suppress OpenCV warnings
-    os.environ['OPENCV_LOG_LEVEL'] = 'ERROR'
+    os.environ['OPENCV_FFMPEG_CAPTURE_OPTIONS'] = 'loglevel;quiet'
+    os.environ['OPENCV_LOG_LEVEL'] = 'SILENT'
     os.environ['OPENCV_VIDEOIO_DEBUG'] = '0'
+    cv2.setLogLevel(0)
+
     
     # Suppress Python warnings
     warnings.filterwarnings('ignore')
     
     # Suppress FFmpeg/libav warnings
-    av.logging.set_level(av.logging.ERROR)
+    # av.logging.set_level(av.logging.ERROR)
+    av.logging.set_level(av.logging.PANIC)
 
 setup_logging()
 
@@ -46,7 +54,7 @@ display_mode = 1  # 0 = original, 1 = combined
 FIXED_COMBINED_WIDTH = 2560
 FIXED_COMBINED_HEIGHT = 720
 
-modelpath = "/home/yy/port_camera/best.pt"
+modelpath = "/home/yy/port_camera/yoloTrain5/runs/detect/train2/weights/best.pt"
 # modelpath = "/home/yy/port_camera/python/yolo11n.pt"
 
 # Flask app for MJPEG streaming
@@ -57,7 +65,7 @@ def process_video_left():
     """Thread 1: Read left RTSP stream only"""
     global frame_left, running
 
-    rtsp_url = "rtsp://localhost:8554/cam2"
+    rtsp_url = "rtsp://localhost:8554/c85"
     
     retry_count = 0
     max_retries = 5
@@ -169,7 +177,7 @@ def process_video_right():
     """Thread 2: Read right RTSP stream only"""
     global frame_right, running
 
-    rtsp_url = "rtsp://localhost:8554/cam3"
+    rtsp_url = "rtsp://localhost:8554/c86"
     
     retry_count = 0
     max_retries = 5
@@ -375,7 +383,13 @@ def process_combined_frame():
                             label = f"Class 41: {conf:.2f}"
                             # cv2.putText(local_frame_left, label, (x1, y1 - 10), 
                             #            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 0), 2)
+                else:
+                    print("nothing detected on left")
+                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+                    fail_image_path = os.path.join(FAIL_DIR, f"left_no_detection_{timestamp}.jpg")
+                    cv2.imwrite(fail_image_path, local_frame_left)
             except Exception as e:
+
                 print(f"Left YOLO detection error: {e}")
             
             # Add frame info to left
@@ -410,7 +424,13 @@ def process_combined_frame():
                             label = f"Class 41: {conf:.2f}"
                             # cv2.putText(local_frame_right, label, (x1, y1 - 10), 
                             #            cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 0, 0), 2)
+                else:
+                    print("nothing detected on right")
+                    timestamp = datetime.now().strftime("%Y%m%d_%H%M%S_%f")
+                    fail_image_path = os.path.join(FAIL_DIR, f"right_no_detection_{timestamp}.jpg")
+                    cv2.imwrite(fail_image_path, local_frame_left)   
             except Exception as e:
+             
                 print(f"Right YOLO detection error: {e}")
             
             # Add frame info to right
@@ -455,9 +475,11 @@ def process_combined_frame():
                 rolled_frame_right = np.roll(local_frame_right, roll_amount, axis=0)
                 
                 if roll_amount > 0:
-                    rolled_frame_right[:roll_amount, :] = 0
+                    rolled_frame_right[:roll_amount, :] = rolled_frame_right[roll_amount, :]
+                    # rolled_frame_right[:roll_amount, :] = 0
                 elif roll_amount < 0:
-                    rolled_frame_right[roll_amount:, :] = 0
+                    rolled_frame_right[roll_amount:, :] = rolled_frame_right[roll_amount-1, :]
+                    # rolled_frame_right[roll_amount:, :] = 0
             else:
                 rolled_frame_right = local_frame_right
             

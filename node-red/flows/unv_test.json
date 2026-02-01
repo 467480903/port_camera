@@ -1410,61 +1410,6 @@
     "wires": []
   },
   {
-    "id": "bb0b4faf899c11a3",
-    "type": "tcp in",
-    "z": "2c27b5a30c1815ba",
-    "name": "",
-    "server": "client",
-    "host": "localhost",
-    "port": "1994",
-    "datamode": "stream",
-    "datatype": "utf8",
-    "newline": "\\n",
-    "topic": "",
-    "trim": false,
-    "base64": false,
-    "tls": "",
-    "x": 330,
-    "y": 2380,
-    "wires": [
-      [
-        "e99bb89988c71271",
-        "5602333bbfa7dc47"
-      ]
-    ]
-  },
-  {
-    "id": "4d1740a1ef623e89",
-    "type": "tcp out",
-    "z": "2c27b5a30c1815ba",
-    "name": "",
-    "host": "",
-    "port": "",
-    "beserver": "reply",
-    "base64": false,
-    "end": false,
-    "tls": "",
-    "x": 610,
-    "y": 2520,
-    "wires": []
-  },
-  {
-    "id": "e99bb89988c71271",
-    "type": "debug",
-    "z": "2c27b5a30c1815ba",
-    "name": "debug 10",
-    "active": false,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 560,
-    "y": 2360,
-    "wires": []
-  },
-  {
     "id": "bf5e27708d8eabd4",
     "type": "inject",
     "z": "2c27b5a30c1815ba",
@@ -1579,42 +1524,6 @@
     "wires": [
       [
         "dfaebd70fcc58eb2"
-      ]
-    ]
-  },
-  {
-    "id": "42f6606f63526e20",
-    "type": "function",
-    "z": "2c27b5a30c1815ba",
-    "name": "function 65",
-    "func": "const res_cam = [1280,720];\nconst res_vid = [ 1920 / 2,  1080 / 2];\nconst offset_vid = [5,5];\n\nmsg.payload[0].x1 = msg.payload[0].x1 * res_vid[0] / res_cam[0] + offset_vid[0];\nmsg.payload[0].x2 = msg.payload[0].x2 * res_vid[0] / res_cam[0] + offset_vid[0];\nmsg.payload[0].y1 = msg.payload[0].y1 * res_vid[1] / res_cam[1] + offset_vid[1];\nmsg.payload[0].y2 = msg.payload[0].y2 * res_vid[1] / res_cam[1] + offset_vid[1];\n\nmsg.payload = {cmd:'drawBox',data:msg.payload};\nmsg.rate = 100;\nreturn msg;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 570,
-    "y": 2180,
-    "wires": [
-      [
-        "dfaebd70fcc58eb2"
-      ]
-    ]
-  },
-  {
-    "id": "5602333bbfa7dc47",
-    "type": "json",
-    "z": "2c27b5a30c1815ba",
-    "name": "",
-    "property": "payload",
-    "action": "obj",
-    "pretty": false,
-    "x": 470,
-    "y": 2260,
-    "wires": [
-      [
-        "42f6606f63526e20"
       ]
     ]
   },
@@ -1750,7 +1659,7 @@
     "type": "function",
     "z": "2c27b5a30c1815ba",
     "name": "AN CHUAN1",
-    "func": "msg.payload = [\n    \n    { address: 'http://localhost:8889/c85/webrtc/', type: 'video', x: 0, y: 0, width: 1920 / 2, height: 1080 / 2 },\n    { address: 'http://localhost:8889/c86/webrtc/', type: 'video', x: 1920 / 2, y: 0, width: 1920 / 2, height: 1080 / 2 },\n\n    { address: 'http://localhost:8889/c53/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },\n\n    { address: 'http://localhost:8889/c47/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 2 },\n\n    { address: 'http://localhost:8889/c48/webrtc/', type: 'video', x: 0, y: 1080 * 3 / 6, width: 1920 / 4, height: 1080 / 6 },\n    { address: 'http://localhost:8889/c60/webrtc/', type: 'video', x: 0, y: 1080 * 4 / 6, width: 1920 / 4, height: 1080 / 6 },\n    { address: 'http://localhost:8889/c80/webrtc/', type: 'video', x: 0, y: 1080 * 5 / 6, width: 1920 / 4, height: 1080 / 6 },\n];\nreturn msg;",
+    "func": "msg.payload = [\n    \n    // { address: 'http://localhost:8889/c85/webrtc/', type: 'video', x: 0, y: 0, width: 1920 / 2, height: 1080 / 2 },\n    // { address: 'http://localhost:8889/c86/webrtc/', type: 'video', x: 1920 / 2, y: 0, width: 1920 / 2, height: 1080 / 2 },\n    { address: 'http://127.0.0.1:5000/video_feed', type: 'image', x: 0, y: 0, width: 1920, height: 1080 / 2 },\n\n    { address: 'http://localhost:8889/c53/webrtc/', type: 'video', x: 1920 / 2, y: 1080 / 2, width: 1920 / 2, height: 1080 / 2 },\n\n    { address: 'http://localhost:8889/c47/webrtc/', type: 'video', x: 1920 * 1 / 4, y: 1080 * 2 / 4, width: 1920 / 4, height: 1080 / 2 },\n\n    { address: 'http://localhost:8889/c48/webrtc/', type: 'video', x: 0, y: 1080 * 3 / 6, width: 1920 / 4, height: 1080 / 6 },\n    { address: 'http://localhost:8889/c60/webrtc/', type: 'video', x: 0, y: 1080 * 4 / 6, width: 1920 / 4, height: 1080 / 6 },\n    { address: 'http://localhost:8889/c80/webrtc/', type: 'video', x: 0, y: 1080 * 5 / 6, width: 1920 / 4, height: 1080 / 6 },\n];\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -1861,6 +1770,100 @@
       [
         "1b32b0468d0d0665"
       ]
+    ]
+  },
+  {
+    "id": "5165416865d034bb",
+    "type": "http in",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "url": "/keypress",
+    "method": "post",
+    "upload": false,
+    "skipBodyParsing": false,
+    "swaggerDoc": "",
+    "x": 380,
+    "y": 2300,
+    "wires": [
+      [
+        "ce6fe384d11a7d6c",
+        "57f3f2e8056504c0",
+        "dbe5bce292097932"
+      ]
+    ]
+  },
+  {
+    "id": "ce6fe384d11a7d6c",
+    "type": "http response",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "statusCode": "",
+    "headers": {},
+    "x": 570,
+    "y": 2300,
+    "wires": []
+  },
+  {
+    "id": "57f3f2e8056504c0",
+    "type": "debug",
+    "z": "2c27b5a30c1815ba",
+    "name": "debug 10",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 540,
+    "y": 2240,
+    "wires": []
+  },
+  {
+    "id": "dbe5bce292097932",
+    "type": "switch",
+    "z": "2c27b5a30c1815ba",
+    "name": "",
+    "property": "payload.key",
+    "propertyType": "msg",
+    "rules": [
+      {
+        "t": "eq",
+        "v": "A",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "B",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "C",
+        "vt": "str"
+      },
+      {
+        "t": "eq",
+        "v": "D",
+        "vt": "str"
+      }
+    ],
+    "checkall": "true",
+    "repair": false,
+    "outputs": 4,
+    "x": 750,
+    "y": 2260,
+    "wires": [
+      [
+        "38d9ec7499016602"
+      ],
+      [
+        "5d1da994fa63d537"
+      ],
+      [
+        "1b32b0468d0d0665"
+      ],
+      []
     ]
   }
 ]

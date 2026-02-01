@@ -15,7 +15,7 @@
     "method": "PUT",
     "ret": "txt",
     "paytoqs": "ignore",
-    "url": "http://172.27.61.86/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
+    "url": "http://172.27.61.85/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
     "tls": "",
     "persist": false,
     "proxy": "",
@@ -65,7 +65,7 @@
     "type": "function",
     "z": "e5b6339a0f552a15",
     "name": "function 20",
-    "func": "// msg.url = global.get(\"cam1url\") + \"LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0\";\nmsg.payload = msg.payload = {\n    \"ZoomPos\": global.get(\"cam1zoom\"),\n    \"FocusPos\": global.get(\"cam1focus\"),\n    \"FocusCorrectPara\": 257,\n    \"NotTriggerFocus\": 1\n}\nreturn msg;",
+    "func": "\nmsg.payload = msg.payload = {\n    \"ZoomPos\": global.get(\"cam1zoom\"),\n    \"FocusPos\": global.get(\"cam1focus\"),\n    \"FocusCorrectPara\": 257,\n    \"NotTriggerFocus\": 1\n}\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -130,7 +130,9 @@
     "y": 40,
     "wires": [
       [
-        "64fe65e72bf42a72"
+        "64fe65e72bf42a72",
+        "cb3cb618c5842caa",
+        "c60cdca0b87c10e0"
       ]
     ]
   },
@@ -138,7 +140,7 @@
     "id": "64fe65e72bf42a72",
     "type": "http request",
     "z": "e5b6339a0f552a15",
-    "name": "READ ZoomFocusPos",
+    "name": "READ ZoomFocusPos left",
     "method": "GET",
     "ret": "txt",
     "paytoqs": "ignore",
@@ -150,11 +152,10 @@
     "authType": "digest",
     "senderr": false,
     "headers": [],
-    "x": 760,
+    "x": 770,
     "y": 40,
     "wires": [
       [
-        "bd081ea9260bef2f",
         "c49e053f8cf9090c"
       ]
     ]
@@ -167,12 +168,11 @@
     "property": "payload",
     "action": "obj",
     "pretty": false,
-    "x": 790,
-    "y": 120,
+    "x": 970,
+    "y": 40,
     "wires": [
       [
-        "221569e9e0424a8e",
-        "bd081ea9260bef2f"
+        "221569e9e0424a8e"
       ]
     ]
   },
@@ -202,27 +202,11 @@
     "from": "",
     "to": "",
     "reg": false,
-    "x": 960,
-    "y": 120,
+    "x": 1140,
+    "y": 40,
     "wires": [
       []
     ]
-  },
-  {
-    "id": "bd081ea9260bef2f",
-    "type": "debug",
-    "z": "e5b6339a0f552a15",
-    "name": "debug 21",
-    "active": false,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 1060,
-    "y": 40,
-    "wires": []
   },
   {
     "id": "5f306ad82463b988",
@@ -278,7 +262,9 @@
     "wires": [
       [
         "bcbc5be713c846cd",
-        "f159d0864ce39439"
+        "f159d0864ce39439",
+        "9c87c1da2c9f55ba",
+        "fc922b4e53d3f791"
       ]
     ]
   },
@@ -415,179 +401,6 @@
     ]
   },
   {
-    "id": "7e4aa85965883ccb",
-    "type": "tcp in",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "server": "client",
-    "host": "localhost",
-    "port": "1991",
-    "datamode": "stream",
-    "datatype": "utf8",
-    "newline": "\\n",
-    "topic": "",
-    "trim": false,
-    "base64": false,
-    "tls": "",
-    "x": 270,
-    "y": 640,
-    "wires": [
-      [
-        "335713bb58a08ac6"
-      ]
-    ]
-  },
-  {
-    "id": "6a88d9d7a7f83e5e",
-    "type": "tcp out",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "host": "",
-    "port": "",
-    "beserver": "reply",
-    "base64": false,
-    "end": false,
-    "tls": "",
-    "x": 690,
-    "y": 720,
-    "wires": []
-  },
-  {
-    "id": "b8c59876c944c496",
-    "type": "inject",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 90,
-    "y": 800,
-    "wires": [
-      [
-        "3a7e58cf30976965"
-      ]
-    ]
-  },
-  {
-    "id": "3a7e58cf30976965",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 52",
-    "func": "msg.payload = {\n    cmd: \"detect\"\n};\nreturn msg;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 250,
-    "y": 800,
-    "wires": [
-      [
-        "19eadc9660e828c6"
-      ]
-    ]
-  },
-  {
-    "id": "19eadc9660e828c6",
-    "type": "json",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "property": "payload",
-    "action": "str",
-    "pretty": false,
-    "x": 410,
-    "y": 800,
-    "wires": [
-      [
-        "5a2b99bb0a2530de"
-      ]
-    ]
-  },
-  {
-    "id": "5a2b99bb0a2530de",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 53",
-    "func": "msg.payload += \"\\n\";\nreturn msg;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 550,
-    "y": 760,
-    "wires": [
-      [
-        "6a88d9d7a7f83e5e"
-      ]
-    ]
-  },
-  {
-    "id": "d15e0b5a2f53d5e7",
-    "type": "http in",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "url": "/detect",
-    "method": "get",
-    "upload": false,
-    "skipBodyParsing": false,
-    "swaggerDoc": "",
-    "x": 130,
-    "y": 920,
-    "wires": [
-      [
-        "1f930d210ed2856f"
-      ]
-    ]
-  },
-  {
-    "id": "3b7e4d5996beb155",
-    "type": "http response",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "statusCode": "",
-    "headers": {},
-    "x": 1210,
-    "y": 600,
-    "wires": []
-  },
-  {
-    "id": "1f930d210ed2856f",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 54",
-    "func": "global.set(\"detect_g\",msg);\nreturn {payload: 1};",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 310,
-    "y": 920,
-    "wires": [
-      [
-        "3a7e58cf30976965",
-        "d4080cba54fdd90f"
-      ]
-    ]
-  },
-  {
     "id": "e8739e1fa1b0bf99",
     "type": "function",
     "z": "e5b6339a0f552a15",
@@ -635,7 +448,7 @@
     "method": "PUT",
     "ret": "txt",
     "paytoqs": "ignore",
-    "url": "http://172.27.61.85/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
+    "url": "http://172.27.61.86/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
     "tls": "",
     "persist": false,
     "proxy": "",
@@ -685,7 +498,9 @@
     "y": 1220,
     "wires": [
       [
-        "a8ba91b1247d8767"
+        "a8ba91b1247d8767",
+        "b4d2398d17d28a2d",
+        "9d0572577d0fb15d"
       ]
     ]
   },
@@ -907,299 +722,6 @@
     ]
   },
   {
-    "id": "d4080cba54fdd90f",
-    "type": "debug",
-    "z": "e5b6339a0f552a15",
-    "name": "debug 35",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 520,
-    "y": 920,
-    "wires": []
-  },
-  {
-    "id": "335713bb58a08ac6",
-    "type": "json",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "property": "payload",
-    "action": "obj",
-    "pretty": false,
-    "x": 470,
-    "y": 640,
-    "wires": [
-      [
-        "5d68b9f3f838aa6d",
-        "b454d00136a6b6bb"
-      ]
-    ]
-  },
-  {
-    "id": "87faf8bc2c24808e",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 59",
-    "func": "try{\n    msg.payload.circle = msg.payload.circles[0];\n    msg.payload.image = msg.payload.circle.image;\n    return msg;\n}catch(ex){\n    msg.payload = ex;\n    return msg;\n}",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 870,
-    "y": 600,
-    "wires": [
-      [
-        "d70774e011e3412a"
-      ]
-    ]
-  },
-  {
-    "id": "d70774e011e3412a",
-    "type": "json",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "property": "payload",
-    "action": "str",
-    "pretty": false,
-    "x": 1030,
-    "y": 600,
-    "wires": [
-      [
-        "3b7e4d5996beb155"
-      ]
-    ]
-  },
-  {
-    "id": "68c74b3a7e1624e8",
-    "type": "inject",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 110,
-    "y": 740,
-    "wires": [
-      [
-        "d16600a54617376b"
-      ]
-    ]
-  },
-  {
-    "id": "d16600a54617376b",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 61",
-    "func": "msg.payload = {\n    cmd: \"adjustByDistance\",\n    distance: 18\n};\nreturn msg;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 270,
-    "y": 740,
-    "wires": [
-      [
-        "19eadc9660e828c6"
-      ]
-    ]
-  },
-  {
-    "id": "f2f61a8fe617af6f",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 55",
-    "func": "var msg2 = global.get(\"detect_g\");\nmsg2.payload = msg.payload;\nreturn msg2;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 690,
-    "y": 600,
-    "wires": [
-      [
-        "87faf8bc2c24808e",
-        "bbdff50b7dd65e6c"
-      ]
-    ]
-  },
-  {
-    "id": "5d68b9f3f838aa6d",
-    "type": "switch",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "property": "payload.cmd",
-    "propertyType": "msg",
-    "rules": [
-      {
-        "t": "eq",
-        "v": "detect",
-        "vt": "str"
-      },
-      {
-        "t": "eq",
-        "v": "adjustByDistance",
-        "vt": "str"
-      }
-    ],
-    "checkall": "true",
-    "repair": false,
-    "outputs": 2,
-    "x": 610,
-    "y": 660,
-    "wires": [
-      [
-        "f2f61a8fe617af6f"
-      ],
-      []
-    ]
-  },
-  {
-    "id": "e7ee4201f0e20b91",
-    "type": "inject",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 130,
-    "y": 700,
-    "wires": [
-      [
-        "4993a112b570e0fa"
-      ]
-    ]
-  },
-  {
-    "id": "4993a112b570e0fa",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 62",
-    "func": "msg.payload = {\n    cmd: \"adjustByDistance\",\n    distance: 35\n};\nreturn msg;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 290,
-    "y": 700,
-    "wires": [
-      [
-        "19eadc9660e828c6"
-      ]
-    ]
-  },
-  {
-    "id": "e595b9dc9c79f76f",
-    "type": "inject",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "props": [
-      {
-        "p": "payload"
-      },
-      {
-        "p": "topic",
-        "vt": "str"
-      }
-    ],
-    "repeat": "",
-    "crontab": "",
-    "once": false,
-    "onceDelay": 0.1,
-    "topic": "",
-    "payload": "",
-    "payloadType": "date",
-    "x": 290,
-    "y": 860,
-    "wires": [
-      [
-        "2f0e8ead76c22cf9"
-      ]
-    ]
-  },
-  {
-    "id": "2f0e8ead76c22cf9",
-    "type": "trigger",
-    "z": "e5b6339a0f552a15",
-    "name": "",
-    "op1": "1",
-    "op2": "0",
-    "op1type": "str",
-    "op2type": "str",
-    "duration": "-50",
-    "extend": false,
-    "overrideDelay": false,
-    "units": "ms",
-    "reset": "",
-    "bytopic": "all",
-    "topic": "topic",
-    "outputs": 1,
-    "x": 450,
-    "y": 860,
-    "wires": [
-      [
-        "5f99f476b445a431"
-      ]
-    ]
-  },
-  {
-    "id": "5f99f476b445a431",
-    "type": "function",
-    "z": "e5b6339a0f552a15",
-    "name": "function 63",
-    "func": "msg.payload = {\n    cmd: \"adjustByDistance\",\n    distance: global.get(\"laser\")\n};\nreturn msg;",
-    "outputs": 1,
-    "timeout": 0,
-    "noerr": 0,
-    "initialize": "",
-    "finalize": "",
-    "libs": [],
-    "x": 670,
-    "y": 880,
-    "wires": [
-      [
-        "19eadc9660e828c6"
-      ]
-    ]
-  },
-  {
     "id": "bcbc5be713c846cd",
     "type": "link out",
     "z": "e5b6339a0f552a15",
@@ -1213,43 +735,11 @@
     "wires": []
   },
   {
-    "id": "bbdff50b7dd65e6c",
-    "type": "debug",
-    "z": "e5b6339a0f552a15",
-    "name": "debug 33",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 860,
-    "y": 560,
-    "wires": []
-  },
-  {
-    "id": "b454d00136a6b6bb",
-    "type": "debug",
-    "z": "e5b6339a0f552a15",
-    "name": "debug 34",
-    "active": true,
-    "tosidebar": true,
-    "console": false,
-    "tostatus": false,
-    "complete": "false",
-    "statusVal": "",
-    "statusType": "auto",
-    "x": 620,
-    "y": 520,
-    "wires": []
-  },
-  {
     "id": "f159d0864ce39439",
     "type": "function",
     "z": "e5b6339a0f552a15",
-    "name": "do auto 1210",
-    "func": "// 分段线性插值函数\nfunction getValuesByDistance(distance) {\n    // 数据点按distance排序\n    const dataPoints = [\n\n\n        { distance: 116.73, focus: 9489, zoom: 0 },\n\n        { distance: 7.64, focus: 9047, zoom: 116 },\n        { distance: 10.3, focus: 7907, zoom: 396 },\n        { distance: 13.09, focus: 6867, zoom: 616 },\n\n        \n        { distance: 15.87, focus: 6153, zoom: 756 },\n        { distance: 18.67, focus: 5643, zoom: 856 },\n        { distance: 21.63, focus: 5004, zoom: 966 },\n\n        { distance: 23.89, focus: 4975, zoom: 971 },\n    ];\n    \n    // 边界情况：小于最小值\n    if (distance <= dataPoints[0].distance) {\n        return {\n            focus: dataPoints[0].focus,\n            zoom: dataPoints[0].zoom\n        };\n    }\n    \n    // 边界情况：大于最大值\n    if (distance >= dataPoints[dataPoints.length - 1].distance) {\n        const lastPoint = dataPoints[dataPoints.length - 1];\n        return {\n            focus: lastPoint.focus,\n            zoom: lastPoint.zoom\n        };\n    }\n    \n    // 查找插值区间并进行线性插值\n    for (let i = 0; i < dataPoints.length - 1; i++) {\n        const p1 = dataPoints[i];\n        const p2 = dataPoints[i + 1];\n        \n        if (distance >= p1.distance && distance <= p2.distance) {\n            // 计算插值系数\n            const t = (distance - p1.distance) / (p2.distance - p1.distance);\n            \n            // 线性插值计算\n            const focus = Math.round(p1.focus + (p2.focus - p1.focus) * t);\n            const zoom = Math.round(p1.zoom + (p2.zoom - p1.zoom) * t);\n            \n            return {\n                focus: focus,\n                zoom: zoom\n            };\n        }\n    }\n}\n\nvar obj = getValuesByDistance(  25 - (20 - global.get(\"plc1\") )  );\nglobal.set(\"cam1zoom\",obj.zoom);\nglobal.set(\"cam1focus\", obj.focus);\n\nreturn msg;",
+    "name": "do auto left",
+    "func": "// 分段线性插值函数\nfunction getValuesByDistance(distance) {\n    // 数据点按distance排序\n    const dataPoints = [\n\n\n        { distance: 17, focus: 3259, zoom: 1250 },\n        { distance: 411, focus: 3500, zoom: 1210 },\n        { distance: 818, focus: 3874, zoom: 1150 },\n        { distance: 1212, focus: 4511, zoom: 1049 }, \n        { distance: 1592, focus: 5117, zoom: 949 },\n        { distance: 2009, focus: 6031, zoom: 783 },\n        { distance: 2391, focus: 6783, zoom: 636 },\n        { distance: 2793, focus: 7891, zoom: 397 },\n        { distance: 3213, focus: 9020, zoom: 124 },\n        { distance: 3613, focus: 9478, zoom: 0 },\n\n    ];\n    \n    // 边界情况：小于最小值\n    if (distance <= dataPoints[0].distance) {\n        return {\n            focus: dataPoints[0].focus,\n            zoom: dataPoints[0].zoom\n        };\n    }\n    \n    // 边界情况：大于最大值\n    if (distance >= dataPoints[dataPoints.length - 1].distance) {\n        const lastPoint = dataPoints[dataPoints.length - 1];\n        return {\n            focus: lastPoint.focus,\n            zoom: lastPoint.zoom\n        };\n    }\n    \n    // 查找插值区间并进行线性插值\n    for (let i = 0; i < dataPoints.length - 1; i++) {\n        const p1 = dataPoints[i];\n        const p2 = dataPoints[i + 1];\n        \n        if (distance >= p1.distance && distance <= p2.distance) {\n            // 计算插值系数\n            const t = (distance - p1.distance) / (p2.distance - p1.distance);\n            \n            // 线性插值计算\n            const focus = Math.round(p1.focus + (p2.focus - p1.focus) * t);\n            const zoom = Math.round(p1.zoom + (p2.zoom - p1.zoom) * t);\n            \n            return {\n                focus: focus,\n                zoom: zoom\n            };\n        }\n    }\n}\n\nvar obj = getValuesByDistance(  global.get(\"plc1\") );\nglobal.set(\"cam1zoom\",obj.zoom);\nglobal.set(\"cam1focus\", obj.focus);\n\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,
@@ -1323,30 +813,6 @@
     ]
   },
   {
-    "id": "24bdd243ace68a07",
-    "type": "http request",
-    "z": "e5b6339a0f552a15",
-    "name": "命令下发 Right",
-    "method": "PUT",
-    "ret": "txt",
-    "paytoqs": "ignore",
-    "url": "http://172.27.61.85/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
-    "tls": "",
-    "persist": false,
-    "proxy": "",
-    "insecureHTTPParser": false,
-    "authType": "digest",
-    "senderr": false,
-    "headers": [],
-    "x": 540,
-    "y": 200,
-    "wires": [
-      [
-        "a74ff39f5583e73b"
-      ]
-    ]
-  },
-  {
     "id": "a74ff39f5583e73b",
     "type": "debug",
     "z": "e5b6339a0f552a15",
@@ -1358,8 +824,8 @@
     "complete": "false",
     "statusVal": "",
     "statusType": "auto",
-    "x": 720,
-    "y": 220,
+    "x": 1200,
+    "y": 400,
     "wires": []
   },
   {
@@ -1377,5 +843,353 @@
     "x": 800,
     "y": 1220,
     "wires": []
+  },
+  {
+    "id": "b4d2398d17d28a2d",
+    "type": "http request",
+    "z": "e5b6339a0f552a15",
+    "name": "命令下发",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://172.27.61.86/LAPI/V1.0/Channel/0/PTZ/PTZCtrl",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 620,
+    "y": 1280,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "9c87c1da2c9f55ba",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "do auto right",
+    "func": "// 分段线性插值函数\nfunction getValuesByDistance(distance) {\n    // 数据点按distance排序\n    const dataPoints = [\n\n\n        { distance: 31, focus: 3683, zoom: 1183 },\n        { distance: 405, focus: 3992, zoom: 1133 },\n        { distance: 804, focus: 4420, zoom: 1063 },\n        { distance: 1202, focus: 4905, zoom: 983 }, \n        { distance: 1606, focus: 5312, zoom: 913 },\n        { distance: 2004, focus: 5991, zoom: 793 },\n        { distance: 2402, focus: 6705, zoom: 653 },\n        { distance: 2806, focus: 7566, zoom: 473 },\n        { distance: 3204, focus: 8594, zoom: 237 },\n        { distance: 3620, focus: 9452, zoom: 10 },\n\n    ];\n    \n    // 边界情况：小于最小值\n    if (distance <= dataPoints[0].distance) {\n        return {\n            focus: dataPoints[0].focus,\n            zoom: dataPoints[0].zoom\n        };\n    }\n    \n    // 边界情况：大于最大值\n    if (distance >= dataPoints[dataPoints.length - 1].distance) {\n        const lastPoint = dataPoints[dataPoints.length - 1];\n        return {\n            focus: lastPoint.focus,\n            zoom: lastPoint.zoom\n        };\n    }\n    \n    // 查找插值区间并进行线性插值\n    for (let i = 0; i < dataPoints.length - 1; i++) {\n        const p1 = dataPoints[i];\n        const p2 = dataPoints[i + 1];\n        \n        if (distance >= p1.distance && distance <= p2.distance) {\n            // 计算插值系数\n            const t = (distance - p1.distance) / (p2.distance - p1.distance);\n            \n            // 线性插值计算\n            const focus = Math.round(p1.focus + (p2.focus - p1.focus) * t);\n            const zoom = Math.round(p1.zoom + (p2.zoom - p1.zoom) * t);\n            \n            return {\n                focus: focus,\n                zoom: zoom\n            };\n        }\n    }\n}\n\nvar obj = getValuesByDistance(  global.get(\"plc1\")  );\nglobal.set(\"cam2zoom\",obj.zoom);\nglobal.set(\"cam2focus\", obj.focus);\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 610,
+    "y": 400,
+    "wires": [
+      [
+        "896a204d2a0be276"
+      ]
+    ]
+  },
+  {
+    "id": "896a204d2a0be276",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 52",
+    "func": "\nmsg.payload = msg.payload = {\n    \"ZoomPos\": global.get(\"cam2zoom\"),\n    \"FocusPos\": global.get(\"cam2focus\"),\n    \"FocusCorrectPara\": 257,\n    \"NotTriggerFocus\": 1\n}\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 790,
+    "y": 400,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "24bdd243ace68a07",
+    "type": "http request",
+    "z": "e5b6339a0f552a15",
+    "name": "命令下发 Right",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://172.27.61.86/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 1020,
+    "y": 400,
+    "wires": [
+      [
+        "a74ff39f5583e73b"
+      ]
+    ]
+  },
+  {
+    "id": "cb3cb618c5842caa",
+    "type": "http request",
+    "z": "e5b6339a0f552a15",
+    "name": "READ ZoomFocusPos right",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://172.27.61.86/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 720,
+    "y": 100,
+    "wires": [
+      [
+        "98577fdbfab5fa1b"
+      ]
+    ]
+  },
+  {
+    "id": "98577fdbfab5fa1b",
+    "type": "json",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "property": "payload",
+    "action": "obj",
+    "pretty": false,
+    "x": 950,
+    "y": 100,
+    "wires": [
+      [
+        "7b9062ce8e3153af"
+      ]
+    ]
+  },
+  {
+    "id": "7b9062ce8e3153af",
+    "type": "change",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "cam2zoom",
+        "pt": "global",
+        "to": "payload.Response.Data.ZoomPos",
+        "tot": "msg"
+      },
+      {
+        "t": "set",
+        "p": "cam2focus",
+        "pt": "global",
+        "to": "payload.Response.Data.FocusPos",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1120,
+    "y": 100,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "177f24c551284dab",
+    "type": "http request",
+    "z": "e5b6339a0f552a15",
+    "name": "命令下发3",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://172.27.61.84/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 1010,
+    "y": 500,
+    "wires": [
+      [
+        "5922aacdb71442c3"
+      ]
+    ]
+  },
+  {
+    "id": "5922aacdb71442c3",
+    "type": "debug",
+    "z": "e5b6339a0f552a15",
+    "name": "debug 15",
+    "active": false,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 1200,
+    "y": 540,
+    "wires": []
+  },
+  {
+    "id": "c60cdca0b87c10e0",
+    "type": "http request",
+    "z": "e5b6339a0f552a15",
+    "name": "READ ZoomFocusPos right",
+    "method": "GET",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://172.27.61.84/LAPI/V1.0/PTZ/ZoomFocusPos?ChannelID=0",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 920,
+    "y": 160,
+    "wires": [
+      [
+        "bb6a08ec5150430f"
+      ]
+    ]
+  },
+  {
+    "id": "bb6a08ec5150430f",
+    "type": "json",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "property": "payload",
+    "action": "obj",
+    "pretty": false,
+    "x": 1150,
+    "y": 160,
+    "wires": [
+      [
+        "267d03d8ef3e681e"
+      ]
+    ]
+  },
+  {
+    "id": "267d03d8ef3e681e",
+    "type": "change",
+    "z": "e5b6339a0f552a15",
+    "name": "",
+    "rules": [
+      {
+        "t": "set",
+        "p": "cam3zoom",
+        "pt": "global",
+        "to": "payload.Response.Data.ZoomPos",
+        "tot": "msg"
+      },
+      {
+        "t": "set",
+        "p": "cam3focus",
+        "pt": "global",
+        "to": "payload.Response.Data.FocusPos",
+        "tot": "msg"
+      }
+    ],
+    "action": "",
+    "property": "",
+    "from": "",
+    "to": "",
+    "reg": false,
+    "x": 1320,
+    "y": 160,
+    "wires": [
+      []
+    ]
+  },
+  {
+    "id": "9d0572577d0fb15d",
+    "type": "http request",
+    "z": "e5b6339a0f552a15",
+    "name": "命令下发",
+    "method": "PUT",
+    "ret": "txt",
+    "paytoqs": "ignore",
+    "url": "http://172.27.61.84/LAPI/V1.0/Channel/0/PTZ/PTZCtrl",
+    "tls": "",
+    "persist": false,
+    "proxy": "",
+    "insecureHTTPParser": false,
+    "authType": "digest",
+    "senderr": false,
+    "headers": [],
+    "x": 620,
+    "y": 1340,
+    "wires": [
+      [
+        "a8f6adddd2e8d02e"
+      ]
+    ]
+  },
+  {
+    "id": "a8f6adddd2e8d02e",
+    "type": "debug",
+    "z": "e5b6339a0f552a15",
+    "name": "debug 16",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "false",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 840,
+    "y": 1380,
+    "wires": []
+  },
+  {
+    "id": "fc922b4e53d3f791",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "do auto 3",
+    "func": "// 分段线性插值函数\nfunction getValuesByDistance(distance) {\n    // 数据点按distance排序\n    const dataPoints = [\n\n\n        { distance: 25, focus: 4585, zoom: 1036 },\n        { distance: 429, focus: 4831, zoom: 996 },\n        { distance: 837, focus: 5120, zoom: 946 },\n        { distance: 1204, focus: 5798, zoom: 826 }, \n        { distance: 1638, focus: 6434, zoom: 706 },\n        { distance: 2017, focus: 6867, zoom: 616 },\n        { distance: 2421, focus: 7718, zoom: 436 },\n        { distance: 2801, focus: 8616, zoom: 228 },\n        { distance: 3245, focus: 9481, zoom: 0 },\n        \n\n    ];\n    \n    // 边界情况：小于最小值\n    if (distance <= dataPoints[0].distance) {\n        return {\n            focus: dataPoints[0].focus,\n            zoom: dataPoints[0].zoom\n        };\n    }\n    \n    // 边界情况：大于最大值\n    if (distance >= dataPoints[dataPoints.length - 1].distance) {\n        const lastPoint = dataPoints[dataPoints.length - 1];\n        return {\n            focus: lastPoint.focus,\n            zoom: lastPoint.zoom\n        };\n    }\n    \n    // 查找插值区间并进行线性插值\n    for (let i = 0; i < dataPoints.length - 1; i++) {\n        const p1 = dataPoints[i];\n        const p2 = dataPoints[i + 1];\n        \n        if (distance >= p1.distance && distance <= p2.distance) {\n            // 计算插值系数\n            const t = (distance - p1.distance) / (p2.distance - p1.distance);\n            \n            // 线性插值计算\n            const focus = Math.round(p1.focus + (p2.focus - p1.focus) * t);\n            const zoom = Math.round(p1.zoom + (p2.zoom - p1.zoom) * t);\n            \n            return {\n                focus: focus,\n                zoom: zoom\n            };\n        }\n    }\n}\n\nvar obj = getValuesByDistance(  global.get(\"plc1\")  );\nglobal.set(\"cam3zoom\",obj.zoom);\nglobal.set(\"cam3focus\", obj.focus);\n\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 620,
+    "y": 500,
+    "wires": [
+      [
+        "f3b9e3626b1b6034"
+      ]
+    ]
+  },
+  {
+    "id": "f3b9e3626b1b6034",
+    "type": "function",
+    "z": "e5b6339a0f552a15",
+    "name": "function 59",
+    "func": "\nmsg.payload = msg.payload = {\n    \"ZoomPos\": global.get(\"cam3zoom\"),\n    \"FocusPos\": global.get(\"cam3focus\"),\n    \"FocusCorrectPara\": 257,\n    \"NotTriggerFocus\": 1\n}\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 810,
+    "y": 500,
+    "wires": [
+      [
+        "177f24c551284dab"
+      ]
+    ]
   }
 ]

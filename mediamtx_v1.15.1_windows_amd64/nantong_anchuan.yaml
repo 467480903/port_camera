@@ -59,6 +59,17 @@ paths:
     source: rtsp://user1:h7Hsu3ULLnLTs*M@172.27.61.86:554/media/video1
     sourceProtocol: tcp
 
+  c84:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@172.27.61.84:554/media/video1
+    sourceProtocol: tcp
+    sourceOnDemand: yes
+    overridePublisher: yes
+  c84/webrtc:
+    source: rtsp://user1:h7Hsu3ULLnLTs*M@172.27.61.84:554/media/video1
+    sourceProtocol: tcp    
+
+
+
   c45:
     source: rtsp://172.27.61.45:554/1/h264major
     sourceProtocol: tcp

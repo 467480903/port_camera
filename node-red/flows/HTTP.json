@@ -771,7 +771,7 @@
     "type": "function",
     "z": "2f9b58d1f9172efa",
     "name": "nantong_anchuan",
-    "func": "msg.payload = [global.get(\"plc1\") ,\nglobal.get(\"cam1zoom\"),\nglobal.get(\"cam1focus\")]\nreturn msg;",
+    "func": "msg.payload = [global.get(\"plc1\") ,\nglobal.get(\"cam1zoom\"),\nglobal.get(\"cam1focus\"),\n    global.get(\"cam2zoom\"),\n    global.get(\"cam2focus\"),\n    global.get(\"cam3zoom\"),\n    global.get(\"cam3focus\"),]\nreturn msg;",
     "outputs": 1,
     "timeout": 0,
     "noerr": 0,

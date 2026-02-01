@@ -74,7 +74,7 @@
     "dataType": "HoldingRegister",
     "adr": "230",
     "quantity": "1",
-    "rate": "300",
+    "rate": "80",
     "rateUnit": "ms",
     "delayOnStart": false,
     "enableDeformedMessages": false,
@@ -126,6 +126,141 @@
     "y": 500,
     "wires": [
       []
+    ]
+  },
+  {
+    "id": "273b787c66f07b47",
+    "type": "modbus-flex-getter",
+    "z": "cf60d2d395b0b7cb",
+    "name": "",
+    "showStatusActivities": false,
+    "showErrors": false,
+    "showWarnings": true,
+    "logIOActivities": false,
+    "server": "482b530de32245b5",
+    "useIOFile": false,
+    "ioFile": "",
+    "useIOForPayload": false,
+    "emptyMsgOnFail": false,
+    "keepMsgProperties": false,
+    "delayOnStart": false,
+    "enableDeformedMessages": false,
+    "startDelayTime": "",
+    "x": 570,
+    "y": 800,
+    "wires": [
+      [
+        "bd2f8c580d41a68b"
+      ],
+      []
+    ]
+  },
+  {
+    "id": "68f9319f8f3b319e",
+    "type": "inject",
+    "z": "cf60d2d395b0b7cb",
+    "name": "",
+    "props": [
+      {
+        "p": "payload"
+      },
+      {
+        "p": "topic",
+        "vt": "str"
+      }
+    ],
+    "repeat": "",
+    "crontab": "",
+    "once": false,
+    "onceDelay": 0.1,
+    "topic": "",
+    "payload": "",
+    "payloadType": "date",
+    "x": 170,
+    "y": 800,
+    "wires": [
+      [
+        "5431bd6b0d17b6f9",
+        "4ee50cbe1cf1ad3b",
+        "ec804cb6b4fe112b"
+      ]
+    ]
+  },
+  {
+    "id": "5431bd6b0d17b6f9",
+    "type": "function",
+    "z": "cf60d2d395b0b7cb",
+    "name": "function 53",
+    "func": "msg.payload = {  value: 0, 'fc': 3, 'unitid': 1, 'address': 230 , 'quantity': 1 } \nmsg.topic = \"height\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 800,
+    "wires": [
+      [
+        "273b787c66f07b47"
+      ]
+    ]
+  },
+  {
+    "id": "bd2f8c580d41a68b",
+    "type": "debug",
+    "z": "cf60d2d395b0b7cb",
+    "name": "debug 14",
+    "active": true,
+    "tosidebar": true,
+    "console": false,
+    "tostatus": false,
+    "complete": "payload",
+    "targetType": "msg",
+    "statusVal": "",
+    "statusType": "auto",
+    "x": 800,
+    "y": 720,
+    "wires": []
+  },
+  {
+    "id": "4ee50cbe1cf1ad3b",
+    "type": "function",
+    "z": "cf60d2d395b0b7cb",
+    "name": "function 54",
+    "func": "msg.payload = {  value: 0, 'fc': 1, 'unitid': 1, 'address': 854 , 'quantity': 3 } \nmsg.topic = \"855\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 880,
+    "wires": [
+      [
+        "273b787c66f07b47"
+      ]
+    ]
+  },
+  {
+    "id": "ec804cb6b4fe112b",
+    "type": "function",
+    "z": "cf60d2d395b0b7cb",
+    "name": "function 55",
+    "func": "msg.payload = { value: 0, 'fc': 1, 'unitid': 1, 'address': 865 , 'quantity': 3 } ;\nmsg.topic = \"866\";\nreturn msg;",
+    "outputs": 1,
+    "timeout": 0,
+    "noerr": 0,
+    "initialize": "",
+    "finalize": "",
+    "libs": [],
+    "x": 350,
+    "y": 980,
+    "wires": [
+      [
+        "273b787c66f07b47"
+      ]
     ]
   }
 ]

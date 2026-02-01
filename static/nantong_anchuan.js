@@ -50,13 +50,13 @@ $(function () {
         let laserVal = parseNumericResponse(data[0]);
         if (laserVal !== null) $('#laserVal').text(laserVal);
 
-        let zoomVal = parseNumericResponse(data[1]);
+        let zoomVal = parseNumericResponse(data[5]);
         if (zoomVal !== null) {
           currentZoom = zoomVal;
           $('#zoomVal').text(zoomVal);
         }
 
-        let focusVal = parseNumericResponse(data[2]);
+        let focusVal = parseNumericResponse(data[6]);
         if (focusVal !== null) {
           currentFocus = focusVal;
           $('#focusVal').text(focusVal);
@@ -281,7 +281,7 @@ $(function () {
   setInterval(pollValues, POLL_INTERVAL_MS);
 
   var stream = {
-    address:"http://localhost:8889/c85/webrtc/"
+    address:"http://localhost:8889/c84/webrtc/"
   };
 
   const video = document.getElementById('video1');
